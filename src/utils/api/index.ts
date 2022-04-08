@@ -1,0 +1,75 @@
+import { NextApiRequest, NextApiResponse } from "next"
+import { CookieSerializeOptions } from "next/dist/server/web/types"
+import { serialize } from "cookie"
+import { DecodedUser } from "~/types"
+import tokenGenerator from "./TokenGenerator"
+import { generalCookieAge, isProd, jwtClaims } from "~/constants"
+import { NextRequest, NextResponse } from "next/server"
+
+export const getUserFromAuthToken = (
+  req: NextApiRequest
+): DecodedUser | null => {
+  try {
+    const rawToken = req.headers["authorization"] || ""
+    const token = rawToken.split(" ")[1]
+    const decoded: any = tokenGenerator.verify(token)
+    const claims = decoded[jwtClaims]
+
+    return {
+      id: Number(claims["X-Auth-User-Id"]),
+      ...claims,
+    }
+  } catch (err) {
+    return null
+  }
+}
+
+export const getCookie = (cookieStr: string | undefined, key: string) => {
+  const cookie = cookieStr
+    ?.split(";")
+    .filter((x) => x.trim().split("=")[0] === key)[0]
+  if (!cookie) {
+    return ""
+  }
+  return cookie.split("=")[1]
+}
+
+export function setHardCookie(
+  name: string,
+  value: string,
+  res: NextApiResponse,
+  options?: CookieSerializeOptions
+) {
+  res.setHeader(
+    "Set-Cookie",
+    serialize(name, value, {
+      path: "/",
+      httpOnly: true,
+      maxAge: options?.maxAge || generalCookieAge,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      ...options,
+    })
+  )
+}
+
+export type MiddlewareFn = (
+  req: NextRequest,
+  res: NextResponse,
+  callback: (result: any) => void
+) => void
+export function runMiddleware(
+  req: NextRequest,
+  res: NextResponse,
+  fn: MiddlewareFn
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result)
+      }
+
+      return resolve(result)
+    })
+  })
+}
