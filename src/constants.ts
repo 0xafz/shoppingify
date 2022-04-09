@@ -6,8 +6,8 @@ export const isProd = process.env.NODE_ENV === "production"
 
 // JWT
 export const jwtSecret = process.env.JWT_SECRET
-export const jwtTtl = 900000
-export const refreshTokenTtl = 900000
+export const jwtTtl = 900 // 15m (in seconds)
+export const refreshTokenTtl = 900000 // 15m (milli seconds)
 export const jwtClaims = `${appUrl}/jwt/claims`
 export const jwtClaimPrefix = "x-auth"
 
