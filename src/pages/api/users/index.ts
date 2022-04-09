@@ -1,16 +1,15 @@
-import { Prisma } from "@prisma/client"
+import crypto from "crypto"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { loginCookieAge, loginCookieName, refreshTokenTtl } from "~/constants"
 import prisma from "~/lib/prisma"
+import { setHardCookie } from "~/utils/api"
 import {
   hashPassword,
   md5,
   SignWithUserClaims,
   uuidv4,
 } from "~/utils/api/crypto"
-import { ClientError, KnownServerError } from "~/utils/error"
-import crypto from "crypto"
-import { setHardCookie } from "~/utils/api"
+import { handleError } from "~/utils/api/error"
 
 export default async function handle(
   req: NextApiRequest,
@@ -68,15 +67,6 @@ export default async function handle(
         res.status(405).end(`Method ${method} Not Allowed`)
     }
   } catch (error) {
-    console.error(error)
-    if (error instanceof ClientError) {
-      res.status(400).json({ error: error.message })
-    } else if (error instanceof KnownServerError) {
-      res.status(500).json({ error: error.message })
-    } else if (error instanceof Prisma.PrismaClientValidationError) {
-      res.status(400).json({ error: error.message })
-    } else {
-      res.status(500).json({ error: "something went wrong!" })
-    }
+    handleError(error, res)
   }
 }

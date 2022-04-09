@@ -4,7 +4,6 @@ import { serialize } from "cookie"
 import { DecodedUser } from "~/types"
 import tokenGenerator from "./TokenGenerator"
 import { generalCookieAge, isProd, jwtClaims } from "~/constants"
-import { NextRequest, NextResponse } from "next/server"
 
 export const getUserFromAuthToken = (
   req: NextApiRequest
@@ -51,25 +50,4 @@ export function setHardCookie(
       ...options,
     })
   )
-}
-
-export type MiddlewareFn = (
-  req: NextRequest,
-  res: NextResponse,
-  callback: (result: any) => void
-) => void
-export function runMiddleware(
-  req: NextRequest,
-  res: NextResponse,
-  fn: MiddlewareFn
-) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-
-      return resolve(result)
-    })
-  })
 }

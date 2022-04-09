@@ -1,6 +1,7 @@
 import { serialize } from "cookie"
 import { NextApiRequest, NextApiResponse } from "next"
 import { loginCookieName } from "~/constants"
+import { handleError } from "~/utils/api/error"
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +22,6 @@ export default async function handler(
       res.status(405).end(`Method ${req.method} Not Allowed`)
     }
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ error: "something went wrong!" })
+    handleError(err, res)
   }
 }

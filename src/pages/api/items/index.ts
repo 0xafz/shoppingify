@@ -1,7 +1,7 @@
-import { Prisma } from "@prisma/client"
 import type { NextApiRequest, NextApiResponse } from "next"
 import prisma from "~/lib/prisma"
-import { ClientError, KnownServerError } from "~/utils/error"
+import checkAuth from "~/middleware/checkAuth"
+import { ClientError, handleError } from "~/utils/api/error"
 
 export default async function handle(
   req: NextApiRequest,
@@ -9,10 +9,16 @@ export default async function handle(
 ) {
   try {
     const { method } = req
+
+    const loggedUser = checkAuth(req)
+
     switch (method) {
       case "GET": {
         const { cursor, limit } = req.query
         const items = await prisma.shoppingItem.findMany({
+          where: {
+            userId: loggedUser.id,
+          },
           take: Number(limit),
           orderBy: {
             id: "asc",
@@ -56,7 +62,7 @@ export default async function handle(
             imageUrl,
             createdAt: new Date().toISOString(),
             shoppingCategoryId: category.id,
-            userId: Number(userId),
+            userId: loggedUser.id,
           },
         })
         res.status(200).json({ data: newItem })
@@ -66,15 +72,6 @@ export default async function handle(
         res.status(405).end(`Method ${method} Not Allowed`)
     }
   } catch (error) {
-    console.error(error)
-    if (error instanceof ClientError) {
-      res.status(400).json({ error: error.message })
-    } else if (error instanceof KnownServerError) {
-      res.status(500).json({ error: error.message })
-    } else if (error instanceof Prisma.PrismaClientValidationError) {
-      res.status(400).json({ error: error.message })
-    } else {
-      res.status(500).json({ error: "something went wrong!" })
-    }
+    handleError(error, res)
   }
 }

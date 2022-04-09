@@ -3,6 +3,7 @@ import { loginCookieName, refreshTokenTtl } from "~/constants"
 import prisma from "~/lib/prisma"
 import { getCookie } from "~/utils/api"
 import { sha256, SignWithUserClaims, uuidv4 } from "~/utils/api/crypto"
+import { handleError } from "~/utils/api/error"
 
 export default async function handler(
   req: NextApiRequest,
@@ -64,7 +65,6 @@ export default async function handler(
       res.status(405).end(`Method ${req.method} Not Allowed`)
     }
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ error: "something went wrong!" })
+    handleError(err, res)
   }
 }

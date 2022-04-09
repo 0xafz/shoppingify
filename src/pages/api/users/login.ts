@@ -1,9 +1,10 @@
+import crypto from "crypto"
 import { NextApiRequest, NextApiResponse } from "next"
 import { loginCookieAge, loginCookieName, refreshTokenTtl } from "~/constants"
-import { checkPassword, uuidv4, SignWithUserClaims } from "~/utils/api/crypto"
-import crypto from "crypto"
 import prisma from "~/lib/prisma"
 import { setHardCookie } from "~/utils/api"
+import { checkPassword, SignWithUserClaims, uuidv4 } from "~/utils/api/crypto"
+import { handleError } from "~/utils/api/error"
 
 export default async function handler(
   req: NextApiRequest,
@@ -65,7 +66,6 @@ export default async function handler(
       res.status(405).end(`Method ${req.method} Not Allowed`)
     }
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ error: "something went wrong!" })
+    handleError(err, res)
   }
 }
