@@ -13,7 +13,8 @@
     "lint": "next lint",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:generate": "prisma generate",
-    "test": "jest --watch"
+    "test:w": "jest --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@prisma/client": "3.12.0",
