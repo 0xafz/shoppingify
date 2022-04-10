@@ -33,7 +33,10 @@ export default async function handle(
           res.status(200).json({
             data: {
               lists,
-              nextCursor: lists.length ? lists[lists.length - 1].id : "",
+              nextCursor:
+                lists.length && lists.length === limit
+                  ? lists[lists.length - 1].id
+                  : "",
             },
           })
         }
