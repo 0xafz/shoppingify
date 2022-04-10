@@ -15,38 +15,50 @@ export default async function handle(
     checkAuth(req)
 
     switch (method) {
-      case "GET": {
-        const item = await prisma.shoppingItem.findFirst({
-          where: {
-            id: Number(itemId),
-          },
-        })
-        if (!item) throw new ClientError("item not found")
-        res.status(200).json({ data: item })
-      }
-      case "PATCH": {
-        const item = await prisma.shoppingItem.findFirst({
-          where: {
-            id: Number(itemId),
-          },
-        })
-        if (!item) throw new ClientError("item not found")
-        const updatedItem = await prisma.shoppingItem.update({
-          where: {
-            id: Number(itemId),
-          },
-          data: req.body,
-        })
-        res.status(200).json({ data: updatedItem })
-      }
-      case "DELETE": {
-        await prisma.shoppingItem.delete({
-          where: {
-            id: Number(itemId),
-          },
-        })
-        res.status(200).send("successfully deleted")
-      }
+      case "GET":
+        {
+          const item = await prisma.shoppingItem.findFirst({
+            where: {
+              id: Number(itemId),
+            },
+          })
+          if (!item) throw new ClientError("item not found")
+          res.status(200).json({ data: item })
+        }
+        break
+      case "PATCH":
+        {
+          const { note, imageUrl, name, category } = req.body
+          const item = await prisma.shoppingItem.findFirst({
+            where: {
+              id: Number(itemId),
+            },
+          })
+          if (!item) throw new ClientError("item not found")
+          const updatedItem = await prisma.shoppingItem.update({
+            where: {
+              id: Number(itemId),
+            },
+            data: {
+              note,
+              imageUrl,
+              name,
+              category,
+            },
+          })
+          res.status(200).json({ data: updatedItem })
+        }
+        break
+      case "DELETE":
+        {
+          await prisma.shoppingItem.delete({
+            where: {
+              id: Number(itemId),
+            },
+          })
+          res.status(200).send("successfully deleted")
+        }
+        break
       default:
         res.setHeader("Allow", ["GET", "PATCH", "DELETE"])
         res.status(405).end(`Method ${method} Not Allowed`)

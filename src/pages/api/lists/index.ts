@@ -15,8 +15,6 @@ export default async function handle(
     switch (method) {
       case "GET":
         {
-          checkAuth(req)
-
           const { cursor, limit = 10 } = req.query
           const lists = await prisma.shoppingList.findMany({
             where: {
@@ -44,21 +42,36 @@ export default async function handle(
         {
           const { name, status = "incomplete", items: rawItems = [] } = req.body
 
-          const createdAt = new Date().toISOString()
-          const items = rawItems.map((item) => {
-            item.createdAt = createdAt
-          })
+          if (!name) throw new ClientError("missing/empty field(s)")
 
-          if (!name || !status) throw new ClientError("empty parameters")
+          const createdAt = new Date().toISOString()
+
+          const itemIds = rawItems.map(({ id, ...other }) => ({
+            where: {
+              id: id,
+            },
+            create: {
+              ...other,
+              createdAt,
+              user: {
+                // connect shoppingItem user
+                connect: {
+                  id: loggedUser.id,
+                },
+              },
+            },
+          }))
+
           const newList = await prisma.shoppingList.create({
             data: {
               name,
               status,
-              items: {
-                create: items,
+              shoppingItems: {
+                connectOrCreate: itemIds,
               },
-              createdAt: new Date().toISOString(),
+              createdAt,
               user: {
+                // connect shoppingList user
                 connect: {
                   id: loggedUser.id,
                 },

@@ -15,38 +15,52 @@ export default async function handle(
     checkAuth(req)
 
     switch (method) {
-      case "GET": {
-        const user = await prisma.user.findFirst({
-          where: {
-            id: Number(userId),
-          },
-        })
-        if (!user) throw new ClientError("user not found")
-        res.status(200).json({ data: user })
-      }
-      case "PATCH": {
-        const user = await prisma.user.findFirst({
-          where: {
-            id: Number(userId),
-          },
-        })
-        if (!user) throw new ClientError("user not found")
-        const updatedUser = await prisma.user.update({
-          where: {
-            id: Number(userId),
-          },
-          data: req.body,
-        })
-        res.status(200).json({ data: updatedUser })
-      }
-      case "DELETE": {
-        await prisma.user.delete({
-          where: {
-            id: Number(userId),
-          },
-        })
-        res.status(200).send("successfully deleted")
-      }
+      case "PATCH":
+        {
+          const { name, avatar } = req.body
+          const user = await prisma.user.findFirst({
+            where: {
+              id: Number(userId),
+            },
+          })
+          if (!user) throw new ClientError("user not found")
+          const updatedUser = await prisma.user.update({
+            where: {
+              id: Number(userId),
+            },
+            data: {
+              name,
+              avatar,
+            },
+          })
+          res.status(200).json({ data: updatedUser })
+        }
+        break
+      case "DELETE":
+        {
+          await prisma.shoppingList.deleteMany({
+            where: {
+              id: Number(userId),
+            },
+          })
+          await prisma.shoppingItem.deleteMany({
+            where: {
+              id: Number(userId),
+            },
+          })
+          await prisma.session.delete({
+            where: {
+              id: Number(userId),
+            },
+          })
+          await prisma.user.delete({
+            where: {
+              id: Number(userId),
+            },
+          })
+          res.status(200).send("successfully deleted")
+        }
+        break
       default:
         res.setHeader("Allow", ["GET", "PATCH", "DELETE"])
         res.status(405).end(`Method ${method} Not Allowed`)

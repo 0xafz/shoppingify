@@ -13,60 +13,54 @@ export default async function handle(
     const loggedUser = checkAuth(req)
 
     switch (method) {
-      case "GET": {
-        const { cursor, limit } = req.query
-        const items = await prisma.shoppingItem.findMany({
-          where: {
-            userId: loggedUser.id,
-          },
-          take: Number(limit),
-          orderBy: {
-            id: "asc",
-          },
-          cursor: {
-            id: Number(cursor),
-          },
-        })
-        res.status(200).json({
-          data: {
-            items,
-            nextCursor: items.length ? items[items.length - 1].id : "",
-          },
-        })
-      }
-      case "POST": {
-        const { name, note, imageUrl, categoryName } = req.body
-
-        if (!categoryName) throw new ClientError("categoryName not provided")
-        let category = await prisma.shoppingCategory.findFirst({
-          where: {
-            name: {
-              // https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#case-insensitive-filtering
-              // mysql is case-insensitive by default
-              equals: categoryName,
+      case "GET":
+        {
+          const { cursor, limit = 10 } = req.query
+          const items = await prisma.shoppingItem.findMany({
+            where: {
+              userId: loggedUser.id,
             },
-          },
-        })
-        if (!category) {
-          category = await prisma.shoppingCategory.create({
+            take: Number(limit),
+            orderBy: {
+              id: "asc",
+            },
+            cursor: cursor
+              ? {
+                  id: Number(cursor),
+                }
+              : undefined,
+          })
+          res.status(200).json({
             data: {
-              name: categoryName,
+              items,
+              nextCursor: items.length ? items[items.length - 1].id : "",
             },
           })
         }
+        break
+      case "POST":
+        {
+          const { name, note, imageUrl, category } = req.body
 
-        const newItem = await prisma.shoppingItem.create({
-          data: {
-            name,
-            note,
-            imageUrl,
-            createdAt: new Date().toISOString(),
-            shoppingCategoryId: category.id,
-            userId: loggedUser.id,
-          },
-        })
-        res.status(200).json({ data: newItem })
-      }
+          if (!category || !name) throw new ClientError("missing/empty fields")
+
+          const newItem = await prisma.shoppingItem.create({
+            data: {
+              name,
+              note,
+              imageUrl,
+              createdAt: new Date().toISOString(),
+              category,
+              user: {
+                connect: {
+                  id: loggedUser.id,
+                },
+              },
+            },
+          })
+          res.status(200).json({ data: newItem })
+        }
+        break
       default:
         res.setHeader("Allow", ["GET", "POST"])
         res.status(405).end(`Method ${method} Not Allowed`)

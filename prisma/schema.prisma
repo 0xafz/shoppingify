@@ -13,11 +13,10 @@ model User {
   name          String
   avatar        String
   password      String
-  shoppingLists ShoppingList[]
   updatedAt     DateTime?      @updatedAt
   createdAt     DateTime
   session       Session?
-
+  shoppingLists ShoppingList[]
   shoppingItems ShoppingItem[]
 }
 
@@ -30,31 +29,24 @@ model Session {
 }
 
 model ShoppingList {
-  id        Int            @id @default(autoincrement())
-  name      String
-  status    String
-  items     ShoppingItem[]
-  createdAt DateTime
-  updatedAt DateTime       @updatedAt
-  user      User?          @relation(fields: [userId], references: [id])
-  userId    Int
+  id            Int            @id @default(autoincrement())
+  name          String
+  status        String
+  createdAt     DateTime
+  updatedAt     DateTime       @updatedAt
+  user          User?          @relation(fields: [userId], references: [id])
+  userId        Int
+  shoppingItems ShoppingItem[]
 }
 
 model ShoppingItem {
-  id                 Int              @id @default(autoincrement())
-  name               String
-  note               String?
-  imageUrl           String?
-  category           ShoppingCategory @relation(fields: [shoppingCategoryId], references: [id])
-  createdAt          DateTime
-  shoppingList       ShoppingList[]
-  shoppingCategoryId Int
-  user               User?            @relation(fields: [userId], references: [id])
-  userId             Int
-}
-
-model ShoppingCategory {
-  id    Int            @id @default(autoincrement())
-  name  String
-  items ShoppingItem[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  note          String?
+  imageUrl      String?
+  category      String
+  createdAt     DateTime
+  user          User?          @relation(fields: [userId], references: [id])
+  userId        Int
+  shoppingLists ShoppingList[]
 }
