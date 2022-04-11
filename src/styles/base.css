@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap");
+
+/* 
+  1-9 copied from https://www.joshwcomeau.com/css/custom-css-reset/
+*/ /*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  3. Allow percentage-based heights in the application
+*/
+html,
+body {
+  height: 100%;
+  font-family: Noto Sans, sans-serif;
+}
+/*
+  Typographic tweaks!
+  4. Add accessible line-height
+  5. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  6. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  7. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+  8. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+  9. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+}
+
+:root {
+  --clr-orange: #f9a109;
+  --clr-lightorange: #fff0de;
+  --clr-brown: #80485b;
+
+  /* gray */
+  --clr-gray1: #fafafe;
+  --colors-gray6: hsl(0 0% 88.7%);
+  --colors-gray7: hsl(0 0% 85.8%);
+  --colors-gray8: hsl(0 0% 78%);
+  --colors-gray9: hsl(0 0% 56.1%);
+  --colors-gray10: hsl(0 0% 52.3%);
+  --colors-gray11: hsl(0 0% 43.5%);
+  --colors-gray12: hsl(0 0% 9%);
+
+  --clr-black: #000;
+  --clr-white: #fff;
+
+  --vw-sm: 640px;
+  --vw-md: 768px;
+  --vw-lg: 1024px;
+  --vw-xl: 1280px;
+  --vw-2xl: 1536px;
+}
+body {
+  font-family: "Quicksand", sans-serif;
+  font-size: 62.5%;
+
+  color: var(--clr-black);
+  background-color: var(--clr-gray1);
+}
