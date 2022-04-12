@@ -14,7 +14,7 @@ export default async function handle(
     if (!rawListId) throw new ClientError("invalid request parameters")
     const listId = Number(rawListId)
 
-    checkAuth(req)
+    const loggedUser = checkAuth(req)
 
     switch (method) {
       case "GET":
@@ -42,6 +42,7 @@ export default async function handle(
           if (!list) throw new ClientError("list not found")
 
           let itemIds
+          const assignedAt = new Date().toISOString()
           if (rawItems.length !== 0) {
             itemIds = rawItems.map(({ shoppingItemId, quantity }) => ({
               where: {
@@ -50,8 +51,13 @@ export default async function handle(
                   shoppingItemId,
                 },
               },
-              data: {
+              update: {
                 quantity,
+              },
+              create: {
+                quantity,
+                assignedAt,
+                assignedBy: loggedUser.id,
               },
             }))
           }
@@ -64,7 +70,7 @@ export default async function handle(
               name,
               shoppingItems: itemIds
                 ? {
-                    update: itemIds,
+                    upsert: itemIds,
                   }
                 : undefined,
             },
