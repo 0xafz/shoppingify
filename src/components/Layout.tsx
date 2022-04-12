@@ -10,7 +10,7 @@ const Layout: React.FC<Props> = (props) => (
   <div {...props} className="layout">
     <Menu />
     <div className="container">{props.children}</div>
-    <RightSidePane />
+    <RightSidePane itemType="create-list" />
     <style jsx>
       {`
         .layout {

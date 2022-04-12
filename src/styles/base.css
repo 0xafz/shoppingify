@@ -22,7 +22,6 @@
 html,
 body {
   height: 100%;
-  font-family: Noto Sans, sans-serif;
 }
 /*
   Typographic tweaks!
@@ -80,13 +79,13 @@ h6 {
 
   /* gray */
   --clr-gray1: #fafafe;
-  --colors-gray6: hsl(0 0% 88.7%);
-  --colors-gray7: hsl(0 0% 85.8%);
-  --colors-gray8: hsl(0 0% 78%);
-  --colors-gray9: hsl(0 0% 56.1%);
-  --colors-gray10: hsl(0 0% 52.3%);
-  --colors-gray11: hsl(0 0% 43.5%);
-  --colors-gray12: hsl(0 0% 9%);
+  --clr-gray6: hsl(0 0% 88.7%);
+  --clr-gray7: hsl(0 0% 85.8%);
+  --clr-gray8: hsl(0 0% 78%);
+  --clr-gray9: hsl(0 0% 56.1%);
+  --clr-gray10: hsl(0 0% 52.3%);
+  --clr-gray11: hsl(0 0% 43.5%);
+  --clr-gray12: hsl(0 0% 9%);
 
   --clr-black: #000;
   --clr-white: #fff;
@@ -97,10 +96,11 @@ h6 {
   --vw-xl: 1280px;
   --vw-2xl: 1536px;
 }
-body {
+html {
   font-family: "Quicksand", sans-serif;
   font-size: 62.5%;
-
+}
+body {
   color: var(--clr-black);
   background-color: var(--clr-gray1);
 }
