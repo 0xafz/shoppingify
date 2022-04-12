@@ -25,28 +25,40 @@ model Session {
   userId                Int     @unique
   refreshToken          String
   refreshTokenExpiresAt String?
-  user                  User?   @relation(fields: [userId], references: [id])
+  user                  User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ShoppingList {
-  id            Int            @id @default(autoincrement())
+  id            Int                    @id @default(autoincrement())
   name          String
   status        String
   createdAt     DateTime
-  updatedAt     DateTime       @updatedAt
-  user          User?          @relation(fields: [userId], references: [id])
+  updatedAt     DateTime               @updatedAt
+  user          User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  shoppingItems ShoppingItem[]
+  shoppingItems ShoppingItemToList[]
 }
 
 model ShoppingItem {
-  id            Int            @id @default(autoincrement())
+  id            Int                    @id @default(autoincrement())
   name          String
   note          String?
   imageUrl      String?
   category      String
   createdAt     DateTime
-  user          User?          @relation(fields: [userId], references: [id])
+  user          User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  shoppingLists ShoppingList[]
+  shoppingLists ShoppingItemToList[]
+}
+
+model ShoppingItemToList {
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shoppingItemId Int
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shoppingListId Int
+  quantity       Int
+  assignedBy     Int
+  assignedAt     DateTime
+
+  @@id([shoppingListId, shoppingItemId])
 }

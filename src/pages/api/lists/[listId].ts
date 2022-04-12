@@ -9,9 +9,10 @@ export default async function handle(
 ) {
   try {
     const { method } = req
-    const { listId } = req.query
+    const { listId: rawListId } = req.query
 
-    if (!listId) throw new ClientError("invalid request parameters")
+    if (!rawListId) throw new ClientError("invalid request parameters")
+    const listId = Number(rawListId)
 
     checkAuth(req)
 
@@ -20,7 +21,10 @@ export default async function handle(
         {
           const list = await prisma.shoppingList.findFirst({
             where: {
-              id: Number(listId),
+              id: listId,
+            },
+            include: {
+              shoppingItems: true,
             },
           })
           if (!list) throw new ClientError("list not found")
@@ -29,20 +33,40 @@ export default async function handle(
         break
       case "PATCH":
         {
-          const { status, name } = req.body
+          const { status, name, items: rawItems } = req.body
           const list = await prisma.shoppingList.findFirst({
             where: {
-              id: Number(listId),
+              id: listId,
             },
           })
           if (!list) throw new ClientError("list not found")
+
+          let itemIds
+          if (rawItems.length !== 0) {
+            itemIds = rawItems.map(({ shoppingItemId, quantity }) => ({
+              where: {
+                shoppingListId_shoppingItemId: {
+                  shoppingListId: listId,
+                  shoppingItemId,
+                },
+              },
+              data: {
+                quantity,
+              },
+            }))
+          }
           const updatedList = await prisma.shoppingList.update({
             where: {
-              id: Number(listId),
+              id: listId,
             },
             data: {
               status,
               name,
+              shoppingItems: itemIds
+                ? {
+                    update: itemIds,
+                  }
+                : undefined,
             },
           })
           res.status(200).json({ data: updatedList })
@@ -52,7 +76,7 @@ export default async function handle(
         {
           await prisma.shoppingList.delete({
             where: {
-              id: Number(listId),
+              id: listId,
             },
           })
           res.status(200).send("successfully deleted")

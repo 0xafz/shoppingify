@@ -22,13 +22,16 @@ export default async function handle(
             },
             take: Number(limit),
             orderBy: {
-              id: "asc",
+              createdAt: "desc",
             },
             cursor: cursor
               ? {
                   id: Number(cursor),
                 }
               : undefined,
+            include: {
+              shoppingItems: true,
+            },
           })
           res.status(200).json({
             data: {
@@ -47,20 +50,15 @@ export default async function handle(
 
           if (!name) throw new ClientError("missing/empty field(s)")
 
-          const createdAt = new Date().toISOString()
+          const assignedAt = new Date().toISOString()
 
-          const itemIds = rawItems.map(({ id, ...other }) => ({
-            where: {
-              id: id,
-            },
-            create: {
-              ...other,
-              createdAt,
-              user: {
-                // connect shoppingItem user
-                connect: {
-                  id: loggedUser.id,
-                },
+          const itemIds = rawItems.map(({ id, quantity }) => ({
+            assignedAt,
+            assignedBy: loggedUser.id,
+            quantity: quantity,
+            shoppingItem: {
+              connect: {
+                id,
               },
             },
           }))
@@ -70,15 +68,18 @@ export default async function handle(
               name,
               status,
               shoppingItems: {
-                connectOrCreate: itemIds,
+                create: itemIds,
               },
-              createdAt,
+              createdAt: assignedAt,
               user: {
                 // connect shoppingList user
                 connect: {
                   id: loggedUser.id,
                 },
               },
+            },
+            include: {
+              shoppingItems: true,
             },
           })
           res.status(200).json({ data: newList })

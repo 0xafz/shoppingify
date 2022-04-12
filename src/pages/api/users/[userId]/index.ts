@@ -38,21 +38,6 @@ export default async function handle(
         break
       case "DELETE":
         {
-          await prisma.shoppingList.deleteMany({
-            where: {
-              id: Number(userId),
-            },
-          })
-          await prisma.shoppingItem.deleteMany({
-            where: {
-              id: Number(userId),
-            },
-          })
-          await prisma.session.delete({
-            where: {
-              id: Number(userId),
-            },
-          })
           await prisma.user.delete({
             where: {
               id: Number(userId),

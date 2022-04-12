@@ -22,7 +22,7 @@ export default async function handle(
             },
             take: Number(limit),
             orderBy: {
-              id: "asc",
+              createdAt: "desc",
             },
             cursor: cursor
               ? {
