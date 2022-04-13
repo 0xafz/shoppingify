@@ -16,7 +16,7 @@ const Cart: React.FC<CartProps> = ({}) => {
           justify-content: center;
           align-items: center;
           color: var(--clr-white);
-          background: var(--clr-orange);
+          background: var(--clr-amber10);
           font-size: 2rem;
         }
       `}</style>

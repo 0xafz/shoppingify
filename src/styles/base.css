@@ -73,7 +73,9 @@ h6 {
 }
 
 :root {
-  --clr-orange: #f9a109;
+  --clr-amber9: hsl(39 100% 57%);
+  --clr-amber10: hsl(35 100% 55.5%);
+  --clr-amber11: hsl(30 100% 34%);
   --clr-lightorange: #fff0de;
   --clr-brown: #80485b;
 
@@ -103,4 +105,10 @@ html {
 body {
   color: var(--clr-black);
   background-color: var(--clr-gray1);
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

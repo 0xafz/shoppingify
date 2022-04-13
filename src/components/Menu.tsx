@@ -81,7 +81,7 @@ export const Menu: React.FC<MenuProps> = ({}) => {
           border-left: 6px solid transparent;
         }
         a[data-active="true"]::after {
-          border-left: 6px solid var(--clr-orange);
+          border-left: 6px solid var(--clr-amber10);
         }
         .logo,
         :global(.cart) {

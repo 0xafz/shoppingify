@@ -1,5 +1,6 @@
-import { Autocomplete, Button, TextField } from "@mui/material"
+import { Autocomplete, Button } from "@mui/material"
 import React from "react"
+import CTextField from "~/mui-c/TextField"
 
 interface AddShoppingItemProps {}
 
@@ -11,12 +12,12 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
       <form action="">
         <div className="row">
           <label htmlFor="name">Name</label>
-          <TextField id="name" placeholder="Enter a name" fullWidth />
+          <CTextField id="name" placeholder="Enter a name" fullWidth />
         </div>
 
         <div className="row">
           <label htmlFor="note">Note (optional)</label>
-          <TextField
+          <CTextField
             id="note"
             multiline
             placeholder="Enter a note"
@@ -28,17 +29,23 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
 
         <div className="row">
           <label htmlFor="image">Image (optional)</label>
-          <TextField id="image" placeholder="Enter a url" fullWidth />
+          <CTextField id="image" placeholder="Enter a url" fullWidth />
         </div>
 
         <div className="row">
           <label htmlFor="image">Category</label>
           <Autocomplete
+            sx={{ fontSize: "1.5rem" }}
             disablePortal
             id="combo-box-demo"
             options={categories}
             fullWidth
-            renderInput={(params) => <TextField {...params} fullWidth />}
+            ListboxProps={{
+              style: {
+                fontSize: "1.5rem",
+              },
+            }}
+            renderInput={(params) => <CTextField {...params} fullWidth />}
           />
         </div>
 
@@ -46,7 +53,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
           <Button variant="text" sx={{ color: "var(--clr-black)" }}>
             Cancel
           </Button>
-          <Button variant="contained" sx={{ background: "var(--clr-orange)" }}>
+          <Button variant="contained" sx={{ background: "var(--clr-amber10)" }}>
             Save
           </Button>
         </div>
