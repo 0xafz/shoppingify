@@ -78,3 +78,29 @@ export function PencilOutlineIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
+export function PlusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="1em" height="1em" viewBox="0 0 15 15" {...props}>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M8 2.75a.5.5 0 0 0-1 0V7H2.75a.5.5 0 0 0 0 1H7v4.25a.5.5 0 0 0 1 0V8h4.25a.5.5 0 0 0 0-1H8V2.75Z"
+        clipRule="evenodd"
+      ></path>
+    </svg>
+  )
+}
+
+export function MinusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="1em" height="1em" viewBox="0 0 15 15" {...props}>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M2.25 7.5a.5.5 0 0 1 .5-.5h9.5a.5.5 0 0 1 0 1h-9.5a.5.5 0 0 1-.5-.5Z"
+        clipRule="evenodd"
+      ></path>
+    </svg>
+  )
+}

@@ -137,19 +137,26 @@ const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
       <div className="quantity">
         {showOptions && (
           <>
-            <button className="delete flex-center">
+            <button className="delete flex-center" title="delete item">
               <DeleteOutlineIcon />
             </button>
-            <button className="minus">-</button>
+            <button className="minus" title="decrease item count">
+              -
+            </button>
           </>
         )}
         <button
           className="display"
+          title="quantity"
           onClick={() => setShowOptions((prev) => !prev)}
         >
           {quantity} pcs
         </button>
-        {showOptions && <button className="plus">+</button>}
+        {showOptions && (
+          <button className="plus" title="increase item count">
+            +
+          </button>
+        )}
       </div>
       <style jsx>{`
         li {
@@ -182,6 +189,7 @@ const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
         .minus {
           padding: 0.5rem 1rem;
           font-size: 2rem;
+          font-weight: 500;
           color: inherit;
         }
         .delete {
@@ -198,7 +206,6 @@ const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
           border: 2px solid var(--clr-amber10);
           width: 6.4rem;
           height: 3.2rem;
-          font-size: 1.2rem;
           font-weight: 500;
           color: inherit;
         }
@@ -221,7 +228,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
               <PencilOutlineIcon aria-hidden="true" />
             </button>
           </div>
-          <div className="add-list__body">
+          <div className="add-list__body styled-scrollbars">
             {Object.entries(list.items).map(([key, value], i) => (
               <ShoppingListGroup
                 groupName={key}
@@ -270,6 +277,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
           width: 100%;
         }
         .add-list__body {
+          min-height: calc(100vh - 40rem);
           max-height: calc(100vh - 40rem);
           overflow-y: scroll;
         }

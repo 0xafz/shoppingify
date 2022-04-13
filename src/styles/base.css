@@ -112,3 +112,23 @@ body {
   justify-content: center;
   align-items: center;
 }
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.styled-scrollbars::-webkit-scrollbar {
+  width: 4px; /* Mostly for vertical scrollbars */
+  height: 4px; /* Mostly for horizontal scrollbars */
+}
+.styled-scrollbars::-webkit-scrollbar-thumb {
+  /* Foreground */
+  scrollbar-width: thin;
+  background: var(--clr-gray8);
+  border-radius: 12px;
+}
+.styled-scrollbars::-webkit-scrollbar-track {
+  /* Background */
+  background: transparent;
+}
