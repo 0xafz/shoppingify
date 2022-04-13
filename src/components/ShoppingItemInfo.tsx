@@ -1,10 +1,22 @@
-import React from "react"
+import React, { useState } from "react"
 import CButton from "~/mui-c/Button"
-import { Button } from "@mui/material"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material"
+import { CloseIcon } from "~/components/icons"
 
 interface ShoppingItemInfoProps {}
 
 const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
+  const [open, setOpen] = useState(false)
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <div className="wrapper">
       <button className="back">&#8656; back</button>
@@ -44,14 +56,79 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
               fontSize: "1.5rem",
               color: "var(--clr-black)",
             }}
+            onClick={handleClose}
           >
             delete
           </Button>
-          <CButton sx={{ fontSize: "1.5rem", padding: "1rem 1.5rem" }}>
+          <CButton
+            sx={{
+              fontSize: "1.5rem",
+              padding: "1rem 1.5rem",
+              marginLeft: "2rem",
+            }}
+          >
             Add to list
           </CButton>
         </div>
       </div>
+      <Dialog
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        sx={{
+          fontSize: "1.8rem",
+          "& .MuiDialog-paper": {
+            borderRadius: "1.2rem",
+          },
+          "& .MuiDialogContent-root": {
+            padding: "3rem",
+          },
+          "& .MuiDialogActions-root": {
+            padding: "3rem",
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontSize: "1.8rem" }}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 14,
+              top: 8,
+              color: "var(--clr-gray11)",
+            }}
+          >
+            <CloseIcon fontSize={"2rem"} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          Are you sure that you want to cancel this item?
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="text"
+            autoFocus
+            sx={{
+              color: "var(--clr-black)",
+              fontSize: "1.8rem",
+              textTransform: "none",
+            }}
+            onClick={handleClose}
+          >
+            cancel
+          </Button>
+          <CButton
+            sx={{
+              background: "var(--clr-red10)",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+            }}
+          >
+            Yes
+          </CButton>
+        </DialogActions>
+      </Dialog>
       <style jsx>{`
         .wrapper {
           display: flex;

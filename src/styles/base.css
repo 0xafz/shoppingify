@@ -73,6 +73,7 @@ h6 {
 }
 
 :root {
+  /* color source: https://www.radix-ui.com/colors */
   --clr-amber9: hsl(39 100% 57%);
   --clr-amber10: hsl(35 100% 55.5%);
   --clr-amber11: hsl(30 100% 34%);
@@ -89,6 +90,13 @@ h6 {
   --clr-gray11: hsl(0 0% 43.5%);
   --clr-gray12: hsl(0 0% 9%);
 
+  --clr-red8: hsl(359 69.5% 74.3%);
+  --clr-red9: hsl(358 75% 59%);
+  --clr-red10: hsl(358 69.4% 55.2%);
+  --clr-red11: hsl(358 65% 48.7%);
+
+  --clr-sky10: hsl(193 87% 66.5%);
+
   --clr-black: #000;
   --clr-white: #fff;
 
@@ -97,6 +105,11 @@ h6 {
   --vw-lg: 1024px;
   --vw-xl: 1280px;
   --vw-2xl: 1536px;
+
+  --elevation3: rgb(0 0 0 / 20%) 0px 3px 3px -2px,
+    rgb(0 0 0 / 14%) 0px 3px 4px 0px, rgb(0 0 0 / 12%) 0px 1px 8px 0px;
+  --elevation8: rgb(0 0 0 / 20%) 0px 5px 5px -3px,
+    rgb(0 0 0 / 14%) 0px 8px 10px 1px, rgb(0 0 0 / 12%) 0px 3px 14px 2px;
 }
 html {
   font-family: "Quicksand", sans-serif;
