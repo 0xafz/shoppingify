@@ -1,21 +1,6 @@
 import "~/styles/base.css"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Quicksand, sans-serif",
-  },
-  components: {
-    MuiInput: {
-      styleOverrides: {
-        root: {
-          fontFamily: "Quicksand, sans-serif",
-          fontSize: "1.5rem",
-        },
-      },
-    },
-  },
-})
+import { ThemeProvider } from "@mui/material/styles"
+import theme from "~/lib/mui-theme"
 
 function App({ Component, pageProps }) {
   return (
