@@ -1,24 +1,44 @@
 import React from "react"
+import { useStore } from "~/zustand"
 import CreateShoppingItem from "./CreateShoppingItem"
 import CreateShoppingList from "./CreateShoppingList"
 import ShoppingItemInfo from "./ShoppingItemInfo"
 
-interface RightSidePaneProps {
-  itemType: "create-list" | "item-info" | "create-item"
-}
+interface RightSidePaneProps {}
 
-export const RightSidePane: React.FC<RightSidePaneProps> = ({ itemType }) => {
+export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
+  const sidePaneType = useStore((state) => state.sidePaneType)
   return (
     <aside className="right-sidepane">
-      {itemType === "create-list" && <CreateShoppingList />}
-      {itemType === "item-info" && <ShoppingItemInfo />}
-      {itemType === "create-item" && <CreateShoppingItem />}
+      {sidePaneType === "create-list" && <CreateShoppingList />}
+      {sidePaneType === "item-info" && <ShoppingItemInfo />}
+      {sidePaneType === "create-item" && <CreateShoppingItem />}
       <style jsx>
         {`
           .right-sidepane {
-            flex-basis: 38em;
+            flex-basis: 38rem;
+            flex-shrink: 0;
+            min-width: 38rem;
             height: 100vh;
             background: var(--clr-lightorange);
+            box-shadow: var(--elevation3);
+          }
+          @media (max-width: 1024px) {
+            .right-sidepane {
+              position: fixed;
+              left: calc(9.3rem + 2rem);
+              right: 0;
+              flex-basis: auto;
+              min-width: auto;
+            }
+          }
+          @media (max-width: 768px) {
+            .right-sidepane {
+              left: calc(6rem + 2rem);
+              right: 0;
+              flex-basis: auto;
+              min-width: auto;
+            }
           }
         `}
       </style>

@@ -9,18 +9,22 @@ import {
   IconButton,
 } from "@mui/material"
 import { CloseIcon } from "~/components/icons"
+import { useStore } from "~/zustand"
 
 interface ShoppingItemInfoProps {}
 
 const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
   const [open, setOpen] = useState(false)
+  const setSidePaneType = useStore((state) => state.setSidePaneType)
   const handleClose = () => {
     setOpen(false)
   }
   return (
     <div className="wrapper">
-      <button className="back">&#8656; back</button>
-      <div className="item">
+      <button className="back" onClick={() => setSidePaneType("create-list")}>
+        &#8656; back
+      </button>
+      <div className="item styled-scrollbars">
         <div className="item__inner">
           <div className="item__picture">
             <img src="/avocado.jpg" alt="avocado single and halved" />
@@ -56,7 +60,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
               fontSize: "1.5rem",
               color: "var(--clr-black)",
             }}
-            onClick={handleClose}
+            onClick={() => setOpen(true)}
           >
             delete
           </Button>
@@ -123,6 +127,9 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
               background: "var(--clr-red10)",
               fontSize: "1.5rem",
               fontWeight: "bold",
+              "&:hover": {
+                backgroundColor: "var(--clr-red11)",
+              },
             }}
           >
             Yes
@@ -136,6 +143,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
           background: var(--clr-white);
           padding: 4rem;
           height: 100%;
+          overflow-y: scroll;
         }
         .back {
           color: var(--clr-amber10);
@@ -144,12 +152,15 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
           line-height: 1.7rem;
           text-align: left;
           margin: 1.5rem 0;
+          text-decoration: underline;
         }
         .item {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+          gap: 2rem;
           height: 100%;
+          overflow-y: scroll;
         }
         .item__picture {
           width: 100%;
@@ -181,6 +192,18 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
         }
         .item__cta {
           text-align: center;
+        }
+
+        @media (max-width: 768px) {
+          .wrapper {
+            padding: 1rem;
+          }
+          .title dd {
+            font-size: 1.8rem;
+          }
+          dd {
+            font-size: 1.5rem;
+          }
         }
       `}</style>
     </div>

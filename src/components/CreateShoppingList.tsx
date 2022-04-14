@@ -1,10 +1,12 @@
-import { Button, TextField } from "@mui/material"
+import { Button } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import React, { useState } from "react"
-import { IShoppingItem } from "~/types"
-import { PencilOutlineIcon, DeleteOutlineIcon } from "./icons"
+import theme from "~/lib/mui-theme"
 import CButton from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
+import { IShoppingItem } from "~/types"
+import { useStore } from "~/zustand"
+import { DeleteOutlineIcon, PencilOutlineIcon } from "./icons"
 
 const list = {
   name: "shopping list",
@@ -51,6 +53,7 @@ const BannerButton = styled(Button)({
   },
 })
 const AdditemBanner = () => {
+  const setSidePaneType = useStore((state) => state.setSidePaneType)
   return (
     <div className="add-item-banner">
       <div className="banner-img">
@@ -58,7 +61,9 @@ const AdditemBanner = () => {
       </div>
       <div className="banner-info">
         <h3>Didn’t find what you need?</h3>
-        <BannerButton>Add item</BannerButton>
+        <BannerButton onClick={() => setSidePaneType("create-item")}>
+          Add item
+        </BannerButton>
       </div>
       <style jsx>{`
         .add-item-banner {
@@ -82,6 +87,11 @@ const AdditemBanner = () => {
         }
         h3 {
           font-size: 1.6rem;
+        }
+        @media (max-width: 40rem) {
+          .add-item-banner {
+            width: 100%;
+          }
         }
       `}</style>
     </div>
@@ -251,6 +261,11 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
           <CTextField
             placeholder="Enter a name"
             fullWidth
+            sx={{
+              [theme.breakpoints.down("sm")]: {
+                width: "25rem",
+              },
+            }}
             InputProps={{
               endAdornment: <CButton type="submit">Save</CButton>,
             }}
@@ -261,11 +276,14 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         .wrapper {
           position: relative;
           display: flex;
+          justify-content: space-between;
           flex-direction: column;
+          height: 100%;
         }
         .top {
           padding: 4rem;
           padding-bottom: 0;
+          flex-grow: 1;
         }
         .bottom {
           background: var(--clr-white);
@@ -300,6 +318,13 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         }
         h2 {
           font-size: 2.4rem;
+        }
+
+        @media (max-width: 768px) {
+          .top,
+          .bottom {
+            padding: 1.5rem;
+          }
         }
       `}</style>
     </div>
