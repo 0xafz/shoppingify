@@ -41,7 +41,7 @@ export const Menu: React.FC<MenuProps> = ({}) => {
           justify-content: space-between;
           align-items: center;
           height: 100vh;
-          width: 93.92px;
+          width: 9.3rem;
           padding: 3rem 0;
           background: var(--clr-white);
         }
@@ -91,6 +91,11 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         .logo img {
           width: 100%;
           height: 100%;
+        }
+        @media (max-width: 768px) {
+          .menu {
+            width: 6rem;
+          }
         }
       `}</style>
     </div>

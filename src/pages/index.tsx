@@ -1,8 +1,10 @@
-import { Button, InputAdornment, Paper } from "@mui/material"
+import { IconButton, InputAdornment, Paper } from "@mui/material"
 import React from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
+import { useStore } from "~/zustand"
 import Layout from "../components/Layout"
+import theme from "~/lib/mui-theme"
 
 const list = {
   name: "shopping list",
@@ -34,51 +36,63 @@ const list = {
 }
 
 const ShoppingItem = ({ name }: { name: string }) => {
+  const setSidePaneType = useStore((state) => state.setSidePaneType)
   return (
-    <Paper
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        minWidth: "18rem",
-        minHeight: "5rem",
-        padding: "1rem",
-        borderRadius: "1.2rem",
-        maxWidth: "20rem",
-      }}
-    >
-      <h3>{name}</h3>
-      <Button
-        variant="text"
+    <div className="s-item">
+      <button onClick={() => setSidePaneType("item-info")}>
+        <h3>{name}</h3>
+      </button>
+      <IconButton
         sx={{
-          fontSize: "1.5rem",
-          fontWeight: "500",
+          fontSize: "2rem",
+          fontWeight: "700",
           color: "var(--clr-gray10)",
         }}
       >
         <PlusIcon />
-      </Button>
+      </IconButton>
       <style jsx>{`
+        .s-item {
+          background: var(--clr-white);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          min-width: 18rem;
+          max-width: 20rem;
+          min-height: 5rem;
+          padding: 1rem;
+          border-radius: 1.2rem;
+          box-shadow: var(--elevation3);
+        }
         h3 {
           font-size: 1.6rem;
           font-weight: 500;
         }
+        @media (max-width: 640px) {
+          .s-item {
+            min-width: 13rem;
+            max-width: 14rem;
+          }
+          h3 {
+            font-size: 1.4rem;
+          }
+        }
       `}</style>
-    </Paper>
+    </div>
   )
 }
-interface ItemListGroupProps {
+interface ShoppingItemsGroupProps {
   groupName: string
   items: any[]
 }
-const ShoppingItemListGroup = ({ groupName, items }: ItemListGroupProps) => {
+const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
   return (
     <section>
       <h2>{groupName}</h2>
       <ul>
         {items.map((item) => (
-          <li>
-            <ShoppingItem name={item.name} key={item.id} />
+          <li key={item.id}>
+            <ShoppingItem name={item.name} />
           </li>
         ))}
       </ul>
@@ -94,17 +108,23 @@ const ShoppingItemListGroup = ({ groupName, items }: ItemListGroupProps) => {
         }
         ul {
           display: flex;
+          flex-flow: row wrap;
           gap: 4rem;
         }
         section {
           margin-bottom: 4rem;
+        }
+        @media (max-width: 768px) {
+          ul {
+            gap: 2rem;
+          }
         }
       `}</style>
     </section>
   )
 }
 
-const Blog = () => {
+const Home = () => {
   return (
     <Layout>
       <div className="wrapper">
@@ -115,6 +135,15 @@ const Blog = () => {
           </h1>
           <CTextField
             placeholder="search item"
+            sx={{
+              flexBasis: "30%",
+              maxWidth: "40rem",
+              minWidth: "30rem",
+              [theme.breakpoints.down("md")]: {
+                minWidth: "25rem",
+                fontSize: "1rem",
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start" style={{ fontSize: "2.5rem" }}>
@@ -126,7 +155,7 @@ const Blog = () => {
         </header>
         <main>
           {Object.entries(list.items).map(([key, items]) => (
-            <ShoppingItemListGroup groupName={key} items={items} key={key} />
+            <ShoppingItemsGroup groupName={key} items={items} key={key} />
           ))}
         </main>
       </div>
@@ -145,9 +174,17 @@ const Blog = () => {
         h1 span {
           color: var(--clr-amber10);
         }
+        @media (max-width: 1024px) {
+          .wrapper {
+            padding: 1rem;
+          }
+          h1 {
+            display: none;
+          }
+        }
       `}</style>
     </Layout>
   )
 }
 
-export default Blog
+export default Home
