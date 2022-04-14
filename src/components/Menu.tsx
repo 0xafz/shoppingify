@@ -36,6 +36,8 @@ export const Menu: React.FC<MenuProps> = ({}) => {
       <Cart />
       <style jsx>{`
         .menu {
+          position: sticky;
+          top: 0;
           display: flex;
           flex-direction: column;
           justify-content: space-between;

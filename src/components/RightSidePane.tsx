@@ -16,7 +16,9 @@ export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
       <style jsx>
         {`
           .right-sidepane {
-            flex-basis: 38rem;
+            position: sticky;
+            top: 0;
+            flex-basis: 40rem;
             flex-shrink: 0;
             min-width: 38rem;
             height: 100vh;

@@ -21,7 +21,7 @@ const Layout: React.FC<Props> = (props) => {
           }
           .container {
             flex-grow: 1;
-            max-width: calc(100% - 38rem - 9.3rem);
+            max-width: calc(100% - 40rem - 9.3rem);
           }
           @media (max-width: 1024px) {
             .container {
