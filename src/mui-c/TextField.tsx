@@ -1,5 +1,5 @@
 import styled from "@mui/system/styled"
-import { TextField } from "@mui/material"
+import TextField from "@mui/material/TextField"
 
 const CTextField = styled(TextField)({
   "& .MuiInputBase-root": {
@@ -18,6 +18,9 @@ const CTextField = styled(TextField)({
   },
   "& label.Mui-focused": {
     color: "var(--clr-amber10)",
+  },
+  "& .MuiFormHelperText-root": {
+    fontSize: "1.5rem",
   },
 })
 
