@@ -149,3 +149,10 @@ body {
   /* Background */
   background: transparent;
 }
+.error {
+  font-size: 1.5rem;
+  color: red;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  margin: 1rem 0;
+}

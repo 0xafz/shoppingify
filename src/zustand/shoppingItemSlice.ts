@@ -4,7 +4,7 @@ import { StoreSlice } from "."
 
 export type ShoppingItemSlice = {
   items: Array<IShoppingItem>
-  createShoppingItem: (item: IShoppingItem) => void
+  addShoppingItem: (item: IShoppingItem) => void
   removeShoppingItem: (id: number) => void
   resetShoppingItems: () => void
 }
@@ -14,35 +14,19 @@ export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
   get
 ) => ({
   items: [],
-  createShoppingItem: async (item) => {
-    try {
-      const result = await cfetch("/api/items", {
-        method: "POST",
-        body: JSON.stringify(item),
-      })
-      set((prev) => ({ items: [...prev.items, result] }))
-    } catch (error) {
-      console.error(error)
-    }
+  addShoppingItem: (item) => {
+    set((prev) => ({ items: [...prev.items, item] }))
   },
   removeShoppingItem: async (id) => {
-    try {
-      const result = await cfetch(`/api/items/${id}`, {
-        method: "DELETE",
-      })
-      set((prev) => ({ items: [...prev.items, result] }))
-    } catch (error) {
-      console.error(error)
-    }
+    const result = await cfetch(`/api/items/${id}`, {
+      method: "DELETE",
+    })
+    set((prev) => ({ items: [...prev.items, result] }))
   },
   resetShoppingItems: async () => {
-    try {
-      const result = await cfetch(`/api/items`, {
-        method: "GET",
-      })
-      set({ items: result })
-    } catch (error) {
-      console.error(error)
-    }
+    const result = await cfetch(`/api/items`, {
+      method: "GET",
+    })
+    set({ items: result })
   },
 })

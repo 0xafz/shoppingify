@@ -1,13 +1,11 @@
 import React, { useState } from "react"
 import CButton from "~/mui-c/Button"
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material"
+import IconButton from "@mui/material/IconButton"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogTitle from "@mui/material/DialogTitle"
 import { CloseIcon } from "~/components/icons"
 import { useStore } from "~/zustand"
 

@@ -10,12 +10,5 @@ export default async function cfetch(input: RequestInfo, options: RequestInit) {
     },
     ...other,
   })
-  const json = await res.json()
-
-  if (json.data) return json.data
-  if (json.error) {
-    throw new Error(json.error)
-  } else {
-    throw new Error("something went wrong!")
-  }
+  return await res.json()
 }
