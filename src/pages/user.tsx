@@ -5,19 +5,19 @@ import React from "react"
 import Layout from "~/components/Layout"
 import { RedButton } from "~/mui-c/Button"
 import { IUser } from "~/types"
-import { removeJwtTokens } from "~/utils/client"
+import { removeJwtTokens } from "~/utils/client/auth"
 import { useStore } from "~/zustand"
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const router = useRouter()
-  const setUser = useStore((state) => state.setUser)
+  const clearStore = useStore((state) => state.clearStore)
   const handleLogout = async () => {
     try {
       await fetch("/api/users/logout", {
         method: "POST",
       })
       sessionStorage.clear()
-      setUser(null)
+      clearStore()
       router.push("/user/sign-in")
     } catch (error) {
       console.error(error)
@@ -82,7 +82,9 @@ const User: React.FC<UserProps> = ({}) => {
           font-size: 1.5rem;
         }
         .login {
+          font-size: 2rem;
           text-align: center;
+          margin-top: 4rem;
         }
       `}</style>
     </Layout>

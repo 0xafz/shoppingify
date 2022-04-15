@@ -1,5 +1,5 @@
-import { IconButton, InputAdornment, Paper } from "@mui/material"
-import React from "react"
+import { IconButton, InputAdornment } from "@mui/material"
+import React, { useEffect } from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
 import { useStore } from "~/zustand"
@@ -125,6 +125,13 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
 }
 
 const Home = () => {
+  const items = useStore((state) => state.items)
+
+  const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
+  useEffect(() => {
+    fetchShoppingItems()
+  }, [])
+
   return (
     <Layout>
       <div className="wrapper">
@@ -154,9 +161,13 @@ const Home = () => {
           />
         </header>
         <main>
-          {list &&
-            Object.entries(list.items || {}).map(([key, items]) => (
-              <ShoppingItemsGroup groupName={key} items={items} key={key} />
+          {items &&
+            Object.entries(items || {}).map(([key, value], i) => (
+              <ShoppingItemsGroup
+                groupName={key}
+                items={value}
+                key={`${key}-${i}`}
+              />
             ))}
         </main>
       </div>
