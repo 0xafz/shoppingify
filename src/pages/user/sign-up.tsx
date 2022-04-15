@@ -6,7 +6,7 @@ import { CButton } from "~/mui-c/Button"
 import { getValidation } from "~/utils/client/form-validation"
 import cfetch from "~/lib/cfetch"
 import { useStore } from "~/zustand"
-import { setJwtToken, setRefreshToken } from "~/utils/client"
+import { setJwtToken, setRefreshToken } from "~/utils/client/auth"
 import { useRouter } from "next/router"
 import Link from "next/link"
 
@@ -37,6 +37,7 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
       })
       if (result.error) {
         setFormError(result.error)
+        return
       }
       if (result.data) {
         setJwtToken(result.data.jwt)

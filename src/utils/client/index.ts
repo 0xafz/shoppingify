@@ -1,35 +1,9 @@
-export function getJwtToken() {
-  return sessionStorage.getItem("jwt")
-}
-export function getRefreshToken() {
-  return sessionStorage.getItem("refreshToken")
-}
-export function setJwtToken(token: string) {
-  sessionStorage.setItem("jwt", token)
-}
-
-export function setRefreshToken(token: string) {
-  sessionStorage.setItem("refreshToken", token)
-}
-
-export function removeJwtTokens() {
-  localStorage.removeItem("jwt")
-  localStorage.removeItem("refreshToken")
-}
-
-export function getAuthHeaders() {
-  const headers: HeadersInit = {}
-  const token = getJwtToken()
-
-  if (token) headers["authorization"] = `Bearer ${token}`
-  return headers
-}
-export const getAuthFetchOptions = (): RequestInit => {
-  return {
-    // credentials: "include" is REQUIRED for cookies to work
-    credentials: "include",
-    headers: {
-      ...getAuthHeaders(),
-    },
-  }
+export const groupBy = (arr: Array<any>, by: string) => {
+  return arr.reduce((acc, curr) => {
+    const key = curr[by]
+    if (!key) throw new Error("key not found")
+    if (!acc[key]) acc[key] = []
+    acc[key].push(curr)
+    return acc
+  }, {})
 }
