@@ -239,20 +239,22 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
             </button>
           </div>
           <div className="add-list__body styled-scrollbars">
-            {Object.entries(list.items).map(([key, value], i) => (
-              <ShoppingListGroup
-                groupName={key}
-                items={value}
-                key={`${key}-${i}`}
-              />
-            ))}
-            {Object.entries(list.items).map(([key, value], i) => (
-              <ShoppingListGroup
-                groupName={key}
-                items={value}
-                key={`${key}-${i}`}
-              />
-            ))}
+            {list &&
+              Object.entries(list.items || {}).map(([key, value], i) => (
+                <ShoppingListGroup
+                  groupName={key}
+                  items={value}
+                  key={`${key}-${i}`}
+                />
+              ))}
+            {list &&
+              Object.entries(list.items || {}).map(([key, value], i) => (
+                <ShoppingListGroup
+                  groupName={key}
+                  items={value}
+                  key={`${key}-${i}`}
+                />
+              ))}
           </div>
         </div>
       </div>

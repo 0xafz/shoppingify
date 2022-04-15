@@ -154,9 +154,10 @@ const Home = () => {
           />
         </header>
         <main>
-          {Object.entries(list.items).map(([key, items]) => (
-            <ShoppingItemsGroup groupName={key} items={items} key={key} />
-          ))}
+          {list &&
+            Object.entries(list.items || {}).map(([key, items]) => (
+              <ShoppingItemsGroup groupName={key} items={items} key={key} />
+            ))}
         </main>
       </div>
       <style jsx>{`
