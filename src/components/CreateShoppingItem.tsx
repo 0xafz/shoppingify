@@ -27,6 +27,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       name: "",
@@ -44,8 +45,10 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
       })
       if (result.error) {
         setFormError(result.error)
+        return
       }
-      addShoppingItem(result)
+      addShoppingItem(result.data)
+      reset()
     } catch (err) {
       console.error(err)
       setFormError("something went wrong!")
