@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import CButton from "~/mui-c/Button"
+import { CButton, RedButton } from "~/mui-c/Button"
 import IconButton from "@mui/material/IconButton"
 import Button from "@mui/material/Button"
 import Dialog from "@mui/material/Dialog"
@@ -120,18 +120,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({}) => {
           >
             cancel
           </Button>
-          <CButton
-            sx={{
-              background: "var(--clr-red10)",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: "var(--clr-red11)",
-              },
-            }}
-          >
-            Yes
-          </CButton>
+          <RedButton>Yes</RedButton>
         </DialogActions>
       </Dialog>
       <style jsx>{`

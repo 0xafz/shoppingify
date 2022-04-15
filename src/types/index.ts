@@ -10,7 +10,9 @@ export type DecodedUser = {
   [x: string]: any
 }
 
-export type IUser = Omit<User, "password">
+export type IUser = Omit<User, "password" | "createdAt" | "updatedAt"> & {
+  createdAt: string
+}
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
 

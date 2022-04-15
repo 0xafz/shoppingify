@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button"
 import Autocomplete from "@mui/material/Autocomplete"
 import React, { useState } from "react"
-import CButton from "~/mui-c/Button"
+import { CButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
 import styled from "@mui/system/styled"
 import { useStore } from "~/zustand"

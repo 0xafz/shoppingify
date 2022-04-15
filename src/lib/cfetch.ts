@@ -5,6 +5,7 @@ export default async function cfetch(input: RequestInfo, options: RequestInit) {
   const res = await fetch(input, {
     credentials: "include",
     headers: {
+      "content-type": "application/json",
       ...getAuthHeaders(),
       ...headers,
     },

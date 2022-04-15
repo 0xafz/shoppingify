@@ -2,7 +2,12 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import Cart from "./Cart"
-import { ChartOutlineIcon, ListBulletedIcon, RefreshOutlineIcon } from "./icons"
+import {
+  ChartOutlineIcon,
+  ListBulletedIcon,
+  PersonIcon,
+  RefreshOutlineIcon,
+} from "./icons"
 
 interface MenuProps {}
 
@@ -30,6 +35,11 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         <Link href={"/stats"}>
           <a aria-label="stats" data-active={isActive("/stats")}>
             <ChartOutlineIcon aria-hidden="true" />
+          </a>
+        </Link>
+        <Link href={"/user"}>
+          <a aria-label="user info" data-active={isActive("/user")}>
+            <PersonIcon aria-hidden="true" />
           </a>
         </Link>
       </div>
