@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import Layout from "~/components/Layout"
 import dynamic from "next/dynamic"
 import C_LineChart from "~/components/charts/C_LineChart"
+import C_BarChart from "~/components/charts/C_BarChart"
 
 const topItems = [
   { name: "Banana", quantity: 60 },
@@ -13,10 +14,65 @@ const topCategories = [
   { name: "Meat and Fish", quantity: 75 },
   { name: "Random", quantity: 100 },
 ]
+// use normalized
+const totalItemsPerMonth = [
+  {
+    month: "January",
+    quantity: 100,
+  },
+  {
+    month: "Febraury",
+    quantity: 102,
+  },
+  {
+    month: "March",
+    quantity: 15,
+  },
+  {
+    month: "April",
+    quantity: 45,
+  },
+  {
+    month: "May",
+    quantity: 5,
+  },
+  {
+    month: "June",
+    quantity: 89,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+  {
+    month: "July",
+    quantity: 77,
+  },
+]
 
-const C_BarChart = dynamic(() => import("~/components/charts/C_BarChart"), {
-  ssr: false,
-})
+// const C_BarChart = dynamic(() => import("~/components/charts/C_BarChart"), {
+//   ssr: false,
+// })
 
 interface StatsProps {}
 
@@ -39,7 +95,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
   }, [topCategories])
   return (
     <Layout>
-      <div className="wrapper">
+      <div className="wrapper styled-scrollbars">
         <div className="bar-charts">
           <div className="chart-1">
             <h2>Top items</h2>
@@ -61,12 +117,17 @@ const Stats: React.FC<StatsProps> = ({}) => {
         </div>
         <div className="line-chart">
           <h2>Yearly Summary</h2>
-          <C_LineChart />
+          <C_LineChart
+            data={totalItemsPerMonth}
+            dataKey="quantity"
+            xAxisDataKey="month"
+          />
         </div>
       </div>
       <style jsx>{`
         .wrapper {
           padding: 4rem 6rem 6rem;
+          box-sizing: border-box;
         }
         h2 {
           font-size: 2.4rem;
@@ -77,17 +138,37 @@ const Stats: React.FC<StatsProps> = ({}) => {
         .bar-charts {
           display: flex;
           width: 100%;
-          height: 40rem;
+          height: 40vh;
           gap: 5rem;
+          overflow: hidden;
         }
         .chart-1,
         .chart-2 {
-          flex-grow: 1;
+          flex-basis: 50%;
         }
         .line-chart {
-          height: 40rem;
+          margin-top: 2rem;
+          height: 40vh;
           width: 100%;
-          padding-top: 4rem;
+        }
+        .line-chart div {
+          height: 100%;
+        }
+        @media (max-width: 1024px) {
+          .wrapper {
+            padding: 1rem;
+          }
+          h2 {
+            font-size: 1.8rem;
+            line-height: 2rem;
+          }
+          @media (max-width: 768px) {
+            .bar-charts {
+              flex-direction: column;
+              height: 90vh;
+              gap: 0rem;
+            }
+          }
         }
       `}</style>
     </Layout>

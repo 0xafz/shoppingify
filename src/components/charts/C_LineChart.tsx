@@ -3,85 +3,48 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  LineProps,
   ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts"
 
-const totalItemsPerMonth = [
-  {
-    month: "January",
-    quantity: 100,
-  },
-  {
-    month: "Febraury",
-    quantity: 102,
-  },
-  {
-    month: "March",
-    quantity: 15,
-  },
-  {
-    month: "April",
-    quantity: 45,
-  },
-  {
-    month: "May",
-    quantity: 5,
-  },
-  {
-    month: "June",
-    quantity: 89,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-]
-interface C_LineChartProps {}
+interface C_LineChartProps {
+  data: Array<{ [key: string]: any }>
+  dataKey: string
+  xAxisDataKey: string
+  yAxisDataKey?: string
+  stroke?: string
+  xAxisType?: "category" | "number"
+  lineType?: LineProps["type"]
+}
 
-const C_LineChart: React.FC<C_LineChartProps> = ({}) => {
+const C_LineChart: React.FC<C_LineChartProps> = ({
+  xAxisDataKey,
+  dataKey,
+  yAxisDataKey,
+  stroke = "#8884d8",
+  xAxisType = "category",
+  lineType = "monotone",
+  data,
+}) => {
   return (
-    <ResponsiveContainer width={"100%"} height="100%">
-      <LineChart
-        // width={1000}
-        // height={400}
-        data={totalItemsPerMonth}
-        margin={{ left: 0 }}
-      >
+    <ResponsiveContainer width={"100%"} height="69%">
+      <LineChart data={data} margin={{ left: 0 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
-          dataKey="month"
-          type="category"
-          fontSize={"1.5rem"}
+          dataKey={xAxisDataKey}
+          type={xAxisType}
           fontWeight="500"
+          fontSize={"1.4rem"}
         />
-        <YAxis fontSize={"1.8rem"} fontWeight="500" />
-        <Line type="monotone" dataKey="quantity" stroke="#8884d8" />
+        <YAxis
+          fontWeight="500"
+          width={30}
+          fontSize="1.5rem"
+          dataKey={yAxisDataKey}
+        />
+        <Line type={lineType} dataKey={dataKey} stroke={stroke} />
       </LineChart>
     </ResponsiveContainer>
   )

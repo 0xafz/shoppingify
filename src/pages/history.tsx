@@ -1,6 +1,11 @@
 import Link from "next/link"
 import React from "react"
-import { CalendarIcon, ChevronRightIcon } from "~/components/icons"
+import {
+  CalendarIcon,
+  CheckCircleIcon,
+  ChevronRightIcon,
+  CrossCircleIcon,
+} from "~/components/icons"
 import Layout from "~/components/Layout"
 
 const timelinedLists = [
@@ -47,15 +52,27 @@ const ShoppingList = ({ name, date, status }: any) => {
         <h3>{name}</h3>
         <div className="s-list__details">
           <div className="s-list__date">
-            <CalendarIcon fontSize={"2rem"} />
+            <CalendarIcon />
             <span>{date}</span>
           </div>
           <div
-            className={`status ${
+            className={`lg__status ${
               status === "completed" ? "completed" : "cancelled"
             }`}
           >
             {status}
+          </div>
+          <div
+            className={`sm__status ${
+              status === "completed" ? "completed" : "cancelled"
+            }`}
+            title={`${name} ${status}`}
+          >
+            {status === "completed" ? (
+              <CheckCircleIcon color="var(--clr-green9)" />
+            ) : (
+              <CrossCircleIcon color="var(--clr-red9)" />
+            )}
           </div>
           <button>
             <ChevronRightIcon />
@@ -79,7 +96,10 @@ const ShoppingList = ({ name, date, status }: any) => {
           }
           .s-list__date {
             color: var(--clr-gray11);
-            gap: 0.5em;
+            gap: 0.3rem;
+          }
+          .s-list__date svg {
+            font-size: 1.4rem;
           }
           .s-list__details,
           .s-list__date {
@@ -100,18 +120,22 @@ const ShoppingList = ({ name, date, status }: any) => {
             line-height: 2em;
             font-weight: 500;
           }
-          .status {
+          .lg__status {
             padding: 0.5em;
             border-radius: 0.8em;
             font-weight: 700;
           }
-          .status.completed {
-            color: var(--clr-sky10);
-            border: 1px solid var(--clr-sky10);
+          .lg__status.completed {
+            color: var(--clr-green9);
+            border: 1px solid var(--clr-green9);
           }
-          .status.cancelled {
+          .lg__status.cancelled {
             color: var(--clr-red9);
             border: 1px solid var(--clr-red9);
+          }
+          .sm__status {
+            display: none;
+            font-size: 1.4rem;
           }
           @media (max-width: 768px) {
             button {
@@ -121,11 +145,20 @@ const ShoppingList = ({ name, date, status }: any) => {
               padding: 1em;
             }
 
+            .sm__status {
+              display: inline-block;
+            }
+            .lg__status {
+              display: none;
+            }
             h3 {
               font-size: 1.2em;
             }
             .s-list__details {
               font-size: 1.2rem;
+            }
+            svg {
+              font-size: 1rem;
             }
           }
         `}</style>
@@ -150,19 +183,17 @@ const ShoppingListsGroup = ({ groupName, items }: ShoppingListsGroupProps) => {
       </ul>
       <style jsx>{`
         section {
-          margin-bottom: 4rem;
+          margin-bottom: 5rem;
         }
 
         h2 {
-          font-size: 1.2rem;
+          font-size: 1.4rem;
           font-weight: 500;
           margin: 1rem 0;
         }
         ul {
           list-style: none;
           padding: 0;
-        }
-        ul {
           display: flex;
           flex-direction: column;
           gap: 3rem;
