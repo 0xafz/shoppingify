@@ -1,3 +1,4 @@
+import produce from "immer"
 import cfetch from "~/lib/cfetch"
 import { Action, IShoppingItem } from "~/types"
 import { groupBy } from "~/utils/client"
@@ -14,41 +15,26 @@ const shoppingItemReducer = (
 ) => {
   switch (action.type) {
     case "item:add":
-      const item = action.payload
-      const filteredCategory = state.itemsGrouped[item.category]
-      if (!filteredCategory) {
-        return {
-          ...state,
-          itemsGrouped: {
-            ...state.itemsGrouped,
-            [item.category]: [item],
-          },
-        }
+      const { category } = action.payload
+      if (category in state.itemsGrouped) {
+        state.itemsGrouped[category].push(action.payload)
       } else {
-        return {
-          ...state,
-          itemsGrouped: {
-            ...state.itemsGrouped,
-            [item.category]: [...filteredCategory, item],
-          },
-        }
+        state.itemsGrouped[category] = [action.payload]
       }
+      break
     case "item:remove":
-      const { category, itemId } = action.payload
-      const catElements = state.itemsGrouped[category]
-      if (!catElements) {
-        return state
+      {
+        const { category, itemId } = action.payload
+        const targetItems = state.itemsGrouped[category]
+        if (!targetItems) {
+          return
+        }
+        const filteredCatElements = targetItems.filter(
+          (item) => item.id !== itemId
+        )
+        state.itemsGrouped[category] = filteredCatElements
       }
-      const filteredCatElements = catElements.filter(
-        (item) => item.id !== itemId
-      )
-      return {
-        ...state,
-        itemsGrouped: {
-          ...state.itemsGrouped,
-          [category]: [...filteredCatElements],
-        },
-      }
+      break
     default:
       break
   }
@@ -64,7 +50,8 @@ export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
 ) => ({
   itemsGrouped: {},
   itemsUngrouped: [],
-  dispatchItem: (args) => set((state) => shoppingItemReducer(state, args)),
+  dispatchItem: (args) =>
+    set(produce((state) => shoppingItemReducer(state, args))),
   fetchShoppingItems: async () => {
     const result = await cfetch(`/api/items`, {
       method: "GET",
