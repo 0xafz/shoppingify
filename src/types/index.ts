@@ -17,7 +17,7 @@ export type IUser = Omit<User, "password" | "createdAt" | "updatedAt"> & {
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
 
 export type IShoppingList = ShoppingList & {
-  shoppingItems?: ShoppingItemToList
+  shoppingItems?: ShoppingItemToList[]
 }
 
 export type IShoppingItem = ShoppingItem
@@ -26,15 +26,18 @@ export type IShoppingItem = ShoppingItem
 //   Omit<ShoppingItem, "createdAt" | "id" | "userId">
 // >
 
-// export type IShoppingListArgs = Partial<
-//   Omit<ShoppingList, "id" | "userId" | "updatedAt" | "createdAt"> & {
-//     shoppingItems?: IShoppingItemToListArgs[]
-//   }
-// >
+export type IShoppingListArgs = Omit<
+  ShoppingList,
+  "id" | "userId" | "updatedAt" | "createdAt"
+> & {
+  shoppingItems?: IShoppingItemToListArgs[]
+}
 
-// export type IShoppingItemToListArgs = Partial<
-//   Omit<
-//     ShoppingItemToList,
-//     "assignedBy" | "assignedAt" | "shoppingItemId" | "shoppingListId"
-//   >
-// >
+export type IShoppingItemToListArgs = Omit<
+  ShoppingItemToList,
+  "assignedBy" | "assignedAt" | "shoppingListId"
+>
+
+export type Action<T, P = undefined> = P extends undefined
+  ? { type: T }
+  : { type: T; payload: P }

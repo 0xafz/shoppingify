@@ -127,17 +127,17 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
 }
 
 const Home = () => {
-  const items = useStore((state) => state.items)
+  const itemsGrouped = useStore((state) => state.itemsGrouped)
   const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
   const [search, setSearch] = useState("")
-  const [filtered, setFiltered] = useState(items)
+  const [filtered, setFiltered] = useState(itemsGrouped)
 
   useEffect(() => {
     fetchShoppingItems()
   }, [])
 
   const debouncedFilter = useCallback(
-    debounce((items: ShoppingItemSlice["items"], search: string) => {
+    debounce((items: ShoppingItemSlice["itemsGrouped"], search: string) => {
       setFiltered(
         Object.entries(items).reduce((acc, [category, items]) => {
           const filteredCategoryItems = items.filter(
@@ -156,7 +156,7 @@ const Home = () => {
     setSearch(e.target.value)
   }
   useEffect(() => {
-    debouncedFilter(items, search)
+    debouncedFilter(itemsGrouped, search)
   }, [search])
 
   return (

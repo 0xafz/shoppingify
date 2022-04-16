@@ -22,7 +22,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
   const setSidePaneType = useStore((state) => state.setSidePaneType)
-  const addShoppingItem = useStore((state) => state.addShoppingItem)
+  const dispatchItem = useStore((state) => state.dispatchItem)
   const {
     control,
     handleSubmit,
@@ -47,7 +47,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
         setFormError(result.error)
         return
       }
-      addShoppingItem(result.data)
+      dispatchItem({ type: "item:add", payload: result.data })
       reset()
     } catch (err) {
       console.error(err)
