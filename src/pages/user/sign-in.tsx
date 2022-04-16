@@ -23,9 +23,8 @@ const SignIn: React.FC<SignInProps> = ({}) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: undefined,
-      email: undefined,
-      password: undefined,
+      email: "",
+      password: "",
     },
   })
   const onSubmit = async (data: any) => {

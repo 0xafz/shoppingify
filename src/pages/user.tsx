@@ -16,13 +16,14 @@ const UserInfo = ({ user }: { user: IUser }) => {
       await fetch("/api/users/logout", {
         method: "POST",
       })
-      sessionStorage.clear()
-      clearStore()
-      router.push("/user/sign-in")
     } catch (error) {
       console.error(error)
+    } finally {
+      sessionStorage.clear()
+      clearStore()
+      removeJwtTokens()
+      router.push("/user/sign-in")
     }
-    removeJwtTokens()
   }
   return (
     <>
