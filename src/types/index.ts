@@ -10,8 +10,26 @@ export type DecodedUser = {
   [x: string]: any
 }
 
+export type CreateUserInput = Omit<User, "createdAt" | "updatedAt" | "id">
+
 export type IUser = Omit<User, "password" | "createdAt" | "updatedAt"> & {
   createdAt: string
+}
+export type CreateListInput = {
+  name: string
+  status: string
+}
+export type CreateItemInput = {
+  name: string
+  note?: string
+  imageUrl?: string
+  category: string
+}
+export type ItemInList = {
+  shoppingItemId: number
+  quantity: number
+  name: string
+  category: string
 }
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
@@ -21,22 +39,6 @@ export type IShoppingList = ShoppingList & {
 }
 
 export type IShoppingItem = ShoppingItem
-
-// export type IShoppingItemArgs = Partial<
-//   Omit<ShoppingItem, "createdAt" | "id" | "userId">
-// >
-
-export type IShoppingListArgs = Omit<
-  ShoppingList,
-  "id" | "userId" | "updatedAt" | "createdAt"
-> & {
-  shoppingItems?: IShoppingItemToListArgs[]
-}
-
-export type IShoppingItemToListArgs = Omit<
-  ShoppingItemToList,
-  "assignedBy" | "assignedAt" | "shoppingListId"
->
 
 export type Action<T, P = undefined> = P extends undefined
   ? { type: T }

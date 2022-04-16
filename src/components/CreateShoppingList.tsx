@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import theme from "~/lib/mui-theme"
 import { CButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
-import { IShoppingItem } from "~/types"
+import { ItemInList } from "~/types"
 import { useStore } from "~/zustand"
 import { DeleteOutlineIcon, PencilOutlineIcon } from "./icons"
 
@@ -100,7 +100,7 @@ const AdditemBanner = () => {
 
 interface ShoppingListGroupProps {
   groupName: string
-  items: Array<any & { quantity: number }>
+  items: Array<ItemInList>
 }
 const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
   groupName,
@@ -112,9 +112,9 @@ const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
       <ul>
         {items.map((item) => (
           <ShoppingListItem
-            item={item}
-            quantity={item.quantity}
-            key={item.id}
+            category={groupName}
+            {...item}
+            key={item.shoppingItemId}
           />
         ))}
       </ul>
@@ -135,22 +135,62 @@ const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
   )
 }
 
-interface ShoppingListItemProps {
-  item: IShoppingItem
-  quantity?: number
-}
-const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
+interface ShoppingListItemProps extends ItemInList {}
+const ShoppingListItem = ({
+  name,
+  category,
+  shoppingItemId,
+  quantity = 1,
+}: ShoppingListItemProps) => {
   const [showOptions, setShowOptions] = useState(false)
+  const dispatchList = useStore((state) => state.dispatchList)
+  const handleDelete = () => {
+    dispatchList({
+      type: "list:delete-item",
+      payload: {
+        shoppingItemId,
+        category,
+      },
+    })
+  }
+  const handlePlusMinus = (delta: -1 | 1) => {
+    if (quantity === 1 && delta === -1) {
+      dispatchList({
+        type: "list:delete-item",
+        payload: {
+          shoppingItemId,
+          category,
+        },
+      })
+      return
+    }
+    dispatchList({
+      type: "list:update-item",
+      payload: {
+        shoppingItemId,
+        quantity: quantity + delta,
+        category,
+      },
+    })
+  }
   return (
     <li>
-      <p>{item.name}</p>
+      <p>{name}</p>
       <div className="quantity">
         {showOptions && (
           <>
-            <button className="delete flex-center" title="delete item">
-              <DeleteOutlineIcon />
+            <button
+              className="delete flex-center"
+              title="delete item"
+              onClick={handleDelete}
+            >
+              <DeleteOutlineIcon aria-hidden="true" />
             </button>
-            <button className="minus" title="decrease item count">
+            <button
+              className="minus"
+              title="decrease item count"
+              onClick={() => handlePlusMinus(-1)}
+            >
               -
             </button>
           </>
@@ -163,7 +203,11 @@ const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
           {quantity} pcs
         </button>
         {showOptions && (
-          <button className="plus" title="increase item count">
+          <button
+            className="plus"
+            title="increase item count"
+            onClick={() => handlePlusMinus(+1)}
+          >
             +
           </button>
         )}
@@ -226,6 +270,8 @@ const ShoppingListItem = ({ item, quantity = 1 }: ShoppingListItemProps) => {
 interface CreateShoppingListProps {}
 
 const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
+  const currList = useStore((state) => state.currList)
+  const currListItems = useStore((state) => state.currListItems)
   const handleEditListName = () => {}
   return (
     <div className="wrapper">
@@ -233,28 +279,22 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         <AdditemBanner />
         <div className="add-list">
           <div className="add-list__header">
-            <h2>{list.name}</h2>
+            <h2>{currList.name}</h2>
             <button title="edit list name" onClick={handleEditListName}>
               <PencilOutlineIcon aria-hidden="true" />
             </button>
           </div>
           <div className="add-list__body styled-scrollbars">
             {list &&
-              Object.entries(list.items || {}).map(([key, value], i) => (
-                <ShoppingListGroup
-                  groupName={key}
-                  items={value}
-                  key={`${key}-${i}`}
-                />
-              ))}
-            {list &&
-              Object.entries(list.items || {}).map(([key, value], i) => (
-                <ShoppingListGroup
-                  groupName={key}
-                  items={value}
-                  key={`${key}-${i}`}
-                />
-              ))}
+              Object.entries(currListItems || {}).map(
+                ([category, items], i) => (
+                  <ShoppingListGroup
+                    groupName={category}
+                    items={items}
+                    key={`${category}-${i}`}
+                  />
+                )
+              )}
           </div>
         </div>
       </div>

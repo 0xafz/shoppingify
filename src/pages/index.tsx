@@ -7,6 +7,7 @@ import Layout from "../components/Layout"
 import theme from "~/lib/mui-theme"
 import { debounce } from "~/utils/client"
 import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
+import { IShoppingItem } from "~/types"
 
 const list = {
   name: "shopping list",
@@ -37,12 +38,24 @@ const list = {
   },
 }
 
-const ShoppingItem = ({ name }: { name: string }) => {
+const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   const setSidePaneType = useStore((state) => state.setSidePaneType)
+  const dispatchList = useStore((state) => state.dispatchList)
+  const handleAdd = () => {
+    dispatchList({
+      type: "list:add-item",
+      payload: {
+        shoppingItemId: item.id,
+        category: item.category,
+        quantity: 1,
+        name: item.name,
+      },
+    })
+  }
   return (
     <div className="s-item">
       <button onClick={() => setSidePaneType("item-info")}>
-        <h3>{name}</h3>
+        <h3>{item.name}</h3>
       </button>
       <IconButton
         sx={{
@@ -50,6 +63,7 @@ const ShoppingItem = ({ name }: { name: string }) => {
           fontWeight: "700",
           color: "var(--clr-gray10)",
         }}
+        onClick={handleAdd}
       >
         <PlusIcon />
       </IconButton>
@@ -85,7 +99,7 @@ const ShoppingItem = ({ name }: { name: string }) => {
 }
 interface ShoppingItemsGroupProps {
   groupName: string
-  items: any[]
+  items: IShoppingItem[]
 }
 const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
   return (
@@ -94,7 +108,7 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
       <ul>
         {items.map((item) => (
           <li key={item.id}>
-            <ShoppingItem name={item.name} />
+            <ShoppingItem item={item} />
           </li>
         ))}
       </ul>
@@ -191,11 +205,11 @@ const Home = () => {
         </header>
         <main>
           {filtered &&
-            Object.entries(filtered || {}).map(([key, value], i) => (
+            Object.entries(filtered || {}).map(([category, items], i) => (
               <ShoppingItemsGroup
-                groupName={key}
-                items={value}
-                key={`${key}-${i}`}
+                groupName={category}
+                items={items}
+                key={`${category}-${i}`}
               />
             ))}
         </main>
