@@ -1,10 +1,12 @@
 import { IconButton, InputAdornment } from "@mui/material"
-import React, { useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
 import { useStore } from "~/zustand"
 import Layout from "../components/Layout"
 import theme from "~/lib/mui-theme"
+import { debounce } from "~/utils/client"
+import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
 
 const list = {
   name: "shopping list",
@@ -126,11 +128,36 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
 
 const Home = () => {
   const items = useStore((state) => state.items)
-
   const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
+  const [search, setSearch] = useState("")
+  const [filtered, setFiltered] = useState(items)
+
   useEffect(() => {
     fetchShoppingItems()
   }, [])
+
+  const debouncedFilter = useCallback(
+    debounce((items: ShoppingItemSlice["items"], search: string) => {
+      setFiltered(
+        Object.entries(items).reduce((acc, [category, items]) => {
+          const filteredCategoryItems = items.filter(
+            (item) => item.name.search(new RegExp(search, "ig")) !== -1
+          )
+          if (filteredCategoryItems.length !== 0) {
+            acc[category] = filteredCategoryItems
+          }
+          return acc
+        }, {})
+      )
+    }, 400),
+    []
+  )
+  const handleSearchChange = (e: any) => {
+    setSearch(e.target.value)
+  }
+  useEffect(() => {
+    debouncedFilter(items, search)
+  }, [search])
 
   return (
     <Layout>
@@ -151,6 +178,8 @@ const Home = () => {
                 fontSize: "1rem",
               },
             }}
+            value={search}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start" style={{ fontSize: "2.5rem" }}>
@@ -161,8 +190,8 @@ const Home = () => {
           />
         </header>
         <main>
-          {items &&
-            Object.entries(items || {}).map(([key, value], i) => (
+          {filtered &&
+            Object.entries(filtered || {}).map(([key, value], i) => (
               <ShoppingItemsGroup
                 groupName={key}
                 items={value}
