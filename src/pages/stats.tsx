@@ -1,98 +1,35 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import Layout from "~/components/Layout"
-import dynamic from "next/dynamic"
 import C_LineChart from "~/components/charts/C_LineChart"
 import C_BarChart from "~/components/charts/C_BarChart"
-
-const topItems = [
-  { name: "Banana", quantity: 60 },
-  { name: "Rice", quantity: 20 },
-  { name: "Chicken", quantity: 200 },
-]
-const topCategories = [
-  { name: "Fruit and veggies", quantity: 90 },
-  { name: "Meat and Fish", quantity: 75 },
-  { name: "Random", quantity: 100 },
-]
-// use normalized
-const totalItemsPerMonth = [
-  {
-    month: "January",
-    quantity: 100,
-  },
-  {
-    month: "Febraury",
-    quantity: 102,
-  },
-  {
-    month: "March",
-    quantity: 15,
-  },
-  {
-    month: "April",
-    quantity: 45,
-  },
-  {
-    month: "May",
-    quantity: 5,
-  },
-  {
-    month: "June",
-    quantity: 89,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-  {
-    month: "July",
-    quantity: 77,
-  },
-]
-
-// const C_BarChart = dynamic(() => import("~/components/charts/C_BarChart"), {
-//   ssr: false,
-// })
+import { useStore } from "~/zustand"
 
 interface StatsProps {}
 
 const Stats: React.FC<StatsProps> = ({}) => {
+  const fetchStats = useStore((state) => state.fetchStats)
+  useEffect(() => {
+    fetchStats()
+  }, [])
+  const stats = useStore((state) => state.stats)
   const topItemsNormalized = useMemo(() => {
-    const total = topItems.reduce((acc, curr) => acc + curr.quantity, 0)
+    if (!stats.byItem) return []
+    const total = stats.byItem.reduce((acc, curr) => acc + curr.quantity, 0)
 
-    return topItems.map((item) => ({
+    return stats.byItem.map((item) => ({
       ...item,
       percent: Math.round((item.quantity * 100) / total),
     }))
-  }, [topItems])
+  }, [stats])
   const topCategoriesNormalized = useMemo(() => {
-    const total = topCategories.reduce((acc, curr) => acc + curr.quantity, 0)
+    // if (!stats.byCategory) return []
+    const total = stats.byCategory.reduce((acc, curr) => acc + curr.quantity, 0)
 
-    return topCategories.map((item) => ({
+    return stats.byCategory.map((item) => ({
       ...item,
       percent: Math.round((item.quantity * 100) / total),
     }))
-  }, [topCategories])
+  }, [stats])
   return (
     <Layout>
       <div className="wrapper styled-scrollbars">
@@ -102,7 +39,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
             <C_BarChart
               data={topItemsNormalized}
               xAxisDataKey="percent"
-              yAxisDataKey="name"
+              yAxisDataKey="itemName"
             />
           </div>
           <div className="chart-2">
@@ -110,7 +47,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
             <C_BarChart
               data={topCategoriesNormalized}
               xAxisDataKey="percent"
-              yAxisDataKey="name"
+              yAxisDataKey="categoryName"
               fill="var(--clr-sky10)"
             />
           </div>
@@ -118,7 +55,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
         <div className="line-chart">
           <h2>Yearly Summary</h2>
           <C_LineChart
-            data={totalItemsPerMonth}
+            data={stats.byMonth}
             dataKey="quantity"
             xAxisDataKey="month"
           />

@@ -6,16 +6,9 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-const BarShape = ({
-  name,
-  x,
-  y,
-  width,
-  height,
-  fill,
-  background,
-  value,
-}: any) => {
+const BarShape = (props: any) => {
+  const { yAxisDataKey, x, y, width, height, fill, background, value } = props
+  const name = props[yAxisDataKey]
   return (
     <g
       fontSize={background.width < 268 ? "1.4rem" : "1.8rem"}
@@ -74,7 +67,7 @@ const C_BarChart = ({
           dataKey={dataKey || xAxisDataKey}
           fill={fill}
           barSize={barSize}
-          shape={<BarShape />}
+          shape={<BarShape yAxisDataKey={yAxisDataKey} />}
         ></Bar>
       </ReBarChart>
     </ResponsiveContainer>
