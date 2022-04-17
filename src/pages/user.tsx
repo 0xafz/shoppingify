@@ -7,6 +7,7 @@ import { RedButton } from "~/mui-c/Button"
 import { IUser } from "~/types"
 import { removeJwtTokens } from "~/utils/client/auth"
 import { useStore } from "~/zustand"
+import NotLoggedIn from "~/components/NotLoggedIn"
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const router = useRouter()
@@ -69,13 +70,7 @@ const User: React.FC<UserProps> = ({}) => {
   return (
     <Layout>
       <div className="wrapper">
-        {user ? (
-          <UserInfo user={user} />
-        ) : (
-          <div className="login">
-            Please <Link href="/user/sign-in">login</Link>
-          </div>
-        )}
+        {user ? <UserInfo user={user} /> : <NotLoggedIn />}
       </div>
       <style jsx>{`
         .wrapper {

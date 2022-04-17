@@ -8,35 +8,7 @@ import theme from "~/lib/mui-theme"
 import { debounce } from "~/utils/client"
 import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
 import { IShoppingItem } from "~/types"
-
-const list = {
-  name: "shopping list",
-  status: "incomplete",
-  items: {
-    "Fruits and vegetables": [
-      {
-        id: 1,
-        name: "Tomato",
-      },
-      {
-        id: 2,
-        name: "Apple",
-      },
-    ],
-    "Meat and Fish": [
-      {
-        id: 3,
-        name: "Chicken",
-      },
-    ],
-    Beverages: [
-      {
-        id: 4,
-        name: "Soda",
-      },
-    ],
-  },
-}
+import NotLoggedIn from "~/components/NotLoggedIn"
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   const setSidePaneType = useStore((state) => state.setSidePaneType)
@@ -139,16 +111,10 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
     </section>
   )
 }
-
-const Home = () => {
-  const itemsGrouped = useStore((state) => state.itemsGrouped)
-  const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
+const HomeContent = () => {
   const [search, setSearch] = useState("")
+  const itemsGrouped = useStore((state) => state.itemsGrouped)
   const [filtered, setFiltered] = useState(itemsGrouped)
-
-  useEffect(() => {
-    fetchShoppingItems()
-  }, [])
 
   const debouncedFilter = useCallback(
     debounce((items: ShoppingItemSlice["itemsGrouped"], search: string) => {
@@ -174,50 +140,45 @@ const Home = () => {
   }, [search])
 
   return (
-    <Layout>
-      <div className="wrapper">
-        <header className="flex-between">
-          <h1>
-            <span>Shoppingify</span> allows you take your shopping list wherever
-            you go
-          </h1>
-          <CTextField
-            placeholder="search item"
-            sx={{
-              flexBasis: "30%",
-              maxWidth: "40rem",
-              minWidth: "30rem",
-              [theme.breakpoints.down("md")]: {
-                minWidth: "25rem",
-                fontSize: "1rem",
-              },
-            }}
-            value={search}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" style={{ fontSize: "2.5rem" }}>
-                  <SearchOutlineIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </header>
-        <main>
-          {filtered &&
-            Object.entries(filtered || {}).map(([category, items], i) => (
-              <ShoppingItemsGroup
-                groupName={category}
-                items={items}
-                key={`${category}-${i}`}
-              />
-            ))}
-        </main>
-      </div>
+    <>
+      <header className="flex-between">
+        <h1>
+          <span>Shoppingify</span> allows you take your shopping list wherever
+          you go
+        </h1>
+        <CTextField
+          placeholder="search item"
+          sx={{
+            flexBasis: "30%",
+            maxWidth: "40rem",
+            minWidth: "30rem",
+            [theme.breakpoints.down("md")]: {
+              minWidth: "25rem",
+              fontSize: "1rem",
+            },
+          }}
+          value={search}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start" style={{ fontSize: "2.5rem" }}>
+                <SearchOutlineIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </header>
+      <main>
+        {filtered &&
+          Object.entries(filtered || {}).map(([category, items], i) => (
+            <ShoppingItemsGroup
+              groupName={category}
+              items={items}
+              key={`${category}-${i}`}
+            />
+          ))}
+      </main>
       <style jsx>{`
-        .wrapper {
-          padding: 4rem;
-        }
         main {
           margin-top: 3rem;
         }
@@ -235,6 +196,32 @@ const Home = () => {
           }
           h1 {
             display: none;
+          }
+        }
+      `}</style>
+    </>
+  )
+}
+
+const Home = () => {
+  const user = useStore((state) => state.user)
+  const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
+
+  useEffect(() => {
+    fetchShoppingItems()
+  }, [])
+
+  return (
+    <Layout>
+      <div className="wrapper">{user ? <HomeContent /> : <NotLoggedIn />}</div>
+      <style jsx>{`
+        .wrapper {
+          padding: 4rem;
+        }
+
+        @media (max-width: 1024px) {
+          .wrapper {
+            padding: 1rem;
           }
         }
       `}</style>
