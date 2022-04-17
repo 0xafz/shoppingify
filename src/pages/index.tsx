@@ -11,22 +11,32 @@ import { IShoppingItem } from "~/types"
 import NotLoggedIn from "~/components/NotLoggedIn"
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
-  const setSidePaneType = useStore((state) => state.setSidePaneType)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const dispatchList = useStore((state) => state.dispatchList)
   const handleAdd = () => {
-    dispatchList({
-      type: "list:add-item",
-      payload: {
-        shoppingItemId: item.id,
-        category: item.category,
-        quantity: 1,
-        name: item.name,
-      },
+    dispatchDrawer({
+      type: "drawer:set",
+      payload: "create-list",
     })
+    setTimeout(() => {
+      dispatchList({
+        type: "list:add-item",
+        payload: {
+          shoppingItemId: item.id,
+          category: item.category,
+          quantity: 1,
+          name: item.name,
+        },
+      })
+    }, 500)
   }
   return (
     <div className="s-item">
-      <button onClick={() => setSidePaneType("item-info")}>
+      <button
+        onClick={() =>
+          dispatchDrawer({ type: "drawer:set-info-item", payload: item })
+        }
+      >
         <h3>{item.name}</h3>
       </button>
       <IconButton

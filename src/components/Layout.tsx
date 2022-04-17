@@ -1,19 +1,19 @@
 import React, { ReactNode } from "react"
 import { useStore } from "~/zustand"
 import { Menu } from "./Menu"
-import { RightSidePane } from "./RightSidePane"
+import RightSideDrawer from "./RightSideDrawer"
 
 type Props = {
   children: ReactNode
 }
 
 const Layout: React.FC<Props> = (props) => {
-  const showSidePane = useStore((state) => state.showSidePane)
+  const showRightSideDrawer = useStore((state) => state.showRightSideDrawer)
   return (
     <div {...props} className="layout">
       <Menu />
       <div className="container">{props.children}</div>
-      {showSidePane && <RightSidePane />}
+      {showRightSideDrawer && <RightSideDrawer />}
       <style jsx>
         {`
           .layout {

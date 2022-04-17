@@ -11,38 +11,6 @@ import { unGroup } from "~/utils/client"
 import { useStore } from "~/zustand"
 import { DeleteOutlineIcon, PencilOutlineIcon } from "./icons"
 
-const list = {
-  name: "shopping list",
-  status: "incomplete",
-  items: {
-    "Fruits and vegetables": [
-      {
-        id: 1,
-        name: "Tomato",
-        quantity: 2,
-      },
-      {
-        id: 2,
-        name: "Apple",
-        quantity: 4,
-      },
-    ],
-    "Meat and Fish": [
-      {
-        id: 3,
-        name: "Chicken",
-        quantity: 1,
-      },
-    ],
-    Beverages: [
-      {
-        id: 4,
-        name: "Soda",
-        quantity: 10,
-      },
-    ],
-  },
-}
 const BannerButton = styled(Button)({
   padding: ".5rem 1rem",
   marginTop: "1rem",
@@ -56,7 +24,7 @@ const BannerButton = styled(Button)({
   },
 })
 const AdditemBanner = () => {
-  const setSidePaneType = useStore((state) => state.setSidePaneType)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   return (
     <div className="add-item-banner">
       <div className="banner-img">
@@ -64,7 +32,11 @@ const AdditemBanner = () => {
       </div>
       <div className="banner-info">
         <h3>Didn’t find what you need?</h3>
-        <BannerButton onClick={() => setSidePaneType("create-item")}>
+        <BannerButton
+          onClick={() =>
+            dispatchDrawer({ type: "drawer:set", payload: "create-item" })
+          }
+        >
           Add item
         </BannerButton>
       </div>
@@ -327,7 +299,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
             </button>
           </div>
           <div className="add-list__body styled-scrollbars">
-            {list &&
+            {currListItems &&
               Object.entries(currListItems || {}).map(
                 ([category, items], i) => (
                   <ShoppingListGroup

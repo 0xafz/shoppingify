@@ -17,11 +17,11 @@ const TextField = styled(CTextField)({
     width: "25rem",
   },
 })
-const categories = ["Fruits and vegetables", "Meat and Fish", "Beverages"]
 const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
-  const setSidePaneType = useStore((state) => state.setSidePaneType)
+  const itemCategories = useStore((state) => state.itemCategories)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const dispatchItem = useStore((state) => state.dispatchItem)
   const {
     control,
@@ -134,7 +134,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
                   sx={{ fontSize: "1.5rem" }}
                   disablePortal
                   id="category"
-                  options={categories}
+                  options={itemCategories}
                   fullWidth
                   ListboxProps={{
                     style: {
@@ -169,7 +169,9 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
                 textTransform: "none",
                 fontSize: "1.5rem",
               }}
-              onClick={() => setSidePaneType("create-list")}
+              onClick={() =>
+                dispatchDrawer({ type: "drawer:set", payload: "create-list" })
+              }
             >
               Cancel
             </Button>

@@ -4,18 +4,21 @@ import CreateShoppingItem from "./CreateShoppingItem"
 import CreateShoppingList from "./CreateShoppingList"
 import ShoppingItemInfo from "./ShoppingItemInfo"
 
-interface RightSidePaneProps {}
+interface RightSideDrawerProps {}
 
-export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
-  const sidePaneType = useStore((state) => state.sidePaneType)
+const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
+  const rightSideDrawerType = useStore((state) => state.rightSideDrawerType)
+  const itemInDrawer = useStore((state) => state.itemInDrawer)
   return (
-    <aside className="right-sidepane">
-      {sidePaneType === "create-list" && <CreateShoppingList />}
-      {sidePaneType === "item-info" && <ShoppingItemInfo />}
-      {sidePaneType === "create-item" && <CreateShoppingItem />}
+    <aside className="right-side-drawer">
+      {rightSideDrawerType === "create-list" && <CreateShoppingList />}
+      {rightSideDrawerType === "item-info" && (
+        <ShoppingItemInfo item={itemInDrawer} />
+      )}
+      {rightSideDrawerType === "create-item" && <CreateShoppingItem />}
       <style jsx>
         {`
-          .right-sidepane {
+          .right-side-drawer {
             position: sticky;
             top: 0;
             flex-basis: 40rem;
@@ -27,7 +30,7 @@ export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
             box-shadow: var(--elevation3);
           }
           @media (max-width: 1024px) {
-            .right-sidepane {
+            .right-side-drawer {
               position: fixed;
               left: calc(9.3rem + 2rem);
               right: 0;
@@ -36,7 +39,7 @@ export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
             }
           }
           @media (max-width: 768px) {
-            .right-sidepane {
+            .right-side-drawer {
               left: calc(6rem + 2rem);
               right: 0;
               flex-basis: auto;
@@ -48,3 +51,5 @@ export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
     </aside>
   )
 }
+
+export default RightSideDrawer

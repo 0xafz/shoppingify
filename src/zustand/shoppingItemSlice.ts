@@ -23,7 +23,7 @@ const shoppingItemReducer = (
       {
         const { category, itemId } = action.payload
         const targetItems = state.itemsGrouped[category]
-        if (!targetItems) {
+        if (targetItems.length === 0) {
           return
         }
         const filteredCatElements = targetItems.filter(
@@ -39,6 +39,7 @@ const shoppingItemReducer = (
 export type ShoppingItemSlice = {
   itemsGrouped: Record<string, Array<IShoppingItem>>
   itemsUngrouped: IShoppingItem[]
+  itemCategories: string[]
   dispatchItem: (args: shoppingItemActions) => void
   fetchShoppingItems: () => void
 }
@@ -48,6 +49,7 @@ export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
 ) => ({
   itemsGrouped: {},
   itemsUngrouped: [],
+  itemCategories: ["Fruits and vegetables", "Meat and Fish", "Beverages"],
   dispatchItem: (args) =>
     set(produce((state) => shoppingItemReducer(state, args))),
   fetchShoppingItems: async () => {

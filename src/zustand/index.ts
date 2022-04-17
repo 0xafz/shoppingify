@@ -1,5 +1,5 @@
 import create, { GetState, SetState } from "zustand"
-import { CartSlice, createCartSlice } from "./cartSlice"
+import { DrawerSlice, createDrawerSlice } from "./drawerSlice"
 import { ShoppingItemSlice, createShoppingItemSlice } from "./shoppingItemSlice"
 import { ShoppingListSlice, createShoppingListSlice } from "./shoppingListSlice"
 import { createUserSlice, UserSlice } from "./userSlice"
@@ -7,7 +7,7 @@ import { createUserSlice, UserSlice } from "./userSlice"
 export type StoreState = UserSlice &
   ShoppingListSlice &
   ShoppingItemSlice &
-  CartSlice
+  DrawerSlice
 
 export type StoreSlice<T> = (
   set: SetState<StoreState>,
@@ -18,5 +18,5 @@ export const useStore = create<StoreState>((set, get) => ({
   ...createUserSlice(set, get),
   ...createShoppingListSlice(set, get),
   ...createShoppingItemSlice(set, get),
-  ...createCartSlice(set, get),
+  ...createDrawerSlice(set, get),
 }))

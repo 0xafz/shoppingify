@@ -5,10 +5,14 @@ import { CartOutlineIcon } from "./icons"
 interface CartProps {}
 
 const Cart: React.FC<CartProps> = () => {
-  const toggleSidePane = useStore((state) => state.toggleSidePane)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   return (
     <>
-      <button title="cart" className="cart" onClick={toggleSidePane}>
+      <button
+        title="cart"
+        className="cart"
+        onClick={() => dispatchDrawer({ type: "drawer:toggle" })}
+      >
         <CartOutlineIcon aria-hidden="true" className="cart-icon" />
       </button>
       <style jsx>{`
