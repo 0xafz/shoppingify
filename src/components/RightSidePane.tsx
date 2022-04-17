@@ -21,6 +21,7 @@ export const RightSidePane: React.FC<RightSidePaneProps> = ({}) => {
             flex-basis: 40rem;
             flex-shrink: 0;
             min-width: 38rem;
+            overflow-y: scroll;
             height: 100vh;
             background: var(--clr-lightorange);
             box-shadow: var(--elevation3);
