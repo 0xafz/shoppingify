@@ -35,9 +35,9 @@ export function handleError(error: Error, res: NextApiResponse) {
   } else if (error instanceof KnownServerError) {
     res.status(error.status || 500).json({ error: error.message })
   } else if (error instanceof Prisma.PrismaClientValidationError) {
-    res.status(400).json({ error: error.message || "something went wrong" })
+    res.status(400).json({ error: "something went wrong" })
   } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    res.status(400).json({ error: error.message || "something went wrong" })
+    res.status(400).json({ error: "something went wrong" })
   } else {
     res.status(500).json({ error: "something went wrong!" })
   }
