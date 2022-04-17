@@ -46,6 +46,13 @@ export default async function handle(
           const { name, note, imageUrl, category } = req.body
 
           if (!category || !name) throw new ClientError("missing/empty fields")
+          const existingItem = await prisma.shoppingItem.findFirst({
+            where: {
+              userId: loggedUser.id,
+              name: name,
+            },
+          })
+          if (existingItem) throw new ClientError("item already exists")
 
           const newItem = await prisma.shoppingItem.create({
             data: {
