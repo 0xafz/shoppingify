@@ -1,10 +1,13 @@
 import Button from "@mui/material/Button"
 import { styled } from "@mui/material/styles"
+import { useRouter } from "next/router"
 import React, { useState } from "react"
+import cfetch from "~/lib/cfetch"
 import theme from "~/lib/mui-theme"
 import { CButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
 import { ItemInList } from "~/types"
+import { unGroup } from "~/utils/client"
 import { useStore } from "~/zustand"
 import { DeleteOutlineIcon, PencilOutlineIcon } from "./icons"
 
@@ -270,9 +273,48 @@ const ShoppingListItem = ({
 interface CreateShoppingListProps {}
 
 const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
+  const [listName, setListName] = useState("")
+  const [formError, setFormError] = useState("")
+  const [loading, setLoading] = useState(false)
   const currList = useStore((state) => state.currList)
   const currListItems = useStore((state) => state.currListItems)
+  const dispatchList = useStore((state) => state.dispatchList)
+  const router = useRouter()
   const handleEditListName = () => {}
+  const handleListNameChange = (e: any) => {
+    setListName(e.target.value)
+  }
+  const handleSubmitList = async (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    try {
+      setLoading(true)
+      setFormError("")
+      const result = await cfetch("api/lists", {
+        method: "POST",
+        body: JSON.stringify({
+          name: listName,
+          items: unGroup(currListItems),
+        }),
+      })
+      if (result.error) {
+        setFormError(result.error)
+        return
+      }
+      if (result.data) {
+        dispatchList({
+          type: "list:add",
+          payload: result.data,
+        })
+        router.push("history")
+      }
+    } catch (err) {
+      console.error(err)
+      setFormError("something went wrong!")
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <div className="wrapper">
       <div className="top">
@@ -299,18 +341,26 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         </div>
       </div>
       <div className="bottom">
-        <form>
+        <form onSubmit={handleSubmitList}>
           <CTextField
             placeholder="Enter a name"
             fullWidth
+            value={listName}
+            onChange={handleListNameChange}
             sx={{
               [theme.breakpoints.down("sm")]: {
                 width: "25rem",
               },
             }}
             InputProps={{
-              endAdornment: <CButton type="submit">Save</CButton>,
+              endAdornment: (
+                <CButton type="submit" disabled={loading}>
+                  {loading ? "loading..." : "Save"}
+                </CButton>
+              ),
             }}
+            error={!!formError}
+            helperText={formError}
           />
         </form>
       </div>

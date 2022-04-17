@@ -1,9 +1,4 @@
-import {
-  User,
-  ShoppingList,
-  ShoppingItem,
-  ShoppingItemToList,
-} from "@prisma/client"
+import { User, ShoppingList, ShoppingItem } from "@prisma/client"
 
 export type DecodedUser = {
   id: number
@@ -34,9 +29,7 @@ export type ItemInList = {
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
 
-export type IShoppingList = ShoppingList & {
-  shoppingItems?: ShoppingItemToList[]
-}
+export type IShoppingList = ShoppingList
 
 export type IShoppingItem = ShoppingItem
 

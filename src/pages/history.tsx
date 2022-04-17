@@ -1,5 +1,5 @@
 import Link from "next/link"
-import React from "react"
+import React, { useEffect } from "react"
 import {
   CalendarIcon,
   CheckCircleIcon,
@@ -7,45 +7,11 @@ import {
   CrossCircleIcon,
 } from "~/components/icons"
 import Layout from "~/components/Layout"
+import NotLoggedIn from "~/components/NotLoggedIn"
+import { IShoppingList } from "~/types"
+import { useStore } from "~/zustand"
 
-const timelinedLists = [
-  {
-    when: "August 2020",
-    lists: [
-      {
-        name: "List 1",
-        date: "Mon 27.8.2020",
-        status: "completed",
-      },
-      {
-        name: "List 2",
-        date: "Mon 27.8.2020",
-        status: "completed",
-      },
-      {
-        name: "List 2",
-        date: "Mon 27.8.2020",
-        status: "cancelled",
-      },
-    ],
-  },
-  {
-    when: "Mar 2019",
-    lists: [
-      {
-        name: "List 2",
-        date: "Mon 27.8.2020",
-        status: "completed",
-      },
-      {
-        name: "List 2",
-        date: "Mon 27.8.2020",
-        status: "completed",
-      },
-    ],
-  },
-]
-const ShoppingList = ({ name, date, status }: any) => {
+const ShoppingList = ({ name, createdAt, status }: IShoppingList) => {
   return (
     <Link href={"/list/1"}>
       <div className="s-list">
@@ -53,7 +19,7 @@ const ShoppingList = ({ name, date, status }: any) => {
         <div className="s-list__details">
           <div className="s-list__date">
             <CalendarIcon />
-            <span>{date}</span>
+            <span>{new Date(createdAt).toLocaleDateString()}</span>
           </div>
           <div
             className={`lg__status ${
@@ -166,18 +132,18 @@ const ShoppingList = ({ name, date, status }: any) => {
     </Link>
   )
 }
-interface ShoppingListsGroupProps {
+interface ShoppingListGroupProps {
   groupName: string
-  items: any[]
+  lists: IShoppingList[]
 }
-const ShoppingListsGroup = ({ groupName, items }: ShoppingListsGroupProps) => {
+const ShoppingListGroup = ({ groupName, lists }: ShoppingListGroupProps) => {
   return (
     <section>
       <h2>{groupName}</h2>
       <ul>
-        {items.map((item, i) => (
-          <li key={`${item.id}-${i}`}>
-            <ShoppingList {...item} />
+        {lists.map((list, i) => (
+          <li key={`${list.id}-${i}`}>
+            <ShoppingList {...list} />
           </li>
         ))}
       </ul>
@@ -202,30 +168,23 @@ const ShoppingListsGroup = ({ groupName, items }: ShoppingListsGroupProps) => {
     </section>
   )
 }
-interface historyProps {}
-
-const history: React.FC<historyProps> = ({}) => {
+const HistoryContent = () => {
+  const listsGrouped = useStore((state) => state.listsGrouped)
   return (
-    <Layout>
-      <div className="wrapper">
-        <header>
-          <h1>Shopping history</h1>
-        </header>
-        <main>
-          {timelinedLists.map((item) => (
-            <ShoppingListsGroup
-              groupName={item.when}
-              items={item.lists}
-              key={item.when}
-            />
-          ))}
-        </main>
-      </div>
-
+    <>
+      <header>
+        <h1>Shopping history</h1>
+      </header>
+      <main>
+        {listsGrouped.map(([groupName, lists]) => (
+          <ShoppingListGroup
+            groupName={groupName}
+            lists={lists}
+            key={groupName}
+          />
+        ))}
+      </main>
       <style jsx>{`
-        .wrapper {
-          padding: 4rem;
-        }
         main {
           margin-top: 3rem;
         }
@@ -233,6 +192,28 @@ const history: React.FC<historyProps> = ({}) => {
           font-size: 2.5rem;
           font-weight: 500;
           flex-basis: 65%;
+        }
+      `}</style>
+    </>
+  )
+}
+interface historyProps {}
+
+const History: React.FC<historyProps> = ({}) => {
+  const user = useStore((state) => state.user)
+  const fetchShoppingLists = useStore((state) => state.fetchShoppingLists)
+  useEffect(() => {
+    fetchShoppingLists()
+  })
+  return (
+    <Layout>
+      <div className="wrapper">
+        {user ? <HistoryContent /> : <NotLoggedIn />}
+      </div>
+
+      <style jsx>{`
+        .wrapper {
+          padding: 4rem;
         }
         @media (max-width: 768px) {
           .wrapper {
@@ -244,4 +225,4 @@ const history: React.FC<historyProps> = ({}) => {
   )
 }
 
-export default history
+export default History

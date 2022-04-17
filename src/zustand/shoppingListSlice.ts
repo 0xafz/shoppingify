@@ -2,6 +2,7 @@ import cfetch from "~/lib/cfetch"
 import { Action, IShoppingList, ItemInList } from "~/types"
 import { StoreSlice } from "."
 import produce from "immer"
+import { groupByTime } from "~/utils/client"
 
 export type ShoppingListActions =
   | Action<"list:add", IShoppingList>
@@ -15,7 +16,12 @@ const shoppingListReducer = (
 ) => {
   switch (action.type) {
     case "list:add":
-      state.lists.push(action.payload)
+      state.listsUngrouped.push(action.payload)
+      state.listsGrouped = groupByTime<IShoppingList>(
+        state.listsUngrouped,
+        "createdAt",
+        "month"
+      )
       break
     case "list:add-item":
       if (!state.currList) {
@@ -75,7 +81,8 @@ const shoppingListReducer = (
 }
 
 export type ShoppingListSlice = {
-  lists: Array<IShoppingList>
+  listsUngrouped: Array<IShoppingList>
+  listsGrouped: Array<[string, Array<IShoppingList>]>
   currListItems: Record<string, Array<ItemInList>>
   currList: {
     name: string
@@ -85,9 +92,11 @@ export type ShoppingListSlice = {
   fetchShoppingLists: () => Promise<void>
 }
 export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
-  set
+  set,
+  get
 ) => ({
-  lists: [],
+  listsUngrouped: [],
+  listsGrouped: [],
   currList: {
     name: "shopping list",
     status: "incomplete",
@@ -95,34 +104,20 @@ export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
   currListItems: {},
   dispatchList: (args) =>
     set(produce((state) => shoppingListReducer(state, args))),
-  // updateCurrList: async (data) => {
-  // try {
-  //   const targetIdx = get().lists.findIndex((list) => list.id === id)
-  //   if (targetIdx === -1) throw new Error("list not found")
-  //   const result = await cfetch(`/api/lists/${id}`, {
-  //     method: "PATCH",
-  //     body: JSON.stringify(data),
-  //   })
-  //   set((prev) => ({
-  //     lists: prev.lists
-  //       .slice(0, targetIdx)
-  //       .concat(prev.lists.slice(targetIdx + 1))
-  //       .concat([{ ...prev.lists.at(targetIdx), ...result }]),
-  //   }))
-  // } catch (err) {
-  //   console.error(err)
-  // }
-  // },
   fetchShoppingLists: async () => {
-    try {
-      const result = await cfetch(`/api/lists`, {
-        method: "GET",
+    if (get().listsUngrouped.length > 0) return
+    const result = await cfetch(`/api/lists`, {
+      method: "GET",
+    })
+    if (result.data) {
+      set({
+        listsUngrouped: result.data.lists,
+        listsGrouped: groupByTime<IShoppingList>(
+          result.data.lists,
+          "createdAt",
+          "month"
+        ),
       })
-      if (result.data) {
-        set({ lists: result.data.lists })
-      }
-    } catch (error) {
-      console.error(error)
     }
   },
 })
