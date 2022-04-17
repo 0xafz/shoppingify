@@ -29,9 +29,9 @@ export default async function handle(
                   id: Number(cursor),
                 }
               : undefined,
-            include: {
-              shoppingItems: true,
-            },
+            // include: {
+            //   shoppingItems: true,
+            // },
           })
           res.status(200).json({
             data: {
@@ -52,13 +52,13 @@ export default async function handle(
 
           const assignedAt = new Date().toISOString()
 
-          const itemIds = rawItems.map(({ id, quantity }) => ({
+          const itemIds = rawItems.map(({ shoppingItemId, quantity }) => ({
             assignedAt,
             assignedBy: loggedUser.id,
             quantity: quantity,
             shoppingItem: {
               connect: {
-                id,
+                id: shoppingItemId,
               },
             },
           }))
