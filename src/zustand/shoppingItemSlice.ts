@@ -16,11 +16,8 @@ const shoppingItemReducer = (
   switch (action.type) {
     case "item:add":
       const { category } = action.payload
-      if (category in state.itemsGrouped) {
-        state.itemsGrouped[category].push(action.payload)
-      } else {
-        state.itemsGrouped[category] = [action.payload]
-      }
+      state.itemsGrouped[category] = state.itemsGrouped[category] || []
+      state.itemsGrouped[category].push(action.payload)
       break
     case "item:remove":
       {
@@ -46,13 +43,16 @@ export type ShoppingItemSlice = {
   fetchShoppingItems: () => void
 }
 export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
-  set
+  set,
+  get
 ) => ({
   itemsGrouped: {},
   itemsUngrouped: [],
   dispatchItem: (args) =>
     set(produce((state) => shoppingItemReducer(state, args))),
   fetchShoppingItems: async () => {
+    // Don't fetch if items already exists (TODO: make it better)
+    if (get().itemsUngrouped.length > 0) return
     const result = await cfetch(`/api/items`, {
       method: "GET",
     })
