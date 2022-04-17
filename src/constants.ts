@@ -19,3 +19,6 @@ export const loginCookieAge = 60 * 60 * 8 // 8 hours
 export const refreshTokenCookieName = "__Secure__User-Refresh"
 export const accessTokenCookieName = "__Secure__User-Access"
 export const jwtCookieTtl = 60 * 60 * 8
+
+// approx
+export const oneYearBackTimestamp = Date.now() - 365 * 24 * 60 * 60 * 1000
