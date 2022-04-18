@@ -23,8 +23,12 @@ export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
   setUser: (user) => set({ user }),
   clearStore: () =>
     set({
-      currList: null,
+      currList: {
+        name: "New Shopping List",
+        status: "un-saved",
+      },
       currListItems: {},
+      crossedItems: [],
       itemsGrouped: {},
       itemsUngrouped: [],
       listsUngrouped: [],

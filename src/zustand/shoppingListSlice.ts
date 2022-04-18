@@ -2,55 +2,98 @@ import cfetch from "~/lib/cfetch"
 import { Action, IShoppingList, ItemInList } from "~/types"
 import { StoreSlice } from "."
 import produce from "immer"
-import { groupByTime } from "~/utils/client"
+import { groupBy, groupByTime } from "~/utils/client"
 
+type ItemWithIdCat = {
+  shoppingItemId: number
+  itemCategory: string
+}
 export type ShoppingListActions =
-  | Action<"list:add", IShoppingList>
+  | Action<"list:cancel-currList">
+  | Action<"list:add-and-set-as-currList", IShoppingList>
+  | Action<"list:complete">
+  | Action<"list:upsert", IShoppingList>
   | Action<"list:add-item", ItemInList>
-  | Action<"list:update-item", Omit<ItemInList, "name">>
-  | Action<"list:delete-item", Omit<ItemInList, "name" | "quantity">>
+  | Action<"list:update-item", Omit<ItemInList, "itemName">>
+  | Action<"list:delete-item", ItemWithIdCat>
+  | Action<"list:toggle-item-purchase", { shoppingItemId: number }>
 
 const shoppingListReducer = (
   state: ShoppingListSlice,
   action: ShoppingListActions
 ) => {
   switch (action.type) {
-    case "list:add":
+    case "list:add-and-set-as-currList":
       state.listsUngrouped.push(action.payload)
       state.listsGrouped = groupByTime<IShoppingList>(
         state.listsUngrouped,
         "createdAt",
         "month"
       )
+      state.currList = action.payload
+      break
+    case "list:upsert":
+      if (!action.payload.id) return
+      const idx = state.listsUngrouped.findIndex(
+        (list) => list.id === action.payload.id
+      )
+      if (idx !== -1) {
+        state.listsUngrouped[idx] = action.payload
+      } else {
+        state.listsUngrouped.push(action.payload)
+      }
+      state.listsGrouped = groupByTime<IShoppingList>(
+        state.listsUngrouped,
+        "createdAt",
+        "month"
+      )
+      break
+    case "list:cancel-currList":
+      state.currList = {
+        name: "New Shopping List",
+        status: "un-saved",
+      }
+      state.currListItems = {}
+      state.crossedItems = []
+      break
+    case "list:complete":
+      state.currList = {
+        name: "New Shopping List",
+        status: "un-saved",
+      }
+      state.currListItems = {}
+      state.crossedItems = []
       break
     case "list:add-item":
       if (!state.currList) {
         state.currList = {
           name: "Shopping list",
-          status: "incomplete",
+          status: "un-saved",
         }
       }
-      const { category } = action.payload
-      if (category in state.currListItems) {
-        const targetItems = state.currListItems[category]
+      const { itemCategory, shoppingItemId } = action.payload
+      if (itemCategory in state.currListItems) {
+        const targetItems = state.currListItems[itemCategory]
 
-        if (!targetItems) return
-        const Idx = targetItems.findIndex(
-          (item) => item.shoppingItemId === action.payload.shoppingItemId
-        )
-        if (Idx !== -1) {
-          targetItems[Idx].quantity += 1
-          return
+        // if adding existing item, just increment quantity
+        if (targetItems && targetItems.length !== 0) {
+          const Idx = targetItems.findIndex(
+            (item) => item.shoppingItemId === shoppingItemId
+          )
+          if (Idx !== -1) {
+            targetItems[Idx].quantity += 1
+            return
+          }
         }
-        state.currListItems[category].push(action.payload)
+        state.currListItems[itemCategory].push(action.payload)
       } else {
-        state.currListItems[category] = [action.payload]
+        state.currListItems[itemCategory] = [action.payload]
       }
       break
     case "list:update-item":
       {
-        const { category, shoppingItemId, quantity } = action.payload
-        const targetItems = state.currListItems[category]
+        const { itemCategory, shoppingItemId, quantity } = action.payload
+        const targetItems = state.currListItems[itemCategory]
         if (!targetItems) return
         const Idx = targetItems.findIndex(
           (item) => item.shoppingItemId === shoppingItemId
@@ -64,8 +107,8 @@ const shoppingListReducer = (
       break
     case "list:delete-item":
       {
-        const { category, shoppingItemId } = action.payload
-        const targetItems = state.currListItems[category]
+        const { itemCategory, shoppingItemId } = action.payload
+        const targetItems = state.currListItems[itemCategory]
         if (!targetItems) return
         const Idx = targetItems.findIndex(
           (item) => item.shoppingItemId === shoppingItemId
@@ -75,7 +118,18 @@ const shoppingListReducer = (
           return
         }
         targetItems.splice(Idx, 1)
-        if (!targetItems.length) delete state.currListItems[category]
+        if (!targetItems.length) delete state.currListItems[itemCategory]
+      }
+      break
+    case "list:toggle-item-purchase":
+      {
+        const idx = state.crossedItems.findIndex(
+          (item) => item.shoppingItemId === action.payload.shoppingItemId
+        )
+        if (idx !== -1)
+          state.crossedItems[idx].itemPurchased =
+            !state.crossedItems[idx].itemPurchased
+        else state.crossedItems.push({ ...action.payload, itemPurchased: true })
       }
       break
     default:
@@ -86,13 +140,16 @@ const shoppingListReducer = (
 export type ShoppingListSlice = {
   listsUngrouped: Array<IShoppingList>
   listsGrouped: Array<[string, Array<IShoppingList>]>
+  crossedItems: Array<{ shoppingItemId: number; itemPurchased: boolean }>
   currListItems: Record<string, Array<ItemInList>>
   currList: {
     name: string
     status: string
+    id?: number // when list fetched from server
   }
   dispatchList: (args: ShoppingListActions) => void
   fetchShoppingLists: () => Promise<void>
+  getLatestIncompleteList: () => Promise<void>
 }
 export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
   set,
@@ -100,9 +157,10 @@ export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
 ) => ({
   listsUngrouped: [],
   listsGrouped: [],
+  crossedItems: [],
   currList: {
-    name: "New Shopping List",
-    status: "incomplete",
+    name: "Un-named list",
+    status: "un-saved", // TODO: status decides part of ui,find a better way
   },
   currListItems: {},
   dispatchList: (args) =>
@@ -120,6 +178,29 @@ export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
           "createdAt",
           "month"
         ),
+      })
+    }
+  },
+  getLatestIncompleteList: async () => {
+    console.log("getLate:wa")
+
+    const { listsUngrouped, listsGrouped } = get()
+    console.log({ listsUngrouped, listsGrouped })
+
+    const latestIncompleteList = listsUngrouped.filter(
+      (list) => list.status === "incomplete"
+    )[0]
+    console.log({ listsUngrouped, listsGrouped, latestIncompleteList })
+    if (!latestIncompleteList) {
+      return
+    }
+    const listItems = await cfetch(`/api/lists/${latestIncompleteList.id}`, {
+      method: "GET",
+    })
+    if (listItems.data) {
+      set({
+        currList: latestIncompleteList,
+        currListItems: groupBy(listItems.data.shoppingItems, "itemCategory"),
       })
     }
   },

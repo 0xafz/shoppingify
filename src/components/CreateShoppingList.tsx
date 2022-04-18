@@ -1,12 +1,14 @@
+import { C_Checkbox } from "~/mui-c/Checkbox"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import cfetch from "~/lib/cfetch"
-import { BannerButton, CButton } from "~/mui-c/Button"
+import { TextButton, CButton, SkyButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
 import { ItemInList } from "~/types"
 import { unGroup } from "~/utils/client"
 import { useStore } from "~/zustand"
 import { DeleteOutlineIcon } from "./icons"
+import { ConfirmDialog } from "~/mui-c/Dialog"
 
 const AdditemBanner = () => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
@@ -17,13 +19,17 @@ const AdditemBanner = () => {
       </div>
       <div className="banner-info">
         <h3>Didn’t find what you need?</h3>
-        <BannerButton
+        <TextButton
+          sx={{
+            padding: ".5rem 1rem",
+            marginTop: "1rem",
+          }}
           onClick={() =>
             dispatchDrawer({ type: "drawer:set", payload: "create-item" })
           }
         >
           Add item
-        </BannerButton>
+        </TextButton>
       </div>
       <style jsx>{`
         .add-item-banner {
@@ -63,10 +69,12 @@ const AdditemBanner = () => {
 interface ShoppingListGroupProps {
   groupName: string
   items: Array<ItemInList>
+  listType: string
 }
 const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
   groupName,
   items,
+  listType,
 }) => {
   return (
     <div>
@@ -74,9 +82,9 @@ const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
       <ul>
         {items.map((item) => (
           <ShoppingListItem
-            category={groupName}
             {...item}
             key={item.shoppingItemId}
+            listType={listType}
           />
         ))}
       </ul>
@@ -97,21 +105,25 @@ const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
   )
 }
 
-interface ShoppingListItemProps extends ItemInList {}
+interface ShoppingListItemProps extends ItemInList {
+  listType: string
+}
 const ShoppingListItem = ({
-  name,
-  category,
+  itemName,
+  itemCategory,
   shoppingItemId,
   quantity = 1,
+  listType,
 }: ShoppingListItemProps) => {
   const [showOptions, setShowOptions] = useState(false)
+  const [itemPurchased, setItemPurchased] = useState(false)
   const dispatchList = useStore((state) => state.dispatchList)
   const handleDelete = () => {
     dispatchList({
       type: "list:delete-item",
       payload: {
         shoppingItemId,
-        category,
+        itemCategory,
       },
     })
   }
@@ -121,7 +133,7 @@ const ShoppingListItem = ({
         type: "list:delete-item",
         payload: {
           shoppingItemId,
-          category,
+          itemCategory,
         },
       })
       return
@@ -131,13 +143,30 @@ const ShoppingListItem = ({
       payload: {
         shoppingItemId,
         quantity: quantity + delta,
-        category,
+        itemCategory,
       },
     })
   }
+  const toggleItemPurchase = () => {
+    dispatchList({
+      type: "list:toggle-item-purchase",
+      payload: {
+        shoppingItemId,
+      },
+    })
+    setItemPurchased((prev) => !prev)
+  }
   return (
-    <li>
-      <p>{name}</p>
+    <li className={itemPurchased ? "checked" : ""}>
+      {listType === "incomplete" ? (
+        <C_Checkbox
+          checked={itemPurchased}
+          size={"medium"}
+          onChange={toggleItemPurchase}
+          inputProps={{ "aria-label": "check shopping item" }}
+        />
+      ) : null}
+      <p>{itemName}</p>
       <div className="quantity">
         {showOptions && (
           <>
@@ -191,6 +220,14 @@ const ShoppingListItem = ({
           text-overflow: ellipsis;
           max-width: 20ch;
         }
+        .checked button {
+          color: var(--clr-gray8);
+          border-color: var(--clr-gray8);
+        }
+        .checked p {
+          text-decoration: line-through;
+          color: var(--clr-gray8);
+        }
         .quantity {
           display: flex;
           align-items: center;
@@ -229,19 +266,58 @@ const ShoppingListItem = ({
     </li>
   )
 }
-interface CreateShoppingListProps {}
-
-const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
-  const [listName, setListName] = useState("")
+const ComposeListFooter = () => {
+  const [confirmDialogOpen, setConfirmDialog] = useState(false)
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
-  const currList = useStore((state) => state.currList)
-  const currListItems = useStore((state) => state.currListItems)
+  const [listName, setListName] = useState("")
   const dispatchList = useStore((state) => state.dispatchList)
+  const currListItems = useStore((state) => state.currListItems)
+  const { id = undefined, status } = useStore((state) => state.currList)
   const router = useRouter()
-  // const handleEditListName = () => {}
+
   const handleListNameChange = (e: any) => {
     setListName(e.target.value)
+  }
+  const handleConfirmDialogClose = () => {
+    setConfirmDialog(false)
+  }
+
+  const handleCancelList = async (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (!id) {
+      console.error("list id required")
+      return
+    }
+    try {
+      setFormError("")
+
+      const result = await cfetch(`api/lists/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          status: "cancelled",
+        }),
+      })
+      if (result.error) {
+        setFormError(result.error)
+        return
+      }
+      if (result.data) {
+        dispatchList({
+          type: "list:cancel-currList",
+        })
+        dispatchList({
+          type: "list:upsert",
+          payload: result.data,
+        })
+        router.push("/history")
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setConfirmDialog(false)
+    }
   }
   const handleSubmitList = async (e: any) => {
     e.stopPropagation()
@@ -253,6 +329,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         method: "POST",
         body: JSON.stringify({
           name: listName,
+          status: "incomplete",
           items: unGroup(currListItems),
         }),
       })
@@ -262,10 +339,10 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
       }
       if (result.data) {
         dispatchList({
-          type: "list:add",
+          type: "list:add-and-set-as-currList",
           payload: result.data,
         })
-        router.push("history")
+        router.push("/history")
       }
     } catch (err) {
       console.error(err)
@@ -275,41 +352,19 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
     }
   }
   return (
-    <div className="wrapper">
-      <div className="top">
-        <AdditemBanner />
-        <div className="add-list">
-          <div className="add-list__header">
-            <h2>{currList.name}</h2>
-            {/* <button title="edit list name" onClick={handleEditListName}>
-              <PencilOutlineIcon aria-hidden="true" />
-            </button> */}
-          </div>
-          <div className="add-list__body styled-scrollbars">
-            {currListItems &&
-              Object.entries(currListItems || {}).map(
-                ([category, items], i) => (
-                  <ShoppingListGroup
-                    groupName={category}
-                    items={items}
-                    key={`${category}-${i}`}
-                  />
-                )
-              )}
-          </div>
-        </div>
-      </div>
-      <div className="bottom">
+    <>
+      {status === "un-saved" && (
         <form onSubmit={handleSubmitList}>
           <CTextField
             placeholder="Enter a name"
             fullWidth
             value={listName}
             onChange={handleListNameChange}
+            required
             InputProps={{
               endAdornment: (
                 <CButton type="submit" disabled={loading}>
-                  {loading ? "loading..." : "Save"}
+                  {loading ? "..." : "Save"}
                 </CButton>
               ),
             }}
@@ -317,6 +372,126 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
             helperText={formError}
           />
         </form>
+      )}
+
+      {status === "incomplete" && (
+        <>
+          {formError && <p className="error">{formError}</p>}
+          <div className="complete-cta">
+            <TextButton onClick={() => setConfirmDialog(true)}>
+              Cancel
+            </TextButton>
+            <SkyButton sx={{ marginLeft: "2rem" }}>Complete</SkyButton>
+          </div>
+          <ConfirmDialog
+            open={confirmDialogOpen}
+            onClose={handleConfirmDialogClose}
+            onYes={handleCancelList}
+          >
+            Are you sure want to cancel this list?
+          </ConfirmDialog>
+        </>
+      )}
+      <style jsx>{`
+        form {
+          width: 100%;
+        }
+        .complete-cta {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
+    </>
+  )
+}
+const ComposeList = () => {
+  const currList = useStore((state) => state.currList)
+  const currListItems = useStore((state) => state.currListItems)
+  // const handleEditListName = () => {}
+
+  return (
+    <div className="compose-list">
+      <div className="compose-list__header">
+        <h2>{currList && currList.name}</h2>
+        {/* <button title="edit list name" onClick={handleEditListName}>
+              <PencilOutlineIcon aria-hidden="true" />
+            </button> */}
+      </div>
+      <div className="compose-list__body styled-scrollbars">
+        {currListItems &&
+          currList &&
+          Object.entries(currListItems || {}).map(([category, items], i) => (
+            <ShoppingListGroup
+              groupName={category}
+              items={items}
+              key={`${category}-${i}`}
+              listType={currList.status}
+            />
+          ))}
+      </div>
+      <div className="compose-list__footer">
+        <ComposeListFooter />
+      </div>
+
+      <style jsx>{`
+        .compose-list {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+        }
+        .compose-list__body {
+          flex-grow: 1;
+          overflow-y: scroll;
+          padding: 0rem 4rem;
+        }
+        .compose-list__header {
+          margin: 1rem 0;
+          font-size: 2.4rem;
+          padding: 2rem 4rem;
+        }
+        .compose-list__footer {
+          width: 100%;
+          height: 13rem;
+          padding: 4rem;
+          font-size: 1.5rem;
+          background-color: var(--clr-white);
+        }
+        .compose-list__footer {
+        }
+        h2 {
+          font-size: 2.4rem;
+        }
+
+        @media (max-width: 768px) {
+          h2 {
+            font-size: 1.5rem;
+          }
+          .compose-list__header,
+          .compose-list__body,
+          .compose-list__footer {
+            padding: 1.5rem;
+          }
+          .compose-list__footer {
+            height: 8rem;
+          }
+        }
+      `}</style>
+    </div>
+  )
+}
+interface CreateShoppingListProps {}
+
+const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
+  return (
+    <div className="wrapper">
+      <div className="top">
+        <AdditemBanner />
+      </div>
+      <div className="bottom">
+        <ComposeList />
       </div>
       <style jsx>{`
         .wrapper {
@@ -329,50 +504,13 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         .top {
           padding: 4rem;
           padding-bottom: 0;
-          flex-grow: 1;
         }
         .bottom {
-          background: var(--clr-white);
-          padding: 4rem;
+          flex-grow: 1;
         }
-        .add-list {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
-        .add-list__body {
-          min-height: calc(100vh - 40rem);
-          max-height: calc(100vh - 40rem);
-          overflow-y: scroll;
-        }
-        .add-list__header {
-          display: flex;
-          justify-content: space-between;
-          margin: 3rem 0;
-          font-size: 2.4rem;
-        }
-        .add-list__footer {
-          width: 100%;
-          height: 13rem;
-          padding: 4rem;
-          font-size: 1.5rem;
-          background-color: var(--clr-white);
-        }
-        .add-list__footer form {
-          display: flex;
-          gap: 2rem;
-        }
-        h2 {
-          font-size: 2.4rem;
-        }
-
         @media (max-width: 768px) {
-          .top,
-          .bottom {
+          .top {
             padding: 1.5rem;
-          }
-          h2 {
-            font-size: 1.5rem;
           }
         }
       `}</style>
