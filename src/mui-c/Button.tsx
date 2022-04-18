@@ -15,6 +15,13 @@ export const CButton = styled(Button)({
     backgroundColor: "var(--clr-amber11)",
   },
 })
+export const TextButton = styled(CButton)({
+  color: "var(--clr-black)",
+  backgroundColor: "var(--clr-white)",
+  "&:hover": {
+    backgroundColor: "var(--clr-gray1)",
+  },
+})
 export const RedButton = styled(CButton)({
   background: "var(--clr-red10)",
   fontWeight: "bold",
@@ -23,12 +30,10 @@ export const RedButton = styled(CButton)({
   },
 })
 
-export const BannerButton = styled(Button)({
-  padding: ".5rem 1rem",
-  marginTop: "1rem",
-  backgroundColor: "var(--clr-white)",
-  color: "var(--clr-black)",
+export const SkyButton = styled(CButton)({
+  background: "var(--clr-sky10)",
+  fontWeight: "bold",
   "&:hover": {
-    backgroundColor: "var(--clr-gray1)",
+    backgroundColor: "var(--clr-sky11)",
   },
 })

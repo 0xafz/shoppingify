@@ -1,4 +1,4 @@
-import { IconButton, InputAdornment, useMediaQuery } from "@mui/material"
+import { IconButton, InputAdornment } from "@mui/material"
 import React, { useCallback, useEffect, useState } from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
@@ -8,34 +8,30 @@ import { debounce } from "~/utils/client"
 import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
 import { IShoppingItem } from "~/types"
 import NotLoggedIn from "~/components/NotLoggedIn"
-import useTimeout from "~/hooks/useTimeout"
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const dispatchList = useStore((state) => state.dispatchList)
-  const [addItemdelay, setAddItemDelay] = useState<number | null>(null)
 
-  useTimeout(() => {
-    dispatchList({
-      type: "list:add-item",
-      payload: {
-        shoppingItemId: item.id,
-        category: item.category,
-        quantity: 1,
-        name: item.name,
-      },
-    })
-  }, addItemdelay)
   const handleAdd = () => {
     dispatchDrawer({
       type: "drawer:set",
       payload: "create-list",
     })
-    setAddItemDelay(500)
+    dispatchList({
+      type: "list:add-item",
+      payload: {
+        shoppingItemId: item.id,
+        itemCategory: item.category,
+        itemName: item.name,
+        quantity: 1,
+      },
+    })
   }
   return (
     <div className="s-item">
       <button
+        className="s-item__name"
         onClick={() =>
           dispatchDrawer({ type: "drawer:set-info-item", payload: item })
         }
@@ -64,6 +60,10 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
           padding: 1rem;
           border-radius: 1.2rem;
           box-shadow: var(--elevation3);
+        }
+        .s-item__name {
+          flex-grow: 1;
+          text-align: left;
         }
         h3 {
           font-size: 1.6rem;
@@ -128,7 +128,6 @@ const HomeContent = () => {
   const [search, setSearch] = useState("")
   const itemsGrouped = useStore((state) => state.itemsGrouped)
   const [filtered, setFiltered] = useState(itemsGrouped)
-  const isSmallScreen = useMediaQuery("(max-width: 768px)")
 
   useEffect(() => {
     setFiltered(itemsGrouped)
@@ -170,13 +169,8 @@ const HomeContent = () => {
         <CTextField
           placeholder="search item"
           sx={{
-            flexBasis: "30%",
-            minWidth: "20rem",
-            "& .MuiInputBase-root": {
-              maxWidth: isSmallScreen ? "20rem" : "40rem",
-            },
+            minWidth: "35rem",
           }}
-          size={isSmallScreen ? "small" : "medium"}
           value={search}
           onChange={handleSearchChange}
           InputProps={{

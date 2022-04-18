@@ -23,8 +23,8 @@ export type CreateItemInput = {
 export type ItemInList = {
   shoppingItemId: number
   quantity: number
-  name: string
-  category: string
+  itemName: string
+  itemCategory: string
 }
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
@@ -36,3 +36,6 @@ export type IShoppingItem = ShoppingItem
 export type Action<T, P = undefined> = P extends undefined
   ? { type: T }
   : { type: T; payload: P }
+
+// Source: https://startfunction.com/typescript-selected-type-properties-optional/
+export type Optional<T, K extends keyof T> = Partial<T> & Omit<T, K>

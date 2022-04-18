@@ -1,23 +1,17 @@
 import React, { useState } from "react"
-import { CButton, RedButton } from "~/mui-c/Button"
-import IconButton from "@mui/material/IconButton"
-import Button from "@mui/material/Button"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogTitle from "@mui/material/DialogTitle"
-import { CloseIcon } from "~/components/icons"
-import { useStore } from "~/zustand"
-import cfetch from "~/lib/cfetch"
-import { IShoppingItem } from "~/types"
 import useTimeout from "~/hooks/useTimeout"
+import cfetch from "~/lib/cfetch"
+import { CButton, TextButton } from "~/mui-c/Button"
+import { ConfirmDialog } from "~/mui-c/Dialog"
+import { IShoppingItem } from "~/types"
+import { useStore } from "~/zustand"
 
 interface ShoppingItemInfoProps {
   item: IShoppingItem
 }
 
 const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
-  const [open, setOpen] = useState(false)
+  const [confirmDialogOpen, setConfirmDialog] = useState(false)
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
   const dispatchList = useStore((state) => state.dispatchList)
@@ -29,15 +23,15 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
     setAddedToList(false)
   }, buttonTimeout)
 
-  const handleClose = () => {
-    setOpen(false)
+  const handleConfirmDialogClose = () => {
+    setConfirmDialog(false)
   }
   const handleAddToList = () => {
     dispatchList({
       type: "list:add-item",
       payload: {
-        category: item.category,
-        name: item.name,
+        itemCategory: item.category,
+        itemName: item.name,
         quantity: 1,
         shoppingItemId: item.id,
       },
@@ -63,7 +57,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
       dispatchList({
         type: "list:delete-item",
         payload: {
-          category: item.category,
+          itemCategory: item.category,
           shoppingItemId: item.id,
         },
       })
@@ -112,18 +106,13 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
         </div>
         <div className="item__cta">
           {formError && <p className="error">{formError}</p>}
-          <Button
+          <TextButton
             variant="text"
-            sx={{
-              textTransform: "none",
-              fontSize: "1.5rem",
-              color: "var(--clr-black)",
-            }}
-            onClick={() => setOpen(true)}
+            onClick={() => setConfirmDialog(true)}
             disabled={loading}
           >
             {loading ? "loading..." : "delete"}
-          </Button>
+          </TextButton>
           <CButton
             sx={{
               fontSize: "1.5rem",
@@ -135,57 +124,14 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
             {addedToList ? "Added" : "Add to list"}
           </CButton>
         </div>
+        <ConfirmDialog
+          open={confirmDialogOpen}
+          onClose={handleConfirmDialogClose}
+          onYes={handleDelete}
+        >
+          Are you sure want to delete this item?
+        </ConfirmDialog>
       </div>
-      <Dialog
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        sx={{
-          fontSize: "1.8rem",
-          "& .MuiDialog-paper": {
-            borderRadius: "1.2rem",
-          },
-          "& .MuiDialogContent-root": {
-            padding: "3rem",
-          },
-          "& .MuiDialogActions-root": {
-            padding: "3rem",
-          },
-        }}
-      >
-        <DialogTitle sx={{ fontSize: "1.8rem" }}>
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={{
-              position: "absolute",
-              right: 14,
-              top: 8,
-              color: "var(--clr-gray11)",
-            }}
-          >
-            <CloseIcon fontSize={"2rem"} />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          Are you sure that you want to <b>delete</b> this item?
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="text"
-            autoFocus
-            sx={{
-              color: "var(--clr-black)",
-              fontSize: "1.8rem",
-              textTransform: "none",
-            }}
-            onClick={handleClose}
-          >
-            cancel
-          </Button>
-          <RedButton onClick={handleDelete}>Yes</RedButton>
-        </DialogActions>
-      </Dialog>
       <style jsx>{`
         .wrapper {
           display: flex;
