@@ -7,6 +7,7 @@ const CTextField = styled(TextField)({
   maxWidth: "40rem",
   [theme.breakpoints.down("sm")]: {
     maxWidth: "100%",
+    minWidth: "100%",
     "& .MuiInputBase-root": {
       width: "100%",
     },
