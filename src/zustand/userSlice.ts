@@ -43,8 +43,6 @@ export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
       method: "GET",
     })
     if (result.data) {
-      console.log(result.data)
-
       set({
         stats: result.data,
       })

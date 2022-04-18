@@ -3,27 +3,13 @@ import { ThemeProvider } from "@mui/material/styles"
 import theme from "~/lib/mui-theme"
 import { useStore } from "~/zustand"
 import cfetch from "~/lib/cfetch"
-import { useEffect, useLayoutEffect, useState } from "react"
+import useIsomorphicLayoutEffect from "~/hooks/useIsomorphicLayoutEffect"
 
 function App({ Component, pageProps }) {
-  const [loadUser, setLoadUser] = useState(false)
-
-  // Wait until after client-side hydration to show
-  useEffect(() => {
-    setLoadUser(true)
-  }, [])
-  return (
-    <ThemeProvider theme={theme}>
-      {loadUser && <LoadInitialUser />}
-      <Component {...pageProps} />
-    </ThemeProvider>
-  )
-}
-const LoadInitialUser = () => {
   const setUser = useStore((state) => state.setUser)
 
-  // read about `useLayoutEffect`: https://kentcdodds.com/blog/useeffect-vs-uselayouteffect#uselayouteffect
-  useLayoutEffect(() => {
+  // See: https://usehooks-ts.com/react-hook/use-isomorphic-layout-effect
+  useIsomorphicLayoutEffect(() => {
     // to avoid state updates after component unmount
     // see: https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
     let isActive = true
@@ -40,8 +26,12 @@ const LoadInitialUser = () => {
     return () => {
       isActive = false
     }
-  }, [setUser])
-  return <></>
+  })
+  return (
+    <ThemeProvider theme={theme}>
+      <Component {...pageProps} />
+    </ThemeProvider>
+  )
 }
 
 export default App

@@ -6,7 +6,7 @@ import { StoreSlice } from "."
 
 export type shoppingItemActions =
   | Action<"item:add", IShoppingItem>
-  | Action<"item:remove", { itemId: number; category: string }>
+  | Action<"item:delete", { itemId: number; category: string }>
   | Action<"item:fetch-all">
 
 const shoppingItemReducer = (
@@ -19,7 +19,7 @@ const shoppingItemReducer = (
       state.itemsGrouped[category] = state.itemsGrouped[category] || []
       state.itemsGrouped[category].push(action.payload)
       break
-    case "item:remove":
+    case "item:delete":
       {
         const { category, itemId } = action.payload
         const targetItems = state.itemsGrouped[category]

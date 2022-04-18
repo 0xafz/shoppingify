@@ -34,6 +34,7 @@ const shoppingListReducer = (
       if (category in state.currListItems) {
         const targetItems = state.currListItems[category]
 
+        if (!targetItems) return
         const Idx = targetItems.findIndex(
           (item) => item.shoppingItemId === action.payload.shoppingItemId
         )
@@ -50,6 +51,7 @@ const shoppingListReducer = (
       {
         const { category, shoppingItemId, quantity } = action.payload
         const targetItems = state.currListItems[category]
+        if (!targetItems) return
         const Idx = targetItems.findIndex(
           (item) => item.shoppingItemId === shoppingItemId
         )
@@ -64,6 +66,7 @@ const shoppingListReducer = (
       {
         const { category, shoppingItemId } = action.payload
         const targetItems = state.currListItems[category]
+        if (!targetItems) return
         const Idx = targetItems.findIndex(
           (item) => item.shoppingItemId === shoppingItemId
         )
@@ -98,7 +101,7 @@ export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
   listsUngrouped: [],
   listsGrouped: [],
   currList: {
-    name: "shopping list",
+    name: "New Shopping List",
     status: "incomplete",
   },
   currListItems: {},

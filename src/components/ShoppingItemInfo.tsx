@@ -10,6 +10,7 @@ import { CloseIcon } from "~/components/icons"
 import { useStore } from "~/zustand"
 import cfetch from "~/lib/cfetch"
 import { IShoppingItem } from "~/types"
+import useTimeout from "~/hooks/useTimeout"
 
 interface ShoppingItemInfoProps {
   item: IShoppingItem
@@ -22,10 +23,15 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
   const dispatchList = useStore((state) => state.dispatchList)
   const dispatchItem = useStore((state) => state.dispatchItem)
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
+  const [addedToList, setAddedToList] = useState(false)
+  const [buttonTimeout, setButtonTimeout] = useState<number | null>(null)
+  useTimeout(() => {
+    setAddedToList(false)
+  }, buttonTimeout)
+
   const handleClose = () => {
     setOpen(false)
   }
-  const [addedToList, setAddedToList] = useState(false)
   const handleAddToList = () => {
     dispatchList({
       type: "list:add-item",
@@ -37,9 +43,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
       },
     })
     setAddedToList(true)
-    setTimeout(() => {
-      setAddedToList(false)
-    }, 2000)
+    setButtonTimeout(2000)
   }
   const handleDelete = async () => {
     setFormError("")
@@ -50,10 +54,17 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
         outputType: "string",
       })
       dispatchItem({
-        type: "item:remove",
+        type: "item:delete",
         payload: {
           category: item.category,
           itemId: item.id,
+        },
+      })
+      dispatchList({
+        type: "list:delete-item",
+        payload: {
+          category: item.category,
+          shoppingItemId: item.id,
         },
       })
       dispatchDrawer({
