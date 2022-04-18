@@ -52,16 +52,21 @@ export default async function handle(
 
           const assignedAt = new Date().toISOString()
 
-          const itemIds = rawItems.map(({ shoppingItemId, quantity }) => ({
-            assignedAt,
-            assignedBy: loggedUser.id,
-            quantity: quantity,
-            shoppingItem: {
-              connect: {
-                id: shoppingItemId,
+          const itemIds = rawItems.map(
+            ({ shoppingItemId, quantity, itemName, itemCategory }) => ({
+              assignedAt,
+              assignedBy: loggedUser.id,
+              quantity,
+              itemCategory,
+              itemName,
+              itemPurchased: false,
+              shoppingItem: {
+                connect: {
+                  id: shoppingItemId,
+                },
               },
-            },
-          }))
+            })
+          )
 
           const newList = await prisma.shoppingList.create({
             data: {

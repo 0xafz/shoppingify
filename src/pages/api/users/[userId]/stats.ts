@@ -31,36 +31,24 @@ export default async function handle(
               // status: "completed",
             },
             include: {
-              shoppingItems: {
-                include: {
-                  shoppingItem: {
-                    select: {
-                      category: true,
-                      name: true,
-                    },
-                  },
-                },
-              },
+              shoppingItems: true,
             },
           })
           const _data = lists.reduce(
             (acc, curr) => {
               let updatedAt = new Date(curr.updatedAt) // user will update the list when items bought
               for (const item of curr.shoppingItems) {
-                const {
-                  quantity,
-                  shoppingItem: { category, name },
-                } = item
+                const { quantity, itemCategory, itemName } = item
                 // item wise
-                acc.byItem[name] = acc.byItem[name] || {
+                acc.byItem[itemName] = acc.byItem[itemName] || {
                   quantity: 0,
                 }
-                acc.byItem[name].quantity += quantity
+                acc.byItem[itemName].quantity += quantity
                 // category wise
-                acc.byCategory[category] = acc.byCategory[category] || {
+                acc.byCategory[itemCategory] = acc.byCategory[itemCategory] || {
                   quantity: 0,
                 }
-                acc.byCategory[category].quantity += quantity
+                acc.byCategory[itemCategory].quantity += quantity
 
                 // month wise
                 // consider only last 12 months
