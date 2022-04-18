@@ -28,7 +28,7 @@ export default async function handle(
           const lists = await prisma.shoppingList.findMany({
             where: {
               userId: loggedUser.id,
-              // status: "completed",
+              status: "completed",
             },
             include: {
               shoppingItems: true,
@@ -38,6 +38,9 @@ export default async function handle(
             (acc, curr) => {
               let updatedAt = new Date(curr.updatedAt) // user will update the list when items bought
               for (const item of curr.shoppingItems) {
+                if (!item.itemPurchased) {
+                  continue
+                }
                 const { quantity, itemCategory, itemName } = item
                 // item wise
                 acc.byItem[itemName] = acc.byItem[itemName] || {
@@ -75,12 +78,15 @@ export default async function handle(
             }
           )
           const data: any = {}
-          data.byItem = converRecordToArray(_data.byItem, "itemName")
+          data.byItem = converRecordToArray(_data.byItem, "itemName").slice(
+            0,
+            3
+          )
           data.byCategory = converRecordToArray(
             _data.byCategory,
             "categoryName"
-          )
-          data.byMonth = converRecordToArray(_data.byMonth, "month")
+          ).slice(0, 3)
+          data.byMonth = converRecordToArray(_data.byMonth, "month").slice(0, 3)
           res.status(200).json({
             data,
           })

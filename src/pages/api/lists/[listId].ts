@@ -43,7 +43,7 @@ export default async function handle(
 
           let itemIds
           const assignedAt = new Date().toISOString()
-          if (rawItems.length !== 0) {
+          if (rawItems && rawItems.length !== 0) {
             itemIds = rawItems.map(
               ({ shoppingItemId, quantity, itemPurchased }) => ({
                 where: {
