@@ -3,26 +3,20 @@ import Autocomplete from "@mui/material/Autocomplete"
 import React, { useState } from "react"
 import { CButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
-import styled from "@mui/system/styled"
 import { useStore } from "~/zustand"
-import theme from "~/lib/mui-theme"
 import { Controller, useForm } from "react-hook-form"
 import { getValidation } from "~/utils/client/form-validation"
 import cfetch from "~/lib/cfetch"
 
 interface AddShoppingItemProps {}
 
-const TextField = styled(CTextField)({
-  [theme.breakpoints.down("sm")]: {
-    width: "25rem",
-  },
-})
 const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
   const itemCategories = useStore((state) => state.itemCategories)
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const dispatchItem = useStore((state) => state.dispatchItem)
+
   const {
     control,
     handleSubmit,
@@ -38,6 +32,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
   })
   const onSubmit = async (data: any) => {
     try {
+      setFormError("")
       setLoading(true)
       const result = await cfetch("/api/items", {
         method: "POST",
@@ -68,7 +63,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
               control={control}
               rules={getValidation({ name: "name" })}
               render={({ field }) => (
-                <TextField
+                <CTextField
                   id="name"
                   placeholder="Enter a name"
                   fullWidth
@@ -89,7 +84,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
               control={control}
               rules={getValidation({ name: "note", req: false, min: 20 })}
               render={({ field }) => (
-                <TextField
+                <CTextField
                   id="note"
                   multiline
                   placeholder="Enter a note"
@@ -111,7 +106,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
               name="image"
               control={control}
               render={({ field }) => (
-                <TextField
+                <CTextField
                   id="image"
                   type="url"
                   placeholder="Enter a url"
@@ -143,7 +138,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
                   }}
                   {...field}
                   renderInput={(params) => (
-                    <TextField
+                    <CTextField
                       {...params}
                       fullWidth
                       error={"category" in errors}
@@ -192,8 +187,8 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
       </form>
       <style jsx>{`
         h2 {
-          font-size: 2.4rem;
-          margin-bottom: 2rem;
+          font-size: 2.4em;
+          margin-bottom: 2em;
         }
         .wrapper {
           display: flex;
@@ -202,6 +197,7 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
           height: 100%;
           padding: 4rem;
           overflow-y: scroll;
+          font-size: 1rem;
         }
         form {
           height: 100%;
@@ -210,27 +206,28 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
           justify-content: space-between;
         }
         .form__cta {
-          margin: 3rem 0;
+          margin: 3em 0;
           display: flex;
           justify-content: center;
-          gap: 1.5rem;
+          gap: 1.5em;
         }
         .form__footer {
           text-align: center;
         }
         .row + .row {
-          margin-top: 2rem;
+          margin-top: 2em;
         }
         .row label {
           display: block;
-          font-size: 1.4rem;
+          font-size: 1.4em;
           font-weight: 500;
-          line-height: 1.7rem;
-          margin-bottom: 1rem;
+          line-height: 1.7em;
+          margin-bottom: 1em;
         }
         @media (max-width: 768px) {
           .wrapper {
             padding: 1.5rem;
+            font-size: 0.9rem;
           }
         }
       `}</style>

@@ -1,7 +1,18 @@
 import styled from "@mui/system/styled"
 import TextField from "@mui/material/TextField"
+import theme from "~/lib/mui-theme"
 
 const CTextField = styled(TextField)({
+  minWidth: "20rem",
+  maxWidth: "40rem",
+  [theme.breakpoints.down("sm")]: {
+    "& .MuiInputBase-root": {
+      maxWidth: "20rem",
+    },
+    "& input": {
+      padding: "1rem .8rem",
+    },
+  },
   "& .MuiInputBase-root": {
     font: "inherit",
     fontSize: "1.5rem",

@@ -1,28 +1,13 @@
-import Button from "@mui/material/Button"
-import { styled } from "@mui/material/styles"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
 import cfetch from "~/lib/cfetch"
-import theme from "~/lib/mui-theme"
-import { CButton } from "~/mui-c/Button"
+import { BannerButton, CButton } from "~/mui-c/Button"
 import CTextField from "~/mui-c/TextField"
 import { ItemInList } from "~/types"
 import { unGroup } from "~/utils/client"
 import { useStore } from "~/zustand"
-import { DeleteOutlineIcon, PencilOutlineIcon } from "./icons"
+import { DeleteOutlineIcon } from "./icons"
 
-const BannerButton = styled(Button)({
-  padding: ".5rem 1rem",
-  marginTop: "1rem",
-  textTransform: "none",
-  borderRadius: "1.2rem",
-  backgroundColor: "var(--clr-white)",
-  color: "var(--clr-black)",
-  fontSize: "1.4rem",
-  "&:hover": {
-    backgroundColor: "var(--clr-gray1)",
-  },
-})
 const AdditemBanner = () => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   return (
@@ -48,6 +33,7 @@ const AdditemBanner = () => {
           border-radius: 2.2rem;
           background: var(--clr-brown);
           color: var(--clr-white);
+          font-size: 1rem;
         }
         .banner-img {
           flex-basis: 30%;
@@ -58,14 +44,15 @@ const AdditemBanner = () => {
           object-position: 4px -19px;
         }
         .banner-info {
-          padding: 1.7rem;
+          padding: 1.7em;
         }
         h3 {
-          font-size: 1.6rem;
+          font-size: 1.6em;
         }
         @media (max-width: 40rem) {
           .add-item-banner {
             width: 100%;
+            font-size: 0.9rem;
           }
         }
       `}</style>
@@ -252,7 +239,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
   const currListItems = useStore((state) => state.currListItems)
   const dispatchList = useStore((state) => state.dispatchList)
   const router = useRouter()
-  const handleEditListName = () => {}
+  // const handleEditListName = () => {}
   const handleListNameChange = (e: any) => {
     setListName(e.target.value)
   }
@@ -294,9 +281,9 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         <div className="add-list">
           <div className="add-list__header">
             <h2>{currList.name}</h2>
-            <button title="edit list name" onClick={handleEditListName}>
+            {/* <button title="edit list name" onClick={handleEditListName}>
               <PencilOutlineIcon aria-hidden="true" />
-            </button>
+            </button> */}
           </div>
           <div className="add-list__body styled-scrollbars">
             {currListItems &&
@@ -319,11 +306,6 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
             fullWidth
             value={listName}
             onChange={handleListNameChange}
-            sx={{
-              [theme.breakpoints.down("sm")]: {
-                width: "25rem",
-              },
-            }}
             InputProps={{
               endAdornment: (
                 <CButton type="submit" disabled={loading}>
@@ -388,6 +370,9 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
           .top,
           .bottom {
             padding: 1.5rem;
+          }
+          h2 {
+            font-size: 1.5rem;
           }
         }
       `}</style>

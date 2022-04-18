@@ -49,15 +49,24 @@ const UserInfo = ({ user }: { user: IUser }) => {
           margin: 2rem 0;
         }
         dl > div + div {
-          margin-top: 2rem;
+          margin-top: 2em;
         }
         dt {
-          font-size: 1.5rem;
+          font-size: 1.5em;
           color: var(--clr-gray10);
         }
         dd {
-          font-size: 2.5rem;
+          font-size: 2.5em;
           font-weight: 500;
+          word-break: break-all;
+        }
+        @media (max-width: 768px) {
+          .details {
+            font-size: 1rem;
+          }
+          dd {
+            font-size: 1.8em;
+          }
         }
       `}</style>
     </>
@@ -81,6 +90,11 @@ const User: React.FC<UserProps> = ({}) => {
           font-size: 2rem;
           text-align: center;
           margin-top: 4rem;
+        }
+        @media (max-width: 1024px) {
+          .wrapper {
+            padding: 1rem;
+          }
         }
       `}</style>
     </Layout>
