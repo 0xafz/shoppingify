@@ -1,13 +1,12 @@
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/router"
 import React from "react"
 import Layout from "~/components/Layout"
+import NotLoggedIn from "~/components/NotLoggedIn"
 import { RedButton } from "~/mui-c/Button"
 import { IUser } from "~/types"
 import { removeJwtTokens } from "~/utils/client/auth"
 import { useStore } from "~/zustand"
-import NotLoggedIn from "~/components/NotLoggedIn"
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const router = useRouter()
@@ -45,7 +44,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
       <RedButton onClick={handleLogout}>Logout</RedButton>
       <style jsx>{`
         .details {
-          font-size: 1.5rem;
+          font-size: 1rem;
           margin: 2rem 0;
         }
         dl > div + div {
@@ -62,7 +61,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
         }
         @media (max-width: 768px) {
           .details {
-            font-size: 1rem;
+            font-size: 0.9rem;
           }
           dd {
             font-size: 1.8em;
@@ -84,7 +83,7 @@ const User: React.FC<UserProps> = ({}) => {
       <style jsx>{`
         .wrapper {
           padding: 4rem;
-          font-size: 1.5rem;
+          font-size: 1rem;
         }
         .login {
           font-size: 2rem;

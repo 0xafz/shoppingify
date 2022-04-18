@@ -3,11 +3,12 @@ import TextField from "@mui/material/TextField"
 import theme from "~/lib/mui-theme"
 
 const CTextField = styled(TextField)({
-  minWidth: "20rem",
+  minWidth: "18rem",
   maxWidth: "40rem",
   [theme.breakpoints.down("sm")]: {
+    maxWidth: "100%",
     "& .MuiInputBase-root": {
-      maxWidth: "20rem",
+      width: "100%",
     },
     "& input": {
       padding: "1rem .8rem",
