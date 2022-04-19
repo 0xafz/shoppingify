@@ -8,9 +8,9 @@ import { Controller, useForm } from "react-hook-form"
 import { getValidation } from "~/utils/client/form-validation"
 import cfetch from "~/lib/cfetch"
 
-interface AddShoppingItemProps {}
+interface CreateShoppingItemProps {}
 
-const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
+const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
   const [formError, setFormError] = useState("")
   const [loading, setLoading] = useState(false)
   const itemCategories = useStore((state) => state.itemCategories)
@@ -234,4 +234,4 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
   )
 }
 
-export default AddShoppingItem
+export default CreateShoppingItem
