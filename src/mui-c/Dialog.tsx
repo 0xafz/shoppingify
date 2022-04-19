@@ -12,24 +12,15 @@ interface ConfirmDialogProps {
   children: ReactNode
   onYes: (...args: any) => void
   onClose: () => void
+  onYesLoading: boolean
 }
 export const ConfirmDialog = ({
   open,
   children,
   onYes,
   onClose,
+  onYesLoading,
 }: ConfirmDialogProps) => {
-  const [loading, setLoading] = useState(false)
-  const handleYes = (e: any) => {
-    try {
-      setLoading(true)
-      onYes(e)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
   return (
     <Dialog
       keepMounted
@@ -67,8 +58,8 @@ export const ConfirmDialog = ({
         <TextButton variant="text" autoFocus onClick={onClose}>
           cancel
         </TextButton>
-        <RedButton onClick={handleYes} disabled={loading}>
-          {loading ? "loading..." : "Yes"}
+        <RedButton onClick={onYes} disabled={onYesLoading}>
+          {onYesLoading ? "..." : "Yes"}
         </RedButton>
       </DialogActions>
     </Dialog>

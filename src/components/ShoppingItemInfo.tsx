@@ -134,6 +134,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
           open={confirmDialogOpen}
           onClose={handleConfirmDialogClose}
           onYes={handleDelete}
+          onYesLoading={loading}
         >
           Are you sure want to delete this item?
         </ConfirmDialog>
