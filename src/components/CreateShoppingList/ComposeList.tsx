@@ -15,12 +15,10 @@ const ComposeListFooter = () => {
   const [listName, setListName] = useState("")
   const dispatchList = useStore((state) => state.dispatchList)
   const currListItems = useStore((state) => state.currListItems)
-  const { id = undefined, status } = useStore((state) => state.currList)
+  const crossedItems = useStore((state) => state.crossedItems)
+  const { id = undefined, status, name } = useStore((state) => state.currList)
   const router = useRouter()
 
-  const handleListNameChange = (e: any) => {
-    setListName(e.target.value)
-  }
   const handleConfirmDialogClose = () => {
     setConfirmDialog(false)
   }
@@ -47,10 +45,7 @@ const ComposeListFooter = () => {
       }
       if (result.data) {
         dispatchList({
-          type: "list:cancel-currList",
-        })
-        dispatchList({
-          type: "list:upsert",
+          type: "list:cancel",
           payload: result.data,
         })
         router.push("/history")
@@ -61,7 +56,7 @@ const ComposeListFooter = () => {
       setConfirmDialog(false)
     }
   }
-  const handleSubmitList = async (e: any) => {
+  const handleSave = async (e: any) => {
     e.stopPropagation()
     e.preventDefault()
     try {
@@ -81,7 +76,39 @@ const ComposeListFooter = () => {
       }
       if (result.data) {
         dispatchList({
-          type: "list:add-and-set-as-currList",
+          type: "list:save",
+          payload: result.data,
+        })
+        router.push("/history")
+      }
+    } catch (err) {
+      console.error(err)
+      setFormError("something went wrong!")
+    } finally {
+      setLoading(false)
+    }
+  }
+  const handleComplete = async (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    try {
+      setLoading(true)
+      setFormError("")
+      const result = await cfetch(`api/lists/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name,
+          status: "completed",
+          items: crossedItems,
+        }),
+      })
+      if (result.error) {
+        setFormError(result.error)
+        return
+      }
+      if (result.data) {
+        dispatchList({
+          type: "list:complete",
           payload: result.data,
         })
         router.push("/history")
@@ -96,12 +123,12 @@ const ComposeListFooter = () => {
   return (
     <>
       {status === "un-saved" && (
-        <form onSubmit={handleSubmitList}>
+        <form onSubmit={handleSave}>
           <CTextField
             placeholder="Enter a name"
             fullWidth
             value={listName}
-            onChange={handleListNameChange}
+            onChange={(e) => setListName(e.target.value)}
             required
             InputProps={{
               endAdornment: (
@@ -123,7 +150,9 @@ const ComposeListFooter = () => {
             <TextButton onClick={() => setConfirmDialog(true)}>
               Cancel
             </TextButton>
-            <SkyButton sx={{ marginLeft: "2rem" }}>Complete</SkyButton>
+            <SkyButton sx={{ marginLeft: "2rem" }} onClick={handleComplete}>
+              Complete
+            </SkyButton>
           </div>
           <ConfirmDialog
             open={confirmDialogOpen}

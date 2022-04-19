@@ -38,7 +38,7 @@ const ShoppingListItem = ({
       return
     }
     dispatchList({
-      type: "list:update-item",
+      type: "list:update-item-quantity",
       payload: {
         shoppingItemId,
         quantity: quantity + delta,
@@ -46,14 +46,18 @@ const ShoppingListItem = ({
       },
     })
   }
-  const toggleItemPurchase = () => {
+  const toggleItemPurchase = (e: any) => {
     dispatchList({
       type: "list:toggle-item-purchase",
       payload: {
         shoppingItemId,
+        quantity,
+        itemCategory,
+        itemName,
+        itemPurchased: e.target.checked,
       },
     })
-    setItemPurchased((prev) => !prev)
+    setItemPurchased(e.target.checked)
   }
   return (
     <li className={itemPurchased ? "checked" : ""}>

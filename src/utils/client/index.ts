@@ -35,29 +35,27 @@ export const groupByTime = <T>(
   arr: Array<T>,
   by: string,
   gap: "month" | "year"
-) => {
-  return Object.entries<T[]>(
-    arr.reduce((acc, curr) => {
-      let dateValue = curr[by]
-      if (!dateValue) throw new Error(`property ${by} doesn't exist`)
-      dateValue = new Date(dateValue)
-      if (!(dateValue instanceof Date))
-        throw new Error(`property ${by} is not valid date`)
+): Record<string, T[]> => {
+  return arr.reduce((acc, curr) => {
+    let dateValue = curr[by]
+    if (!dateValue) throw new Error(`property ${by} doesn't exist`)
+    dateValue = new Date(dateValue)
+    if (!(dateValue instanceof Date))
+      throw new Error(`property ${by} is not valid date`)
 
-      let key
-      switch (gap) {
-        case "month":
-          key = `${months[dateValue.getMonth()]} ${dateValue.getFullYear()}`
-          break
-        case "year":
-          key = dateValue.getFullYear()
-          break
-      }
-      acc[key] = acc[key] || []
-      acc[key].push(curr)
-      return acc
-    }, {})
-  ).sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
+    const key = getGroupByKeyString(dateValue, gap)
+    acc[key] = acc[key] || []
+    acc[key].push(curr)
+    return acc
+  }, {})
+}
+export const getGroupByKeyString = (date: Date, gap: "month" | "year") => {
+  switch (gap) {
+    case "month":
+      return `${months[date.getMonth()]} ${date.getFullYear()}`
+    case "year":
+      return date.getFullYear().toString()
+  }
 }
 
 export const unGroup = (obj: Record<string, Array<any>>) => {
@@ -66,4 +64,11 @@ export const unGroup = (obj: Record<string, Array<any>>) => {
     result = result.concat(groupedItemsArr)
   }
   return result
+}
+
+export const sortObjectByKey = <T>(
+  obj: Record<string | number, T>,
+  compareFn?: (a: [string, T], b: [string, T]) => number
+) => {
+  return Object.entries<T>(obj).sort(compareFn)
 }

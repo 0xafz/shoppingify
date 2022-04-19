@@ -2,67 +2,85 @@ import cfetch from "~/lib/cfetch"
 import { Action, IShoppingList, ItemInList } from "~/types"
 import { StoreSlice } from "."
 import produce from "immer"
-import { groupBy, groupByTime } from "~/utils/client"
+import { getGroupByKeyString, groupBy, groupByTime } from "~/utils/client"
 
 type ItemWithIdCat = {
   shoppingItemId: number
   itemCategory: string
 }
 export type ShoppingListActions =
-  | Action<"list:cancel-currList">
-  | Action<"list:add-and-set-as-currList", IShoppingList>
-  | Action<"list:complete">
-  | Action<"list:upsert", IShoppingList>
+  | Action<"list:cancel", IShoppingList>
+  | Action<"list:save", IShoppingList>
+  | Action<"list:complete", IShoppingList>
+  | Action<"list:update", IShoppingList>
   | Action<"list:add-item", ItemInList>
-  | Action<"list:update-item", Omit<ItemInList, "itemName">>
+  | Action<"list:update-item-quantity", Omit<ItemInList, "itemName">>
   | Action<"list:delete-item", ItemWithIdCat>
-  | Action<"list:toggle-item-purchase", { shoppingItemId: number }>
+  | Action<"list:toggle-item-purchase", ItemInList & { itemPurchased: boolean }>
 
+const AddToListsUngroupedAndRegroup = (
+  state: ShoppingListSlice,
+  list: IShoppingList
+) => {
+  // TODO: make it good
+  if (!list.id) return
+  const idx = state.listsUngrouped.findIndex((list) => list.id === list.id)
+  if (idx !== -1) {
+    state.listsUngrouped[idx] = list
+    return // modified existing grouped item ,no need to regroup
+  } else {
+    // why unshift: listsUngrouped is sorted by desc time,latest items pushed front
+    state.listsUngrouped.unshift(list)
+  }
+  state.listsGrouped = groupByTime<IShoppingList>(
+    state.listsUngrouped,
+    "createdAt",
+    "month"
+  )
+}
+const upsertToGroupedList = (state: ShoppingListSlice, list: IShoppingList) => {
+  const groupByKey = getGroupByKeyString(new Date(list.createdAt), "month")
+  state.listsGrouped[groupByKey] = state.listsGrouped[groupByKey] || []
+
+  const idx = state.listsGrouped[groupByKey].findIndex(
+    (item) => item.id === list.id
+  )
+  if (idx !== -1) {
+    state.listsGrouped[groupByKey][idx] = {
+      ...state.listsGrouped[groupByKey][idx],
+      ...list,
+    }
+    return
+  }
+  state.listsGrouped[groupByKey].unshift(list)
+}
+const resetCurrList = (state: ShoppingListSlice) => {
+  state.currList = {
+    name: "New Shopping List",
+    status: "un-saved",
+  }
+  state.currListItems = {}
+  state.crossedItems = []
+}
 const shoppingListReducer = (
   state: ShoppingListSlice,
   action: ShoppingListActions
 ) => {
   switch (action.type) {
-    case "list:add-and-set-as-currList":
-      state.listsUngrouped.push(action.payload)
-      state.listsGrouped = groupByTime<IShoppingList>(
-        state.listsUngrouped,
-        "createdAt",
-        "month"
-      )
+    case "list:save":
+      upsertToGroupedList(state, action.payload)
       state.currList = action.payload
       break
-    case "list:upsert":
-      if (!action.payload.id) return
-      const idx = state.listsUngrouped.findIndex(
-        (list) => list.id === action.payload.id
-      )
-      if (idx !== -1) {
-        state.listsUngrouped[idx] = action.payload
-      } else {
-        state.listsUngrouped.push(action.payload)
-      }
-      state.listsGrouped = groupByTime<IShoppingList>(
-        state.listsUngrouped,
-        "createdAt",
-        "month"
-      )
+    case "list:update":
+      upsertToGroupedList(state, action.payload)
       break
-    case "list:cancel-currList":
-      state.currList = {
-        name: "New Shopping List",
-        status: "un-saved",
-      }
-      state.currListItems = {}
-      state.crossedItems = []
+    case "list:cancel":
+      upsertToGroupedList(state, action.payload)
+      resetCurrList(state)
       break
     case "list:complete":
-      state.currList = {
-        name: "New Shopping List",
-        status: "un-saved",
-      }
-      state.currListItems = {}
-      state.crossedItems = []
+      upsertToGroupedList(state, action.payload)
+      resetCurrList(state)
       break
     case "list:add-item":
       if (!state.currList) {
@@ -90,7 +108,7 @@ const shoppingListReducer = (
         state.currListItems[itemCategory] = [action.payload]
       }
       break
-    case "list:update-item":
+    case "list:update-item-quantity":
       {
         const { itemCategory, shoppingItemId, quantity } = action.payload
         const targetItems = state.currListItems[itemCategory]
@@ -129,7 +147,7 @@ const shoppingListReducer = (
         if (idx !== -1)
           state.crossedItems[idx].itemPurchased =
             !state.crossedItems[idx].itemPurchased
-        else state.crossedItems.push({ ...action.payload, itemPurchased: true })
+        else state.crossedItems.push(action.payload)
       }
       break
     default:
@@ -139,8 +157,8 @@ const shoppingListReducer = (
 
 export type ShoppingListSlice = {
   listsUngrouped: Array<IShoppingList>
-  listsGrouped: Array<[string, Array<IShoppingList>]>
-  crossedItems: Array<{ shoppingItemId: number; itemPurchased: boolean }>
+  listsGrouped: Record<string, Array<IShoppingList>>
+  crossedItems: Array<ItemInList & { itemPurchased: boolean }>
   currListItems: Record<string, Array<ItemInList>>
   currList: {
     name: string
@@ -149,14 +167,14 @@ export type ShoppingListSlice = {
   }
   dispatchList: (args: ShoppingListActions) => void
   fetchShoppingLists: () => Promise<void>
-  getLatestIncompleteList: () => Promise<void>
+  setLatestIncompleteList: () => Promise<void>
 }
 export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
   set,
   get
 ) => ({
   listsUngrouped: [],
-  listsGrouped: [],
+  listsGrouped: {},
   crossedItems: [],
   currList: {
     name: "Un-named list",
@@ -181,16 +199,13 @@ export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
       })
     }
   },
-  getLatestIncompleteList: async () => {
-    console.log("getLate:wa")
-
+  setLatestIncompleteList: async () => {
+    // TODO: better approach ?? , or how to use this
     const { listsUngrouped, listsGrouped } = get()
-    console.log({ listsUngrouped, listsGrouped })
 
     const latestIncompleteList = listsUngrouped.filter(
       (list) => list.status === "incomplete"
     )[0]
-    console.log({ listsUngrouped, listsGrouped, latestIncompleteList })
     if (!latestIncompleteList) {
       return
     }

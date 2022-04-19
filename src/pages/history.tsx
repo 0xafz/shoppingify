@@ -9,6 +9,7 @@ import {
 import Layout from "~/components/Layout"
 import NotLoggedIn from "~/components/NotLoggedIn"
 import { IShoppingList } from "~/types"
+import { sortObjectByKey } from "~/utils/client"
 import { useStore } from "~/zustand"
 
 const ShoppingList = ({ name, createdAt, status }: IShoppingList) => {
@@ -91,17 +92,17 @@ const ShoppingList = ({ name, createdAt, status }: IShoppingList) => {
             border-radius: 0.8em;
             font-weight: 700;
           }
-          .lg__status.completed {
-            color: var(--clr-green9);
-            border: 1px solid var(--clr-green9);
-          }
-          .lg__status.cancelled {
-            color: var(--clr-red9);
-            border: 1px solid var(--clr-red9);
-          }
           .sm__status {
             display: none;
             font-size: 1.4rem;
+          }
+          .completed {
+            color: var(--clr-green9);
+            border: 1px solid var(--clr-green9);
+          }
+          .cancelled {
+            color: var(--clr-red9);
+            border: 1px solid var(--clr-red9);
           }
           @media (max-width: 768px) {
             button {
@@ -176,13 +177,14 @@ const HistoryContent = () => {
         <h1>Shopping history</h1>
       </header>
       <main>
-        {listsGrouped.map(([groupName, lists]) => (
-          <ShoppingListGroup
-            groupName={groupName}
-            lists={lists}
-            key={groupName}
-          />
-        ))}
+        {listsGrouped &&
+          sortObjectByKey(listsGrouped).map(([groupName, lists]) => (
+            <ShoppingListGroup
+              groupName={groupName}
+              lists={lists}
+              key={groupName}
+            />
+          ))}
       </main>
       <style jsx>{`
         main {
