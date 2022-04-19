@@ -1,6 +1,6 @@
 // source: https://gist.github.com/ziluvatar/a3feb505c4c0ec37059054537b38fc48
 import jwt, { Secret, SignOptions, VerifyOptions } from "jsonwebtoken"
-import { jwtSecret, jwtTtl, jwtClaims } from "~/constants"
+import { jwtSecret, jwtTtl, jwtClaimsPropKey } from "~/constants"
 
 interface RefreshOptions {
   verify?: Exclude<VerifyOptions, "jwtid">
@@ -52,7 +52,7 @@ class TokenGenerator {
   }
   signWithClaims(_payload: any, signOptions?: SignOptions) {
     const payload = {
-      [jwtClaims]: _payload,
+      [jwtClaimsPropKey]: _payload,
     }
     return this.sign(payload, {
       expiresIn: signOptions?.expiresIn || this.options.expiresIn,

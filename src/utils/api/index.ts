@@ -3,7 +3,7 @@ import { CookieSerializeOptions } from "next/dist/server/web/types"
 import { serialize } from "cookie"
 import { DecodedUser } from "~/types"
 import tokenGenerator from "./TokenGenerator"
-import { generalCookieAge, isProd, jwtClaims } from "~/constants"
+import { generalCookieAge, isProd, jwtClaimsPropKey } from "~/constants"
 
 export const getUserFromAuthToken = (
   req: NextApiRequest
@@ -12,7 +12,7 @@ export const getUserFromAuthToken = (
     const rawToken = req.headers["authorization"] || ""
     const token = rawToken.split(" ")[1]
     const decoded: any = tokenGenerator.verify(token)
-    const claims = decoded[jwtClaims]
+    const claims = decoded[jwtClaimsPropKey]
 
     return {
       id: Number(claims["X-Auth-User-Id"]),
