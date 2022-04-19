@@ -4,6 +4,16 @@
 
 > Shopping list App with stats page.
 
+## TODO
+
+- handle token expiry
+- add user delete ui
+- implement list crud ui
+- provide functionality to pick/fork from existing lists
+- remove grouped empty item/list holders
+- blink updated/new items in list
+- handle timeout on item add
+
 ## Tech stack
 
 - [cookie](https://www.npmjs.com/package/cookie)
@@ -22,7 +32,8 @@
 ## scripts
 
 ```sh
-yarn dev
+# lists available package.json script commands
+yarn run
 ```
 
 ## Credits
