@@ -4,6 +4,7 @@ import theme from "~/lib/mui-theme"
 import { useStore } from "~/zustand"
 import cfetch from "~/lib/cfetch"
 import useIsomorphicLayoutEffect from "~/hooks/useIsomorphicLayoutEffect"
+import SEO from "~/components/SEO"
 
 function App({ Component, pageProps }) {
   const setUser = useStore((state) => state.setUser)
@@ -29,6 +30,7 @@ function App({ Component, pageProps }) {
   })
   return (
     <ThemeProvider theme={theme}>
+      <SEO />
       <Component {...pageProps} />
     </ThemeProvider>
   )
