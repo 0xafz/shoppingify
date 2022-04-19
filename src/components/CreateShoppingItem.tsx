@@ -174,7 +174,6 @@ const AddShoppingItem: React.FC<AddShoppingItemProps> = ({}) => {
               type="submit"
               variant="contained"
               sx={{
-                background: "var(--clr-amber10)",
                 padding: "1rem 1.5rem",
                 fontSize: "1.5rem",
               }}

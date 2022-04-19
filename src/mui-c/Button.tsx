@@ -23,7 +23,7 @@ export const TextButton = styled(CButton)({
   },
 })
 export const RedButton = styled(CButton)({
-  background: "var(--clr-red10)",
+  backgroundColor: "var(--clr-red10)",
   fontWeight: "bold",
   "&:hover": {
     backgroundColor: "var(--clr-red11)",
