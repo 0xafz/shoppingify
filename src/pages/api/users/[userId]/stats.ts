@@ -4,12 +4,15 @@ import prisma from "~/lib/prisma"
 import checkAuth from "~/middleware/checkAuth"
 import { handleError } from "~/utils/api/error"
 
-const converRecordToArray = (
-  value: Record<string, { [key: string]: any }>,
-  _keyName?: string
-) => {
-  const keyName = _keyName || "name"
-  return Object.entries(value).map(([name, obj]) => ({
+const converRecordToArrayOfRecords = <
+  K extends string | number | symbol,
+  T extends Record<string, any>
+>(
+  value: Record<K, T>,
+  recordKeyName?: string
+): Array<Record<string, T>> => {
+  const keyName = recordKeyName || "name"
+  return Object.entries<T>(value).map(([name, obj]) => ({
     [keyName]: name,
     ...obj,
   }))
@@ -78,15 +81,19 @@ export default async function handle(
             }
           )
           const data: any = {}
-          data.byItem = converRecordToArray(_data.byItem, "itemName").slice(
-            0,
-            3
-          )
-          data.byCategory = converRecordToArray(
+          // limit to top 3 items
+          data.byItem = converRecordToArrayOfRecords(
+            _data.byItem,
+            "itemName"
+          ).slice(0, 3)
+          data.byCategory = converRecordToArrayOfRecords(
             _data.byCategory,
             "categoryName"
           ).slice(0, 3)
-          data.byMonth = converRecordToArray(_data.byMonth, "month").slice(0, 3)
+          data.byMonth = converRecordToArrayOfRecords(
+            _data.byMonth,
+            "month"
+          ).slice(0, 3)
           res.status(200).json({
             data,
           })

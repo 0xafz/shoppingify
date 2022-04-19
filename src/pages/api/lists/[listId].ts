@@ -44,26 +44,27 @@ export default async function handle(
           let itemIds
           const assignedAt = new Date().toISOString()
           if (rawItems && rawItems.length !== 0) {
-            itemIds = rawItems.map(
-              ({ shoppingItemId, quantity, itemPurchased }) => ({
-                where: {
-                  shoppingListId_shoppingItemId: {
-                    shoppingListId: listId,
-                    shoppingItemId,
+            itemIds = rawItems.map(({ shoppingItemId, ...updates }) => ({
+              where: {
+                shoppingListId_shoppingItemId: {
+                  shoppingListId: listId,
+                  shoppingItemId,
+                },
+              },
+              update: {
+                ...updates,
+              },
+              create: {
+                ...updates,
+                assignedAt,
+                assignedBy: loggedUser.id,
+                shoppingItem: {
+                  connect: {
+                    id: shoppingItemId,
                   },
                 },
-                update: {
-                  quantity,
-                  itemPurchased,
-                },
-                create: {
-                  quantity,
-                  itemPurchased,
-                  assignedAt,
-                  assignedBy: loggedUser.id,
-                },
-              })
-            )
+              },
+            }))
           }
           const updatedList = await prisma.shoppingList.update({
             where: {
