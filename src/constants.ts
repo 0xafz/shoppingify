@@ -8,7 +8,7 @@ export const isProd = process.env.NODE_ENV === "production"
 export const jwtSecret = process.env.JWT_SECRET
 export const jwtTtl = 900 // 15m (in seconds)
 export const refreshTokenTtl = 900000 // 15m (milli seconds)
-export const jwtClaims = `${appUrl}/jwt/claims`
+export const jwtClaimsPropKey = "zkindest.vercel.app/jwt/claims"
 export const jwtClaimPrefix = "x-auth"
 
 // COOKIES
