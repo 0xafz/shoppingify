@@ -32,7 +32,7 @@ export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
       itemsGrouped: {},
       itemsUngrouped: [],
       listsUngrouped: [],
-      listsGrouped: [],
+      listsGrouped: {},
       user: null,
       stats: {
         byCategory: [],

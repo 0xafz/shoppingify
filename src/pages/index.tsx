@@ -1,5 +1,5 @@
 import { IconButton, InputAdornment } from "@mui/material"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
 import { useStore } from "~/zustand"
@@ -125,7 +125,7 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
   )
 }
 const HomeContent = () => {
-  const [search, setSearch] = useState("")
+  const [searchKey, setSearchKey] = useState("")
   const itemsGrouped = useStore((state) => state.itemsGrouped)
   const [filtered, setFiltered] = useState(itemsGrouped)
 
@@ -133,31 +133,33 @@ const HomeContent = () => {
     setFiltered(itemsGrouped)
   }, [itemsGrouped])
 
-  const debouncedFilter = useCallback(
-    debounce((items: ShoppingItemSlice["itemsGrouped"], search: string) => {
-      setFiltered(
-        Object.entries(items).reduce((acc, [category, items]) => {
-          const filteredCategoryItems = items.filter(
-            (item) => item.name.search(new RegExp(search, "ig")) !== -1
-          )
-          if (filteredCategoryItems.length !== 0) {
-            acc[category] = filteredCategoryItems
-          }
-          return acc
-        }, {})
-      )
-    }, 400),
-    []
-  )
-  const handleSearchChange = (e: any) => {
-    setSearch(e.target.value)
+  const search = (
+    items: ShoppingItemSlice["itemsGrouped"],
+    searchKey: string
+  ) => {
+    setFiltered(
+      Object.entries(items).reduce((acc, [category, items]) => {
+        const filteredCategoryItems = items.filter(
+          (item) => item.name.toLowerCase().search(searchKey) !== -1
+        )
+        if (filteredCategoryItems.length !== 0) {
+          acc[category] = filteredCategoryItems
+        }
+        return acc
+      }, {})
+    )
+  }
+  const debouncedSearch = useMemo(() => debounce(search, 400), [])
+
+  const handleSearchKeyChange = (e: any) => {
+    setSearchKey(e.target.value.toLowerCase())
   }
   useEffect(() => {
-    if (search) {
-      debouncedFilter(itemsGrouped, search)
+    if (searchKey) {
+      debouncedSearch(itemsGrouped, searchKey)
     }
     setFiltered(itemsGrouped)
-  }, [search])
+  }, [itemsGrouped, searchKey, setFiltered, debouncedSearch])
 
   return (
     <>
@@ -171,8 +173,8 @@ const HomeContent = () => {
           sx={{
             minWidth: "35rem",
           }}
-          value={search}
-          onChange={handleSearchChange}
+          value={searchKey}
+          onChange={handleSearchKeyChange}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start" style={{ fontSize: "2.5rem" }}>
@@ -223,7 +225,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchShoppingItems()
-  }, [])
+  }, [fetchShoppingItems])
 
   return (
     <Layout>

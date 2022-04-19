@@ -8,6 +8,7 @@ import {
   PersonIcon,
   RefreshOutlineIcon,
 } from "./icons"
+import Image from "next/image"
 
 interface MenuProps {}
 
@@ -19,7 +20,7 @@ export const Menu: React.FC<MenuProps> = ({}) => {
   return (
     <div className="menu">
       <button className="logo" title="logo">
-        <img src="/logo.svg" alt="logo" />
+        <Image src="/logo.svg" alt="logo" width={40} height={40} />
       </button>
       <div className="main">
         <Link href={"/"}>

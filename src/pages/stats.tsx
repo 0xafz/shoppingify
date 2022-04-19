@@ -10,7 +10,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
   const fetchStats = useStore((state) => state.fetchStats)
   useEffect(() => {
     fetchStats()
-  }, [])
+  }, [fetchStats])
   const stats = useStore((state) => state.stats)
   const topItemsNormalized = useMemo(() => {
     if (!stats.byItem) return []

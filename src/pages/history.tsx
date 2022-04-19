@@ -14,7 +14,7 @@ import { useStore } from "~/zustand"
 
 const ShoppingList = ({ name, createdAt, status }: IShoppingList) => {
   return (
-    <Link href={"/list/1"}>
+    <Link href={"/list/1"} passHref>
       <div className="s-list">
         <h3>{name}</h3>
         <div className="s-list__details">

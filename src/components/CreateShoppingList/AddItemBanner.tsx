@@ -1,15 +1,16 @@
 import { TextButton } from "~/mui-c/Button"
 import { useStore } from "~/zustand"
+import Image from "next/image"
 
 const AddItemBanner = () => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   return (
     <div className="add-item-banner">
       <div className="banner-img">
-        <img src="/source.svg" alt="source" />
+        <Image src="/source.svg" alt="source" width={60} height={130} />
       </div>
       <div className="banner-info">
-        <h3>Didn’t find what you need?</h3>
+        <h3>Didn&apos;t find what you need?</h3>
         <TextButton
           sx={{
             padding: ".5rem 1rem",

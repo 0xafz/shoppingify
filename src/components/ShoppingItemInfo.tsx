@@ -5,6 +5,7 @@ import { CButton, TextButton } from "~/mui-c/Button"
 import { ConfirmDialog } from "~/mui-c/Dialog"
 import { IShoppingItem } from "~/types"
 import { useStore } from "~/zustand"
+import Image from "next/image"
 
 interface ShoppingItemInfoProps {
   item: IShoppingItem
@@ -85,7 +86,12 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
       <div className="item styled-scrollbars">
         <div className="item__inner">
           <div className="item__picture">
-            <img src="/avocado.jpg" alt="avocado single and halved" />
+            <Image
+              src="/avocado.jpg"
+              alt="avocado single and halved"
+              width={300}
+              height={220}
+            />
           </div>
           <div className="item__details">
             <dl>
