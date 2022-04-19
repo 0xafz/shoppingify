@@ -85,6 +85,13 @@ export default async function handle(
         break
       case "DELETE":
         {
+          // when list gets deleted, remove all related records from
+          // ShoppingItemToList (junction table)
+          await prisma.shoppingItemToList.deleteMany({
+            where: {
+              shoppingListId: listId,
+            },
+          })
           await prisma.shoppingList.delete({
             where: {
               id: listId,

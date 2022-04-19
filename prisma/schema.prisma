@@ -55,9 +55,9 @@ model ShoppingItem {
 }
 
 model ShoppingItemToList {
-  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   shoppingItemId Int
-  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   shoppingListId Int
   quantity       Int
   itemName           String
