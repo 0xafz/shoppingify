@@ -24,6 +24,7 @@ const SEO: React.FC<SEOProps> = (props) => {
   const description = props.description || defaults.description
   const url = new URL(props.path || "", defaults.baseUrl).href
   const image = props.image || defaults.image
+  const twitterUserName = defaults.twitterUserName || ""
 
   return (
     <Head>
@@ -45,7 +46,7 @@ const SEO: React.FC<SEOProps> = (props) => {
       )}
 
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:creator" content={"zkindest"} />
+      <meta name="twitter:creator" content={twitterUserName} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       {image && <meta name="twitter:image" content={image} />}
