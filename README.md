@@ -6,6 +6,8 @@
 
 ## TODO
 
+- add product home page
+- add history/[listId]
 - handle token expiry
 - add user delete ui
 - implement list crud ui
