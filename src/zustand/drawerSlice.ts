@@ -36,7 +36,7 @@ const drawerReducer = (state: DrawerSlice, action: DrawerActions) => {
   }
 }
 export const createDrawerSlice: StoreSlice<DrawerSlice> = (set, get) => ({
-  rightSideDrawerType: "create-item",
+  rightSideDrawerType: "create-list",
   showRightSideDrawer: false,
   itemInDrawer: null,
   dispatchDrawer: (args) => set(produce((state) => drawerReducer(state, args))),
