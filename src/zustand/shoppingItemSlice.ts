@@ -30,6 +30,8 @@ const shoppingItemReducer = (
           (item) => item.id !== itemId
         )
         state.itemsGrouped[category] = filteredCatElements
+        if (!state.itemsGrouped[category].length)
+          delete state.itemsGrouped[category]
       }
       break
     default:

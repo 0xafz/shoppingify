@@ -70,6 +70,9 @@ const ComposeList = () => {
           h2 {
             font-size: 1.5rem;
           }
+          .compose-list__header {
+            margin: 0;
+          }
           .compose-list__header,
           .compose-list__body,
           .compose-list__footer {

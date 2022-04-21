@@ -1,31 +1,38 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import useTimeout from "~/hooks/useTimeout"
-import cfetch from "~/lib/cfetch"
+import { cfetchPromise } from "~/lib/cfetch"
 import { CButton, TextButton } from "~/mui-c/Button"
 import { ConfirmDialog } from "~/mui-c/Dialog"
 import { IShoppingItem } from "~/types"
 import { useStore } from "~/zustand"
 import Image from "next/image"
+import useAsync from "~/hooks/useAsync"
 
 interface ShoppingItemInfoProps {
   item: IShoppingItem
 }
 
 const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
-  const [confirmDialogOpen, setConfirmDialog] = useState(false)
-  const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const deleteItem = useCallback(() => {
+    return cfetchPromise(`/api/items/${item.id}`, {
+      method: "DELETE",
+    })
+  }, [item.id])
+  const [deleteConfirmDialogOpen, setdeleteConfirmDialog] = useState(false)
   const dispatchList = useStore((state) => state.dispatchList)
   const dispatchItem = useStore((state) => state.dispatchItem)
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const [addedToList, setAddedToList] = useState(false)
-  const [buttonTimeout, setButtonTimeout] = useState<number | null>(null)
-  useTimeout(() => {
-    setAddedToList(false)
-  }, buttonTimeout)
+
+  useTimeout(
+    () => {
+      setAddedToList(false)
+    },
+    addedToList ? 2000 : null
+  )
 
   const handleConfirmDialogClose = () => {
-    setConfirmDialog(false)
+    setdeleteConfirmDialog(false)
   }
   const handleAddToList = () => {
     dispatchList({
@@ -38,45 +45,38 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
       },
     })
     setAddedToList(true)
-    setButtonTimeout(2000)
   }
+
+  const {
+    execute: exeDelete,
+    isLoading: deleteLoading,
+    error,
+  } = useAsync(deleteItem, false)
   const handleDelete = async () => {
-    setFormError("")
-    try {
-      setLoading(true)
-      await cfetch(`/api/items/${item.id}`, {
-        method: "DELETE",
-        outputType: "string",
-      })
-      dispatchItem({
-        type: "item:delete",
-        payload: {
-          category: item.category,
-          itemId: item.id,
-        },
-      })
-      dispatchList({
-        type: "list:delete-item",
-        payload: {
-          itemCategory: item.category,
-          shoppingItemId: item.id,
-        },
-      })
-      dispatchDrawer({
-        type: "drawer:set",
-        payload: "create-list",
-      })
-    } catch (err) {
-      console.error(err)
-      setFormError("something went wrong!")
-    } finally {
-      setLoading(false)
-    }
+    await exeDelete()
+    dispatchItem({
+      type: "item:delete",
+      payload: {
+        category: item.category,
+        itemId: item.id,
+      },
+    })
+    dispatchList({
+      type: "list:delete-item",
+      payload: {
+        itemCategory: item.category,
+        shoppingItemId: item.id,
+      },
+    })
+    dispatchDrawer({
+      type: "drawer:set",
+      payload: "create-list",
+    })
   }
   return (
     <div className="wrapper">
       <button
-        className="back"
+        className="back-link"
         onClick={() =>
           dispatchDrawer({ type: "drawer:set", payload: "create-list" })
         }
@@ -111,13 +111,13 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
           </div>
         </div>
         <div className="item__cta">
-          {formError && <p className="error">{formError}</p>}
+          {error && <p className="error">{error.message}</p>}
           <TextButton
             variant="text"
-            onClick={() => setConfirmDialog(true)}
-            disabled={loading}
+            onClick={() => setdeleteConfirmDialog(true)}
+            disabled={deleteLoading}
           >
-            {loading ? "loading..." : "delete"}
+            {deleteLoading ? "loading..." : "delete"}
           </TextButton>
           <CButton
             sx={{
@@ -131,10 +131,10 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
           </CButton>
         </div>
         <ConfirmDialog
-          open={confirmDialogOpen}
+          open={deleteConfirmDialogOpen}
           onClose={handleConfirmDialogClose}
           onYes={handleDelete}
-          onYesLoading={loading}
+          onYesLoading={deleteLoading}
         >
           Are you sure want to delete this item?
         </ConfirmDialog>
@@ -147,15 +147,6 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
           padding: 4rem;
           height: 100%;
           overflow-y: scroll;
-        }
-        .back {
-          color: var(--clr-amber10);
-          font-size: 1.5rem;
-          font-weight: 500;
-          line-height: 1.7rem;
-          text-align: left;
-          margin: 1.5rem 0;
-          text-decoration: underline;
         }
         .item {
           display: flex;

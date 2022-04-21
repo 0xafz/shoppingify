@@ -34,6 +34,8 @@ const CompleteCancelCTA = () => {
           status: "cancelled",
         }),
       })
+      setLoading(false)
+      setConfirmDialog(false)
       if (result.error) {
         setError(result.error)
         return
@@ -46,10 +48,9 @@ const CompleteCancelCTA = () => {
         router.push("/history")
       }
     } catch (error) {
-      console.error(error)
-    } finally {
       setLoading(false)
       setConfirmDialog(false)
+      console.error(error)
     }
   }
 
@@ -88,11 +89,14 @@ const CompleteCancelCTA = () => {
     <>
       {error && <p className="error">{error}</p>}
       <div className="complete-cta">
-        <TextButton onClick={() => setConfirmDialog(true)}>Cancel</TextButton>
+        <TextButton onClick={() => setConfirmDialog(true)} disabled={loading}>
+          Cancel
+        </TextButton>
         <SkyButton
           sx={{ marginLeft: "2rem" }}
           onClick={handleComplete}
           variant="contained"
+          disabled={loading}
         >
           Complete
         </SkyButton>
