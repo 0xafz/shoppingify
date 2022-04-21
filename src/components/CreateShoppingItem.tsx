@@ -7,6 +7,7 @@ import { useStore } from "~/zustand"
 import { Controller, useForm } from "react-hook-form"
 import { getValidation } from "~/utils/client/form-validation"
 import cfetch from "~/lib/cfetch"
+import useTimeout from "~/hooks/useTimeout"
 
 interface CreateShoppingItemProps {}
 
@@ -16,7 +17,14 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
   const itemCategories = useStore((state) => state.itemCategories)
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
   const dispatchItem = useStore((state) => state.dispatchItem)
+  const [status, setStatus] = useState("")
 
+  useTimeout(
+    () => {
+      setStatus("")
+    },
+    status ? 5000 : null
+  )
   const {
     control,
     handleSubmit,
@@ -34,6 +42,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
     try {
       setFormError("")
       setLoading(true)
+      setStatus("")
       const result = await cfetch("/api/items", {
         method: "POST",
         body: JSON.stringify(data),
@@ -44,11 +53,12 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
       }
       dispatchItem({ type: "item:add", payload: result.data })
       reset()
-    } catch (err) {
-      console.error(err)
-      setFormError("something went wrong!")
-    } finally {
       setLoading(false)
+      setStatus("Item created!")
+    } catch (err) {
+      setLoading(false)
+      setFormError("something went wrong!")
+      console.error(err)
     }
   }
   return (
@@ -156,6 +166,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
 
         <div className="form__footer">
           {formError && <p className="error">{formError}</p>}
+          {status && <p className="status">{status}</p>}
           <div className="form__cta">
             <Button
               variant="text"
@@ -164,6 +175,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
                 textTransform: "none",
                 fontSize: "1.5rem",
               }}
+              disabled={loading}
               onClick={() =>
                 dispatchDrawer({ type: "drawer:set", payload: "create-list" })
               }
