@@ -1,13 +1,13 @@
 import { IconButton, InputAdornment } from "@mui/material"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
 import CTextField from "~/mui-c/TextField"
 import { useStore } from "~/zustand"
 import Layout from "../components/Layout"
-import { debounce } from "~/utils/client"
 import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
 import { IShoppingItem } from "~/types"
 import NotLoggedIn from "~/components/NotLoggedIn"
+import useDebounce from "~/hooks/useDebounce"
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
@@ -126,6 +126,7 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
 }
 const HomeContent = () => {
   const [searchKey, setSearchKey] = useState("")
+  const debouncedSearchKey = useDebounce<string>(searchKey, 500)
   const itemsGrouped = useStore((state) => state.itemsGrouped)
   const [filtered, setFiltered] = useState(itemsGrouped)
 
@@ -149,17 +150,17 @@ const HomeContent = () => {
       }, {})
     )
   }
-  const debouncedSearch = useMemo(() => debounce(search, 400), [])
 
   const handleSearchKeyChange = (e: any) => {
     setSearchKey(e.target.value.toLowerCase())
   }
   useEffect(() => {
-    if (searchKey) {
-      debouncedSearch(itemsGrouped, searchKey)
+    if (debouncedSearchKey) {
+      search(itemsGrouped, debouncedSearchKey)
+      return
     }
     setFiltered(itemsGrouped)
-  }, [itemsGrouped, searchKey, setFiltered, debouncedSearch])
+  }, [debouncedSearchKey])
 
   return (
     <>
