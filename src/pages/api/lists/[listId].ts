@@ -97,7 +97,9 @@ export default async function handle(
               id: listId,
             },
           })
-          res.status(200).send("successfully deleted")
+          res.status(200).json({
+            data: "success",
+          })
         }
         break
       default:
