@@ -1,11 +1,11 @@
-export const groupBy = (arr: Array<any>, by: string) => {
+export const groupBy = <T>(arr: Array<T>, by: string) => {
   return arr.reduce((acc, curr) => {
     const key = curr[by]
     if (!key) throw new Error("key not found")
     acc[key] = acc[key] || []
     acc[key].push(curr)
     return acc
-  }, {})
+  }, {} as Record<string, T[]>)
 }
 
 export function debounce<T extends Function>(cb: T, wait = 20) {
