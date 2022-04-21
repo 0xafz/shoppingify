@@ -67,6 +67,7 @@ const CompleteCancelCTA = () => {
           items: crossedItems,
         }),
       })
+      setLoading(false)
       if (result.error) {
         setError(result.error)
         return
@@ -81,8 +82,6 @@ const CompleteCancelCTA = () => {
     } catch (err) {
       console.error(err)
       setError("something went wrong!")
-    } finally {
-      setLoading(false)
     }
   }
   return (
@@ -90,7 +89,11 @@ const CompleteCancelCTA = () => {
       {error && <p className="error">{error}</p>}
       <div className="complete-cta">
         <TextButton onClick={() => setConfirmDialog(true)}>Cancel</TextButton>
-        <SkyButton sx={{ marginLeft: "2rem" }} onClick={handleComplete}>
+        <SkyButton
+          sx={{ marginLeft: "2rem" }}
+          onClick={handleComplete}
+          variant="contained"
+        >
           Complete
         </SkyButton>
       </div>

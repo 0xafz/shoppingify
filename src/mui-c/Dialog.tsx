@@ -55,11 +55,16 @@ export const ConfirmDialog = ({
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <TextButton variant="text" autoFocus onClick={onClose}>
+        <TextButton
+          variant="text"
+          autoFocus
+          onClick={onClose}
+          disabled={onYesLoading}
+        >
           cancel
         </TextButton>
-        <RedButton onClick={onYes} disabled={onYesLoading}>
-          {onYesLoading ? "..." : "Yes"}
+        <RedButton onClick={onYes} disabled={onYesLoading} variant="contained">
+          {onYesLoading ? "processing..." : "Yes"}
         </RedButton>
       </DialogActions>
     </Dialog>

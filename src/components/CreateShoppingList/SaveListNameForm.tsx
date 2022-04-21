@@ -28,6 +28,7 @@ const SaveListNameForm = () => {
           items: unGroup(currListItems),
         }),
       })
+      setLoading(false)
       if (result.error) {
         setFormError(result.error)
         return
@@ -40,10 +41,9 @@ const SaveListNameForm = () => {
         router.push("/history")
       }
     } catch (err) {
-      console.error(err)
-      setFormError("something went wrong!")
-    } finally {
       setLoading(false)
+      setFormError("something went wrong!")
+      console.error(err)
     }
   }
   return (
@@ -56,7 +56,7 @@ const SaveListNameForm = () => {
         required
         InputProps={{
           endAdornment: (
-            <CButton type="submit" disabled={loading}>
+            <CButton type="submit" disabled={loading} variant="contained">
               {loading ? "..." : "Save"}
             </CButton>
           ),

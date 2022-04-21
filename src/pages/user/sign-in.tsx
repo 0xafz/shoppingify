@@ -49,7 +49,7 @@ const SignIn: React.FC<SignInProps> = ({}) => {
 
         setUser(userResult.data)
 
-        router.push("/user")
+        router.push("/")
       }
     } catch (err) {
       console.error(err)

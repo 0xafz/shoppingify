@@ -19,6 +19,7 @@ const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
       <style jsx>
         {`
           .right-side-drawer {
+            z-index: 9999;
             position: sticky;
             top: 0;
             flex-basis: 40rem;
