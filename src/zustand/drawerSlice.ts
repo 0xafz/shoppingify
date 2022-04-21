@@ -5,7 +5,7 @@ import produce from "immer"
 export type DrawerActions =
   | Action<"drawer:set", "create-list" | "item-info" | "create-item">
   | Action<"drawer:set-info-item", IShoppingItem>
-  | Action<"drawer:hide", boolean>
+  | Action<"drawer:hide">
   | Action<"drawer:toggle">
 
 export type DrawerSlice = {
