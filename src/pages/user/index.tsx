@@ -1,28 +1,58 @@
 import Image from "next/image"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useCallback, useState } from "react"
 import Layout from "~/components/Layout"
 import NotLoggedIn from "~/components/NotLoggedIn"
-import { RedButton } from "~/mui-c/Button"
+import useAsync from "~/hooks/useAsync"
+import { cfetchPromise } from "~/lib/cfetch"
+import { RedButton, CButton } from "~/mui-c/Button"
+import { ConfirmDialog } from "~/mui-c/Dialog"
 import { IUser } from "~/types"
-import { removeJwtTokens } from "~/utils/client/auth"
 import { useStore } from "~/zustand"
 
 const UserInfo = ({ user }: { user: IUser }) => {
+  const deleteAccount = useCallback(() => {
+    return cfetchPromise(`/api/users/${user.id}`, {
+      method: "DELETE",
+    })
+  }, [user.id])
+  const logout = useCallback(() => {
+    return cfetchPromise("/api/users/logout", {
+      method: "post",
+    })
+  }, [])
   const router = useRouter()
   const clearStore = useStore((state) => state.clearStore)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const { execute: deleteUser, isLoading: deleteLoading } = useAsync(
+    deleteAccount,
+    false
+  )
+  const { execute: exeLogout, isLoading: logoutLoading } = useAsync(
+    logout,
+    false
+  )
+
   const handleLogout = async () => {
     try {
-      await fetch("/api/users/logout", {
-        method: "POST",
-      })
+      await exeLogout()
     } catch (error) {
       console.error(error)
     } finally {
+      // one way or other,just force clean session data
       sessionStorage.clear()
       clearStore()
-      removeJwtTokens()
       router.push("/user/sign-in")
+    }
+  }
+  const handleDelete = async () => {
+    try {
+      await deleteUser()
+      sessionStorage.clear()
+      clearStore()
+      router.push("/user/sign-in")
+    } catch (error) {
+      console.error(error)
     }
   }
   return (
@@ -41,7 +71,32 @@ const UserInfo = ({ user }: { user: IUser }) => {
             ))}
         </dl>
       </div>
-      <RedButton onClick={handleLogout}>Logout</RedButton>
+      <div>
+        <CButton
+          onClick={handleLogout}
+          variant="contained"
+          disabled={logoutLoading}
+        >
+          Logout
+        </CButton>
+      </div>
+
+      <RedButton
+        onClick={() => setShowConfirm(true)}
+        sx={{ mt: "4rem" }}
+        variant="contained"
+        disabled={deleteLoading}
+      >
+        Delete My Account
+      </RedButton>
+      <ConfirmDialog
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onYes={handleDelete}
+        onYesLoading={deleteLoading}
+      >
+        Are you sure you want to <b>Delete</b> your account?
+      </ConfirmDialog>
       <style jsx>{`
         .details {
           font-size: 1rem;

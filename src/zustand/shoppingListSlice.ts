@@ -9,6 +9,7 @@ type ItemWithIdCat = {
   itemCategory: string
 }
 export type ShoppingListActions =
+  | Action<"list:delete", { id: number; createdAt: string }>
   | Action<"list:cancel", IShoppingList>
   | Action<"list:save", IShoppingList>
   | Action<"list:complete", IShoppingList>
@@ -50,9 +51,31 @@ const upsertToGroupedList = (state: ShoppingListSlice, list: IShoppingList) => {
       ...state.listsGrouped[groupByKey][idx],
       ...list,
     }
+    // adding a new list, need to keep in sync with grouped data
+    state.listsUngrouped.unshift(list)
     return
   }
   state.listsGrouped[groupByKey].unshift(list)
+}
+const deleteFromGroupedList = (
+  state: ShoppingListSlice,
+  list: { id: number; createdAt: string }
+) => {
+  const groupByKey = getGroupByKeyString(new Date(list.createdAt), "month")
+  state.listsGrouped[groupByKey] = state.listsGrouped[groupByKey] || []
+  const idx = state.listsGrouped[groupByKey].findIndex(
+    (item) => item.id === list.id
+  )
+  if (idx === -1) {
+    return
+  }
+  state.listsGrouped[groupByKey] = state.listsGrouped[groupByKey].filter(
+    (item) => item.id !== list.id
+  )
+  if (!state.listsGrouped[groupByKey]) delete state.listsGrouped[groupByKey]
+  state.listsUngrouped = state.listsUngrouped.filter(
+    (item) => item.id !== list.id
+  )
 }
 const resetCurrList = (state: ShoppingListSlice) => {
   state.currList = {
@@ -67,6 +90,12 @@ const shoppingListReducer = (
   action: ShoppingListActions
 ) => {
   switch (action.type) {
+    case "list:delete":
+      deleteFromGroupedList(state, action.payload)
+      if (state.currList.id === action.payload.id) {
+        resetCurrList(state)
+      }
+      break
     case "list:save":
       upsertToGroupedList(state, action.payload)
       state.currList = action.payload
