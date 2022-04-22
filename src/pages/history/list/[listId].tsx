@@ -28,6 +28,7 @@ const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
       <style jsx>{`
         .wrapper {
           font-size: 1rem;
+          margin-bottom: 3rem;
         }
         h2 {
           color: var(--clr-gray12);
@@ -38,8 +39,8 @@ const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
           list-style: none;
           display: flex;
           flex-flow: row wrap;
+          gap: 4rem;
           padding: 0;
-          margin-bottom: 3rem;
         }
         li {
           background: var(--clr-white);
@@ -62,6 +63,11 @@ const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
           font-size: 1.6rem;
           line-height: 1.5rem;
           font-weigth: 500;
+        }
+        @media (max-width: 768px) {
+          ul {
+            gap: 2rem;
+          }
         }
         @media (max-width: 640px) {
           .s-item {
