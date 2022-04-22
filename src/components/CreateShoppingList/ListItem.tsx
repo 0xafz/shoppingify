@@ -69,7 +69,7 @@ const ShoppingListItem = ({
           inputProps={{ "aria-label": "check shopping item" }}
         />
       ) : null}
-      <p>{itemName}</p>
+      <span>{itemName}</span>
       <div className="quantity">
         {showOptions && (
           <>
@@ -94,7 +94,7 @@ const ShoppingListItem = ({
           title="quantity"
           onClick={() => setShowOptions((prev) => !prev)}
         >
-          {quantity} pcs
+          <strong>{quantity} pcs</strong>
         </button>
         {showOptions && (
           <button
@@ -114,7 +114,7 @@ const ShoppingListItem = ({
           line-height: 2.2rem;
           padding: 1rem 0;
         }
-        p {
+        span {
           flex-grow: 1;
           font-size: 1.8rem;
           font-weight: 500;
@@ -127,7 +127,7 @@ const ShoppingListItem = ({
           color: var(--clr-gray8);
           border-color: var(--clr-gray8);
         }
-        .checked p {
+        .checked span {
           text-decoration: line-through;
           color: var(--clr-gray8);
         }
@@ -159,11 +159,11 @@ const ShoppingListItem = ({
         }
         .display {
           border-radius: 2.4rem;
-          border: 2px solid var(--clr-amber10);
+          border: 1px solid var(--clr-amber9);
           width: 6.4rem;
           height: 3.2rem;
           font-weight: 500;
-          color: inherit;
+          color: var(--clr-amber10);
         }
       `}</style>
     </li>
