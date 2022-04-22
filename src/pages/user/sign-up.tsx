@@ -79,6 +79,7 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
                       fullWidth
                       required
                       error={"name" in errors}
+                      autoComplete="name"
                       helperText={errors.name ? errors["name"].message : ""}
                       {...field}
                     />
@@ -98,6 +99,7 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
                       placeholder="Enter a email"
                       fullWidth
                       {...field}
+                      autoComplete="email"
                       error={"email" in errors}
                       helperText={errors.email ? errors["email"].message : ""}
                     />

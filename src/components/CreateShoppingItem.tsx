@@ -78,6 +78,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
                   placeholder="Enter a name"
                   fullWidth
                   required
+                  autoComplete="off"
                   error={"name" in errors}
                   helperText={errors.name ? errors["name"].message : ""}
                   {...field}
@@ -101,6 +102,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
                   fullWidth
                   minRows={5}
                   maxRows={10}
+                  autoComplete="off"
                   {...field}
                   error={"note" in errors}
                   helperText={errors.note ? errors["note"].message : ""}
@@ -119,6 +121,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
                 <CTextField
                   id="image"
                   type="url"
+                  autoComplete="off"
                   placeholder="Enter a url"
                   fullWidth
                   {...field}
@@ -128,7 +131,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
           </div>
 
           <div className="row">
-            <label htmlFor="image">Category</label>
+            <label htmlFor="category">Category</label>
 
             <Controller
               name="category"

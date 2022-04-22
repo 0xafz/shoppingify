@@ -54,6 +54,7 @@ const SaveListNameForm = () => {
         value={listName}
         onChange={(e) => setListName(e.target.value)}
         required
+        autoComplete="off"
         InputProps={{
           endAdornment: (
             <CButton type="submit" disabled={loading} variant="contained">

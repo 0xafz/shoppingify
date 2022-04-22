@@ -77,6 +77,7 @@ const SignIn: React.FC<SignInProps> = ({}) => {
                       placeholder="Enter a email"
                       fullWidth
                       {...field}
+                      autoComplete="email"
                       error={"email" in errors}
                       helperText={errors.email ? errors["email"].message : ""}
                     />
