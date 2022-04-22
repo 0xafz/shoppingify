@@ -161,7 +161,7 @@ const HomeContent = () => {
       return
     }
     setFiltered(itemsGrouped)
-  }, [debouncedSearchKey])
+  }, [debouncedSearchKey, itemsGrouped])
 
   return (
     <>
