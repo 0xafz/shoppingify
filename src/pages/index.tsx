@@ -8,6 +8,7 @@ import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
 import { IShoppingItem } from "~/types"
 import NotLoggedIn from "~/components/NotLoggedIn"
 import useDebounce from "~/hooks/useDebounce"
+import { selectUser } from "~/zustand/userSlice"
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   const dispatchDrawer = useStore((state) => state.dispatchDrawer)
@@ -221,7 +222,7 @@ const HomeContent = () => {
 }
 
 const Home = () => {
-  const user = useStore((state) => state.user)
+  const user = useStore(selectUser)
   const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
 
   useEffect(() => {

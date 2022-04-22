@@ -3,10 +3,13 @@ import Layout from "~/components/Layout"
 import C_LineChart from "~/components/charts/C_LineChart"
 import C_BarChart from "~/components/charts/C_BarChart"
 import { useStore } from "~/zustand"
+import { selectUser } from "~/zustand/userSlice"
+import NotLoggedIn from "~/components/NotLoggedIn"
 
 interface StatsProps {}
 
 const Stats: React.FC<StatsProps> = ({}) => {
+  const user = useStore(selectUser)
   const fetchStats = useStore((state) => state.fetchStats)
   useEffect(() => {
     fetchStats()
@@ -32,35 +35,39 @@ const Stats: React.FC<StatsProps> = ({}) => {
   }, [stats])
   return (
     <Layout>
-      <div className="wrapper styled-scrollbars">
-        <div className="bar-charts">
-          <div className="chart-1">
-            <h2>Top items</h2>
-            <C_BarChart
-              data={topItemsNormalized}
-              xAxisDataKey="percent"
-              yAxisDataKey="itemName"
-            />
+      {!user ? (
+        <NotLoggedIn />
+      ) : (
+        <div className="wrapper styled-scrollbars">
+          <div className="bar-charts">
+            <div className="chart-1">
+              <h2>Top items</h2>
+              <C_BarChart
+                data={topItemsNormalized}
+                xAxisDataKey="percent"
+                yAxisDataKey="itemName"
+              />
+            </div>
+            <div className="chart-2">
+              <h2>Top Categories</h2>
+              <C_BarChart
+                data={topCategoriesNormalized}
+                xAxisDataKey="percent"
+                yAxisDataKey="categoryName"
+                fill="var(--clr-sky10)"
+              />
+            </div>
           </div>
-          <div className="chart-2">
-            <h2>Top Categories</h2>
-            <C_BarChart
-              data={topCategoriesNormalized}
-              xAxisDataKey="percent"
-              yAxisDataKey="categoryName"
-              fill="var(--clr-sky10)"
+          <div className="line-chart">
+            <h2>Yearly Summary</h2>
+            <C_LineChart
+              data={stats.byMonth}
+              dataKey="quantity"
+              xAxisDataKey="month"
             />
           </div>
         </div>
-        <div className="line-chart">
-          <h2>Yearly Summary</h2>
-          <C_LineChart
-            data={stats.byMonth}
-            dataKey="quantity"
-            xAxisDataKey="month"
-          />
-        </div>
-      </div>
+      )}
       <style jsx>{`
         .wrapper {
           padding: 4rem 6rem 6rem;

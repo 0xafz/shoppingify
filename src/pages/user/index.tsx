@@ -9,6 +9,7 @@ import { RedButton, CButton } from "~/mui-c/Button"
 import { ConfirmDialog } from "~/mui-c/Dialog"
 import { IUser } from "~/types"
 import { useStore } from "~/zustand"
+import { selectUser } from "~/zustand/userSlice"
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const deleteAccount = useCallback(() => {
@@ -129,7 +130,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
 interface UserProps {}
 
 const User: React.FC<UserProps> = ({}) => {
-  const user = useStore((state) => state.user)
+  const user = useStore(selectUser)
   return (
     <Layout>
       <div className="wrapper">

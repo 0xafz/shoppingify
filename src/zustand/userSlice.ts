@@ -53,3 +53,5 @@ export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
     }
   },
 })
+
+export const selectUser = (state) => state.user

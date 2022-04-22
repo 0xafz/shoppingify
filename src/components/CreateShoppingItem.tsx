@@ -47,13 +47,13 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
         method: "POST",
         body: JSON.stringify(data),
       })
+      setLoading(false)
       if (result.error) {
         setFormError(result.error)
         return
       }
       dispatchItem({ type: "item:add", payload: result.data })
       reset()
-      setLoading(false)
       setStatus("Item created!")
     } catch (err) {
       setLoading(false)

@@ -113,10 +113,7 @@ const shoppingListReducer = (
       break
     case "list:add-item":
       if (!state.currList) {
-        state.currList = {
-          name: "Shopping list",
-          status: "un-saved",
-        }
+        resetCurrList(state)
       }
       const { itemCategory, shoppingItemId } = action.payload
       if (itemCategory in state.currListItems) {

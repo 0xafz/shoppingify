@@ -17,6 +17,7 @@ import { RedButton, TextButton } from "~/mui-c/Button"
 import { IShoppingList } from "~/types"
 import { sortObjectByKey } from "~/utils/client"
 import { useStore } from "~/zustand"
+import { selectUser } from "~/zustand/userSlice"
 
 const getStatusClass = (status: string) => {
   switch (status) {
@@ -299,7 +300,7 @@ const HistoryContent = () => {
 interface historyProps {}
 
 const History: React.FC<historyProps> = ({}) => {
-  const user = useStore((state) => state.user)
+  const user = useStore(selectUser)
   const fetchShoppingLists = useStore((state) => state.fetchShoppingLists)
   useEffect(() => {
     fetchShoppingLists()
