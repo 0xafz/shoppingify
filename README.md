@@ -6,15 +6,11 @@
 
 ## TODO
 
-- add product home page
-- add history/[listId]
 - handle token expiry
-- add user delete ui
-- implement list crud ui
+- show confirm access for sensitive info change
+- add product home page
+- make app more interactive
 - provide functionality to pick/fork from existing lists
-- remove grouped empty item/list holders
-- blink updated/new items in list
-- handle timeout on item add
 
 ## Tech stack
 
