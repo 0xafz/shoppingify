@@ -2,7 +2,7 @@
 
 ## About
 
-> Shopping list App with stats page.
+> Shopping list management with purchase stats. 
 
 ## TODO
 
