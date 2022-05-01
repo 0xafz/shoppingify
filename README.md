@@ -7,6 +7,7 @@
 ## TODO
 
 - handle token expiry
+- handle tab synchronisation
 - show confirm access for sensitive info change
 - add product home page
 - make app more interactive
