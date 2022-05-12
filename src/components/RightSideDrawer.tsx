@@ -25,26 +25,27 @@ const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
         {`
           .right-side-drawer {
             z-index: 9999;
-            position: sticky;
-            top: 0;
+            position: fixed;
+            // left: calc(9.3rem + 2rem);
+            right: 0;
             flex-basis: 40rem;
             flex-shrink: 0;
             min-width: 38rem;
-            overflow-y: scroll;
-            height: 100vh;
+            // overflow-y: scroll;
+            height: 100%;
             background: var(--clr-lightorange);
             box-shadow: var(--elevation3);
           }
           @media (max-width: 1024px) {
             .right-side-drawer {
               position: fixed;
-              left: calc(9.3rem + 2rem);
+              // left: calc(9.3rem + 2rem);
               right: 0;
               flex-basis: auto;
-              min-width: auto;
+              // min-width: auto;
             }
           }
-          @media (max-width: 768px) {
+          @media (max-width: 568px) {
             .right-side-drawer {
               left: calc(6rem + 2rem);
               right: 0;

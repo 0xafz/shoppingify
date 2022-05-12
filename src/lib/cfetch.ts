@@ -17,8 +17,11 @@ export default async function cfetch(
     },
     ...other,
   })
+  if (!res.ok) {
+    return {}
+  }
   if (outputType === "string") {
-    return res
+    return res.text()
   }
   return await res.json()
 }

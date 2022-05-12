@@ -2,11 +2,11 @@ import "~/styles/base.css"
 import { ThemeProvider } from "@mui/material/styles"
 import theme from "~/lib/mui-theme"
 import { useStore } from "~/zustand"
-import cfetch from "~/lib/cfetch"
+import { cfetchPromise } from "~/lib/cfetch"
 import useIsomorphicLayoutEffect from "~/hooks/useIsomorphicLayoutEffect"
 import SEO from "~/components/SEO"
-import Head from "next/head"
 import { useEffect } from "react"
+import { IUser } from "~/types"
 
 function App({ Component, pageProps }) {
   const setUser = useStore((state) => state.setUser)
@@ -18,10 +18,10 @@ function App({ Component, pageProps }) {
     let isActive = true
     try {
       ;(async () => {
-        const userResult = await cfetch("/api/users/me", {
+        const userResult = await cfetchPromise<IUser>("/api/users/me", {
           method: "GET",
         })
-        if (isActive) setUser(userResult.data)
+        if (isActive) setUser(userResult)
       })()
     } catch (err) {
       console.error(err)
@@ -33,28 +33,25 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     // source: https://stackoverflow.com/questions/32963400/android-keyboard-shrinking-the-viewport-and-elements-using-unit-vh-in-css
-    let viewheight = window.innerHeight
-    let viewport = document.querySelector(
-      "meta[name=viewport]"
-    ) as HTMLMetaElement
-    if (!viewport) {
-      console.error("Please set viewport meta tag!")
-      return
-    }
-    viewport?.setAttribute(
-      "content",
-      viewport.content + "," + "height=" + viewheight
-    )
+    setTimeout(() => {
+      let viewheight = window.innerHeight
+      let viewWidth = window.innerWidth
+      let viewport = document.querySelector(
+        "meta[name=viewport]"
+      ) as HTMLMetaElement
+      if (!viewport) {
+        console.error("Please set viewport meta tag!")
+        return
+      }
+      viewport?.setAttribute(
+        "content",
+        `height=${viewheight},width=${viewWidth},initial-scale=1.0`
+      )
+    }, 300)
   }, [])
 
   return (
     <ThemeProvider theme={theme}>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, height=device-height, initial-scale=1"
-        />
-      </Head>
       <SEO />
       <Component {...pageProps} />
     </ThemeProvider>

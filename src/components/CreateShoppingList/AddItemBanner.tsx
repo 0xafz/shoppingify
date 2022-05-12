@@ -26,7 +26,7 @@ const AddItemBanner = () => {
       <style jsx>{`
         .add-item-banner {
           display: flex;
-          width: 30rem;
+          width: inherit;
           height: 13rem;
           border-radius: 2.2rem;
           background: var(--clr-brown);
@@ -35,6 +35,7 @@ const AddItemBanner = () => {
         }
         .banner-img {
           flex-basis: 30%;
+          text-align: center;
         }
         .banner-img img {
           width: 100%;
@@ -43,6 +44,7 @@ const AddItemBanner = () => {
         }
         .banner-info {
           padding: 1.7em;
+          width: inherit;
         }
         h3 {
           font-size: 1.6em;

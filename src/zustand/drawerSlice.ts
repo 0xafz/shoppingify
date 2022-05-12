@@ -14,39 +14,21 @@ export type DrawerSlice = {
   itemInDrawer: IShoppingItem
   dispatchDrawer: (args: DrawerActions) => void
 }
-const freezeBodyScroll = () => {
-  if (document.body) {
-    document.body.classList.add("no-scroll")
-  }
-}
-const unFreezeBodyScroll = () => {
-  if (document.body) {
-    document.body.classList.remove("no-scroll")
-  }
-}
 const drawerReducer = (state: DrawerSlice, action: DrawerActions) => {
   switch (action.type) {
     case "drawer:set":
-      freezeBodyScroll()
       state.rightSideDrawerType = action.payload
       state.showRightSideDrawer = true
       break
     case "drawer:set-info-item":
-      freezeBodyScroll()
       state.itemInDrawer = action.payload
       state.rightSideDrawerType = "item-info"
       state.showRightSideDrawer = true
       break
     case "drawer:hide":
       state.showRightSideDrawer = false
-      unFreezeBodyScroll()
       break
     case "drawer:toggle":
-      if (state.showRightSideDrawer) {
-        unFreezeBodyScroll()
-      } else {
-        freezeBodyScroll()
-      }
       state.showRightSideDrawer = !state.showRightSideDrawer
       break
     default:

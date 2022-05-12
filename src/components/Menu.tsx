@@ -19,9 +19,11 @@ export const Menu: React.FC<MenuProps> = ({}) => {
 
   return (
     <nav className="menu" id="menu" aria-label="Menu">
-      <button className="logo" title="logo" aria-label="home">
-        <Image src="/logo.svg" alt="logo" width={40} height={40} />
-      </button>
+      <Link href={"/"}>
+        <a>
+          <Image src="/logo.svg" alt="logo" width={50} height={50} />
+        </a>
+      </Link>
       <div className="main">
         <Link href={"/"}>
           <a
@@ -73,15 +75,15 @@ export const Menu: React.FC<MenuProps> = ({}) => {
           align-items: center;
           height: 100vh;
           width: 9.3rem;
-          padding: 3rem 0;
           background: var(--clr-white);
+          padding: 3rem 0;
         }
         .main {
           display: flex;
           flex-direction: inherit;
           justify-content: center;
           align-items: center;
-          gap: 3rem;
+          gap: 3.5rem;
           width: 100%;
         }
         button,
@@ -93,7 +95,7 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         }
         button,
         a {
-          font-size: 2rem;
+          font-size: 3rem;
           color: var(--clr-black);
         }
         a {
@@ -103,7 +105,7 @@ export const Menu: React.FC<MenuProps> = ({}) => {
           justify-content: center;
           align-items: center;
           width: 100%;
-          height: 4rem;
+          height: 5rem;
         }
         a::after {
           content: "";
@@ -116,8 +118,8 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         }
         .logo,
         :global(.cart) {
-          width: 4rem;
-          height: 4rem;
+          width: 5rem;
+          height: 5rem;
         }
         .logo img {
           width: 100%;
@@ -126,6 +128,17 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         @media (max-width: 768px) {
           .menu {
             width: 6rem;
+            gap: 3rem;
+          }
+          a,
+          button {
+            height: 4rem;
+            font-size: 2rem;
+          }
+          .logo,
+          :global(.cart) {
+            width: 4rem;
+            height: 4rem;
           }
         }
       `}</style>
