@@ -10,7 +10,12 @@ const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
   const rightSideDrawerType = useStore((state) => state.rightSideDrawerType)
   const itemInDrawer = useStore((state) => state.itemInDrawer)
   return (
-    <aside className="right-side-drawer">
+    <aside
+      className="right-side-drawer"
+      id="right-side-drawer"
+      tabIndex={-1}
+      aria-label="Drawer"
+    >
       {rightSideDrawerType === "create-list" && <CreateShoppingList />}
       {rightSideDrawerType === "item-info" && (
         <ShoppingItemInfo item={itemInDrawer} />

@@ -18,28 +18,46 @@ export const Menu: React.FC<MenuProps> = ({}) => {
     router.pathname === pathname
 
   return (
-    <div className="menu">
-      <button className="logo" title="logo">
+    <nav className="menu" id="menu" aria-label="Menu">
+      <button className="logo" title="logo" aria-label="home">
         <Image src="/logo.svg" alt="logo" width={40} height={40} />
       </button>
       <div className="main">
         <Link href={"/"}>
-          <a aria-label="items" data-active={isActive("/")}>
+          <a
+            aria-label={`items page, ${isActive("/") ? "current page" : ""}`}
+            data-active={isActive("/")}
+          >
             <ListBulletedIcon aria-hidden="true" />
           </a>
         </Link>
         <Link href={"/history"}>
-          <a aria-label="history" data-active={isActive("/history")}>
+          <a
+            aria-label={`history page, ${
+              isActive("/history") ? "current page" : ""
+            }`}
+            data-active={isActive("/history")}
+          >
             <RefreshOutlineIcon aria-hidden="true" />
           </a>
         </Link>
         <Link href={"/stats"}>
-          <a aria-label="stats" data-active={isActive("/stats")}>
+          <a
+            aria-label={`stats page, ${
+              isActive("/stats") ? "current page" : ""
+            }`}
+            data-active={isActive("/stats")}
+          >
             <ChartOutlineIcon aria-hidden="true" />
           </a>
         </Link>
         <Link href={"/user"}>
-          <a aria-label="user info" data-active={isActive("/user")}>
+          <a
+            aria-label={`user settings page, ${
+              isActive("/user") ? "current page" : ""
+            }`}
+            data-active={isActive("/user")}
+          >
             <PersonIcon aria-hidden="true" />
           </a>
         </Link>
@@ -111,6 +129,6 @@ export const Menu: React.FC<MenuProps> = ({}) => {
           }
         }
       `}</style>
-    </div>
+    </nav>
   )
 }

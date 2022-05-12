@@ -73,7 +73,7 @@ h6 {
 }
 
 :root {
-  /* color source: https://www.radix-ui.com/colors */
+  /* COLOR SOURCE: https://www.radix-ui.com/colors */
   --clr-amber9: hsl(39 100% 57%);
   --clr-amber10: hsl(35 100% 55.5%);
   --clr-amber11: hsl(30 100% 34%);
@@ -177,4 +177,43 @@ body {
 
 body.no-scroll {
   overflow: hidden;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.sr-text {
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  width: 1px;
+}
+
+.skip-link {
+  background-color: #f1f1f1;
+  box-shadow: 0 0 1px 1px rgb(0 0 0 / 20%);
+  color: var(--clr-sky11);
+  display: block;
+  font: bold 14px / normal "Noto Sans", sans-serif;
+  left: -9999em;
+  outline: none;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  text-transform: none;
+  top: -9999em;
+}
+.skip-link:focus {
+  clip: auto;
+  height: auto;
+  left: 6px;
+  top: 7px;
+  width: auto;
+  z-index: 100000;
 }

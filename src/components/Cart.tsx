@@ -12,6 +12,7 @@ const Cart: React.FC<CartProps> = () => {
         title="cart"
         className="cart"
         onClick={() => dispatchDrawer({ type: "drawer:toggle" })}
+        aria-label="toggle drawer"
       >
         <CartOutlineIcon aria-hidden="true" className="cart-icon" />
       </button>
