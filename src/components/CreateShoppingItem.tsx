@@ -93,7 +93,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
             <Controller
               name="note"
               control={control}
-              rules={getValidation({ name: "note", req: false, min: 20 })}
+              rules={getValidation({ name: "note", req: false, min: 3 })}
               render={({ field }) => (
                 <CTextField
                   id="note"

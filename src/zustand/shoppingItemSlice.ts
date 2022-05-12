@@ -51,7 +51,13 @@ export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
 ) => ({
   itemsGrouped: {},
   itemsUngrouped: [],
-  itemCategories: ["Fruits and vegetables", "Meat and Fish", "Beverages"],
+  itemCategories: [
+    "Fruits and vegetables",
+    "Meat and Fish",
+    "Beverages",
+    "Groceries",
+    "Other",
+  ],
   dispatchItem: (args) =>
     set(produce((state) => shoppingItemReducer(state, args))),
   fetchShoppingItems: async () => {
