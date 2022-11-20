@@ -36,7 +36,7 @@
     "@types/jest": "27.4.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "16.11.35",
-    "@types/react": "17.0.44",
+    "@types/react": "18.0.25",
     "babel-jest": "27.5.1",
     "eslint": "8.15.0",
     "eslint-config-next": "12.1.6",
