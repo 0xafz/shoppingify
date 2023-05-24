@@ -37,5 +37,5 @@ yarn run
 
 ## Credits
 
-1. [open source](https://gist.github.com/zkindest/d5cfdef2d1b7767e8df321f9fd56f79b)
+1. [open source](https://gist.github.com/0xafz/d5cfdef2d1b7767e8df321f9fd56f79b)
 2. Thanks to [@thunghiemdinh](https://twitter.com/thunghiemdinh) for design and checkout [devchallenges](https://devchallenges.io/).
