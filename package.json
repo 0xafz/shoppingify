@@ -1,10 +1,10 @@
 {
-  "name": "hello-next",
+  "name": "shoppingify",
   "version": "1.0.0",
-  "description": "",
+  "description": "Shopping list management with purchase stats.",
   "keywords": [],
   "license": "MIT",
-  "author": "",
+  "author": "Afroz Mohammad",
   "main": "index.js",
   "scripts": {
     "dev": "next",
