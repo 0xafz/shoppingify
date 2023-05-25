@@ -28,7 +28,9 @@
 - ts-node (run ts files)
 - zustand (state management , first time user)
 
-## scripts
+## How to run the app?
+
+**Note:** Add relevant `.env` variables using `.env.example` template.
 
 ```sh
 # lists available package.json script commands
