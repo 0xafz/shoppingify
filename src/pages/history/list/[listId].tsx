@@ -99,7 +99,7 @@ const ListInfo: React.FC<ListInfoProps> = ({}) => {
         </Link>
         <main>
           {isLoading && <p className="loading">loading...</p>}
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error">{error.message}</p>}
           {!isLoading && !error && data && (
             <>
               <h1>{data.name}</h1>
