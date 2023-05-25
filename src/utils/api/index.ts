@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { CookieSerializeOptions } from "next/dist/server/web/types"
-import { serialize } from "cookie"
+import { CookieSerializeOptions, serialize } from "cookie"
 import { DecodedUser } from "~/types"
 import tokenGenerator from "./TokenGenerator"
 import { generalCookieAge, isProd, jwtClaimsPropKey } from "~/constants"
