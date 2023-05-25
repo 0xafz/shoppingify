@@ -94,8 +94,8 @@ const ListInfo: React.FC<ListInfoProps> = ({}) => {
   return (
     <Layout>
       <div className="wrapper">
-        <Link href={"/history"} passHref>
-          <a className="back-link">&#8656; back</a>
+        <Link href={"/history"} className="back-link">
+          &#8656; back
         </Link>
         <main>
           {isLoading && <p className="loading">loading...</p>}
