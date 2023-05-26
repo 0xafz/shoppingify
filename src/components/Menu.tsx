@@ -19,49 +19,41 @@ export const Menu: React.FC<MenuProps> = ({}) => {
 
   return (
     <nav className="menu" id="menu" aria-label="Menu">
-      <Link href={"/"}>
-        <a>
-          <Image src="/logo.svg" alt="logo" width={50} height={50} />
-        </a>
+      <Link href="/">
+        <Image src="/logo.svg" alt="logo" width={50} height={50} />
       </Link>
       <div className="main">
-        <Link href={"/"}>
-          <a
-            aria-label={`items page, ${isActive("/") ? "current page" : ""}`}
-            data-active={isActive("/")}
-          >
-            <ListBulletedIcon aria-hidden="true" />
-          </a>
+        <Link
+          href="/"
+          aria-label={`items page, ${isActive("/") ? "current page" : ""}`}
+          data-active={isActive("/")}
+        >
+          <ListBulletedIcon aria-hidden="true" />
         </Link>
-        <Link href={"/history"}>
-          <a
-            aria-label={`history page, ${
-              isActive("/history") ? "current page" : ""
-            }`}
-            data-active={isActive("/history")}
-          >
-            <RefreshOutlineIcon aria-hidden="true" />
-          </a>
+        <Link
+          href={"/history"}
+          aria-label={`history page, ${
+            isActive("/history") ? "current page" : ""
+          }`}
+          data-active={isActive("/history")}
+        >
+          <RefreshOutlineIcon aria-hidden="true" />
         </Link>
-        <Link href={"/stats"}>
-          <a
-            aria-label={`stats page, ${
-              isActive("/stats") ? "current page" : ""
-            }`}
-            data-active={isActive("/stats")}
-          >
-            <ChartOutlineIcon aria-hidden="true" />
-          </a>
+        <Link
+          href="/stats"
+          aria-label={`stats page, ${isActive("/stats") ? "current page" : ""}`}
+          data-active={isActive("/stats")}
+        >
+          <ChartOutlineIcon aria-hidden="true" />
         </Link>
-        <Link href={"/user"}>
-          <a
-            aria-label={`user settings page, ${
-              isActive("/user") ? "current page" : ""
-            }`}
-            data-active={isActive("/user")}
-          >
-            <PersonIcon aria-hidden="true" />
-          </a>
+        <Link
+          href={"/user"}
+          aria-label={`user settings page, ${
+            isActive("/user") ? "current page" : ""
+          }`}
+          data-active={isActive("/user")}
+        >
+          <PersonIcon aria-hidden="true" />
         </Link>
       </div>
       <Cart />

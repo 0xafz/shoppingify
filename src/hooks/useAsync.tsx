@@ -32,7 +32,7 @@ const useAsync = <T extends unknown>(
     if (immediate) {
       execute()
     }
-  }, [immediate])
+  }, [immediate,execute])
   return { execute, isLoading, data, error }
 }
 

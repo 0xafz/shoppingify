@@ -1,4 +1,4 @@
-export default {
+const config = {
   title: `Shoppingify App`,
   shortName: `shoppingify`,
   subtitle: `Manage shopping lists`,
@@ -10,3 +10,5 @@ export default {
   image: `https://i.imgur.com/8PPjpAD.png`,
   codeUrl: `https://github.com/zkindest/shoppingify.git`,
 }
+
+export default config;

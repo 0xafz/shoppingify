@@ -1,8 +1,6 @@
 # Shoppingify App
 
-## About
-
-> Shopping list management with purchase stats. 
+Shopping list management with purchase stats. 
 
 ## TODO
 
@@ -28,12 +26,13 @@
 - ts-node (run ts files)
 - zustand (state management , first time user)
 
-## scripts
+## Setup
+1. Node.js v16.15.0 or higher for Next.js v13. (Prisma need Node.js v14.17.0 or higher)
+2. For **styled-jsx**: Install VScode [ extension ](https://github.com/vercel/styled-jsx#syntax-highlighting-visual-studio-code-extension) 
+3. Add relevant `.env` variables using `.env.example` template
+4. **Database**: This project uses `mysql` db(see [prisma schema](./prisma/schema.prisma)). Follow mysql [ docs ](https://dev.mysql.com/doc/refman/8.0/en/installing.html) to install. If you want to switch database, check [Prisma Provider switch docs](https://pris.ly/d/migrate-provider-switch). 
 
-```sh
-# lists available package.json script commands
-yarn run
-```
+5. Run prisma migrations: run `npx prisma migrate dev`. For more info check [Prisma migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate). 
 
 ## Credits
 
