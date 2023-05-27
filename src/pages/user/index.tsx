@@ -83,6 +83,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
       </div>
 
       <RedButton
+        data-cy="deleteMyAccount"
         onClick={() => setShowConfirm(true)}
         sx={{ mt: "4rem" }}
         variant="contained"
