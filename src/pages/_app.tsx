@@ -16,16 +16,13 @@ function App({ Component, pageProps }) {
     // to avoid state updates after component unmount
     // see: https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
     let isActive = true;
-    try {
-      (async () => {
-        const userResult = await cfetchPromise<IUser>("/api/users/me", {
-          method: "GET",
-        });
-        if (isActive) setUser(userResult);
-      })();
-    } catch (err) {
-      console.error(err);
-    }
+    const fetchUser = async () => {
+      const userResult = await cfetchPromise<IUser>("/api/users/me", {
+        method: "GET",
+      });
+      if (isActive) setUser(userResult);
+    };
+    fetchUser().catch(console.error);
     return () => {
       isActive = false;
     };

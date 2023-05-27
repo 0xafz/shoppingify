@@ -129,6 +129,7 @@ const HomeContent = () => {
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchKey = useDebounce<string>(searchKey, 500);
   const itemsGrouped = useStore((state) => state.itemsGrouped);
+  // TODO: find better way
   const [filtered, setFiltered] = useState(itemsGrouped);
 
   useEffect(() => {
@@ -225,6 +226,7 @@ const Home = () => {
   const user = useStore(selectUser);
   const fetchShoppingItems = useStore((state) => state.fetchShoppingItems);
 
+  // TODO: WTF is this??
   useEffect(() => {
     fetchShoppingItems();
   }, [fetchShoppingItems]);
