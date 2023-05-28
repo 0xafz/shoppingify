@@ -8,8 +8,8 @@ declare namespace Cypress {
     resetAndVisitSignUpPage(): Chainable<any>
     resetAuth(): Chainable<an>
     deleteUserIfExists(): Chainable<any>
-    loginViaUI(id: string | object): Chainable<any> // TODO
-    signUpViaUI(email: string, password: string): Chainable<any>// TODO
-    deleteAccountViaUI(): Chainable<any>// TODO
+    loginViaUI(email: string, password: string): Chainable<any>
+    signUpViaUI(email: string, password: string): Chainable<any>
+    deleteAccountViaUI(): Chainable<any>
   }
 }

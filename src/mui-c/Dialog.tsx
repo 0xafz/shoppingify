@@ -49,6 +49,7 @@ export const ConfirmDialog = ({
             top: 8,
             color: "var(--clr-gray11)",
           }}
+          data-cy="closeConfirmDialog"
         >
           <CloseIcon fontSize={"2rem"} />
         </IconButton>
@@ -60,10 +61,11 @@ export const ConfirmDialog = ({
           autoFocus
           onClick={onClose}
           disabled={onYesLoading}
+          data-cy="cancelAction"
         >
           cancel
         </TextButton>
-        <RedButton onClick={onYes} disabled={onYesLoading} variant="contained">
+        <RedButton onClick={onYes} disabled={onYesLoading} variant="contained" data-cy="confirmAction">
           {onYesLoading ? "processing..." : "Yes"}
         </RedButton>
       </DialogActions>
