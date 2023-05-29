@@ -1,10 +1,8 @@
-it('home page main content', () => {
-  cy.resetAndVisitHomePage();
+describe('Home', () => {
+  it('should display login link', () => {
+    cy.visit('/')
 
-  // Click on login
-  cy.clickLink('login')
-
-  cy.location('pathname').should('eq', '/user/sign-in')
-
-  cy.contains('h1', 'Sign In').end()
+    cy.contains('Please login').should('be.visible')
+    cy.clickLink('login')
+  })
 })

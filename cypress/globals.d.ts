@@ -1,15 +1,12 @@
 /// <reference types="cypress" />
 
 declare namespace Cypress {
+  type SCREEN_SIZE = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   interface Chainable {
     clickLink(label: string): Chainable<any>
-    resetAndVisitHomePage(): Chainable<any>
-    resetAndVisitLoginPage(): Chainable<any>
-    resetAndVisitSignUpPage(): Chainable<any>
     resetAuth(): Chainable<an>
-    deleteUserIfExists(): Chainable<any>
-    loginViaUI(email: string, password: string): Chainable<any>
-    signUpViaUI(email: string, password: string): Chainable<any>
-    deleteAccountViaUI(): Chainable<any>
+    signIn(email: string, password: string): Chainable<any>
+    signUp(email: string, password: string): Chainable<any>
+    setScreenSize(size: SCREEN_SIZE): Chainable<any>
   }
 }
