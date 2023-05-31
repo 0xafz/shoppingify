@@ -8,35 +8,41 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model shoppinglist {
-  id        Int      @id @default(autoincrement())
-  name      String
-  status    String
-  createdAt DateTime
-  updatedAt DateTime
-  userId    Int
+model ShoppingList {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  status        String
+  createdAt     DateTime
+  updatedAt     DateTime
+  userId        Int
+  shoppingItems ShoppingItemToList[]
+  user          User                 @relation(fields: [userId], references: [id])
 }
 
-model session {
+model Session {
   id                    Int     @id @default(autoincrement())
   userId                Int     @unique(map: "Session_userId_key")
   refreshToken          String
   refreshTokenExpiresAt String?
+  user                  User    @relation(fields: [userId], references: [id])
 }
 
-model shoppingitem {
-  id        Int      @id @default(autoincrement())
-  name      String
-  note      String?
-  imageUrl  String?
-  category  String
-  createdAt DateTime
-  userId    Int
+model ShoppingItem {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  note          String?
+  imageUrl      String?
+  category      String
+  createdAt     DateTime
+  userId        Int
+  shoppingLists ShoppingItemToList[]
 }
 
-model shoppingitemtolist {
+model ShoppingItemToList {
   shoppingItemId Int
   shoppingListId Int
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id])
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
   quantity       Int
   itemName       String
   itemCategory   String
@@ -47,12 +53,14 @@ model shoppingitemtolist {
   @@id([shoppingListId, shoppingItemId])
 }
 
-model user {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique(map: "User_email_key")
+model User {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique(map: "User_email_key")
   name      String
   avatar    String
   password  String
   updatedAt DateTime?
   createdAt DateTime
+  lists     ShoppingList[]
+  session   Session?
 }

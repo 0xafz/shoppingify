@@ -76,6 +76,7 @@ export default async function handle(
                 create: itemIds,
               },
               createdAt: assignedAt,
+              updatedAt: assignedAt,
               user: {
                 // connect shoppingList user
                 connect: {

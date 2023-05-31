@@ -61,11 +61,7 @@ export default async function handle(
               imageUrl,
               createdAt: new Date().toISOString(),
               category,
-              user: {
-                connect: {
-                  id: loggedUser.id,
-                },
-              },
+              userId: loggedUser.id
             },
           })
           res.status(200).json({ data: newItem })
