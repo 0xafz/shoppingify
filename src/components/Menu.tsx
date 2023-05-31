@@ -19,41 +19,49 @@ export const Menu: React.FC<MenuProps> = ({}) => {
 
   return (
     <nav className="menu" id="menu" aria-label="Menu">
-      <Link href="/">
-        <Image src="/logo.svg" alt="logo" width={50} height={50} />
+      <Link href="/" passHref legacyBehavior>
+        <a>
+          <Image src="/logo.svg" priority alt="logo" width={50} height={50} />
+        </a>
       </Link>
       <div className="main">
-        <Link
-          href="/"
-          aria-label={`items page, ${isActive("/") ? "current page" : ""}`}
-          data-active={isActive("/")}
-        >
-          <ListBulletedIcon aria-hidden="true" />
+        <Link href="/" passHref legacyBehavior>
+          <a
+            aria-label={`items page, ${isActive("/") ? "current page" : ""}`}
+            data-active={isActive("/")}
+          >
+            <ListBulletedIcon aria-hidden="true" />
+          </a>
         </Link>
-        <Link
-          href={"/history"}
-          aria-label={`history page, ${
-            isActive("/history") ? "current page" : ""
-          }`}
-          data-active={isActive("/history")}
-        >
-          <RefreshOutlineIcon aria-hidden="true" />
+        <Link href={"/history"} passHref legacyBehavior>
+          <a
+            aria-label={`history page, ${
+              isActive("/history") ? "current page" : ""
+            }`}
+            data-active={isActive("/history")}
+          >
+            <RefreshOutlineIcon aria-hidden="true" />
+          </a>
         </Link>
-        <Link
-          href="/stats"
-          aria-label={`stats page, ${isActive("/stats") ? "current page" : ""}`}
-          data-active={isActive("/stats")}
-        >
-          <ChartOutlineIcon aria-hidden="true" />
+        <Link href="/stats" passHref legacyBehavior>
+          <a
+            aria-label={`stats page, ${
+              isActive("/stats") ? "current page" : ""
+            }`}
+            data-active={isActive("/stats")}
+          >
+            <ChartOutlineIcon aria-hidden="true" />
+          </a>
         </Link>
-        <Link
-          href={"/user"}
-          aria-label={`user settings page, ${
-            isActive("/user") ? "current page" : ""
-          }`}
-          data-active={isActive("/user")}
-        >
-          <PersonIcon aria-hidden="true" />
+        <Link href={"/user"} passHref legacyBehavior>
+          <a
+            aria-label={`user settings page, ${
+              isActive("/user") ? "current page" : ""
+            }`}
+            data-active={isActive("/user")}
+          >
+            <PersonIcon aria-hidden="true" />
+          </a>
         </Link>
       </div>
       <Cart />
