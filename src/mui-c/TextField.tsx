@@ -1,6 +1,6 @@
-import styled from "@mui/system/styled"
-import TextField from "@mui/material/TextField"
-import theme from "~/lib/mui-theme"
+import styled from "@mui/system/styled";
+import TextField from "@mui/material/TextField";
+import theme from "~/lib/mui-theme";
 
 const CTextField = styled(TextField)({
   minWidth: "18rem",
@@ -35,6 +35,6 @@ const CTextField = styled(TextField)({
   "& .MuiFormHelperText-root": {
     fontSize: "1.5rem",
   },
-})
+});
 
-export default CTextField
+export default CTextField;

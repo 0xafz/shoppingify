@@ -1,0 +1,7 @@
+schema.prisma
+
+.next/*
+
+.husky/*
+
+.eslintrc.json

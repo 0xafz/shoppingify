@@ -1,39 +1,39 @@
-import React, { useCallback, useState } from "react"
-import useTimeout from "~/hooks/useTimeout"
-import { cfetchPromise } from "~/lib/cfetch"
-import { CButton, TextButton } from "~/mui-c/Button"
-import { ConfirmDialog } from "~/mui-c/Dialog"
-import { IShoppingItem } from "~/types"
-import { useStore } from "~/zustand"
-import Image from "next/image"
-import useAsync from "~/hooks/useAsync"
+import React, { useCallback, useState } from "react";
+import useTimeout from "~/hooks/useTimeout";
+import { cfetchPromise } from "~/lib/cfetch";
+import { CButton, TextButton } from "~/mui-c/Button";
+import { ConfirmDialog } from "~/mui-c/Dialog";
+import { IShoppingItem } from "~/types";
+import { useStore } from "~/zustand";
+import Image from "next/image";
+import useAsync from "~/hooks/useAsync";
 
 interface ShoppingItemInfoProps {
-  item: IShoppingItem
+  item: IShoppingItem;
 }
 
 const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
   const deleteItem = useCallback(() => {
     return cfetchPromise(`/api/items/${item.id}`, {
       method: "DELETE",
-    })
-  }, [item.id])
-  const [deleteConfirmDialogOpen, setdeleteConfirmDialog] = useState(false)
-  const dispatchList = useStore((state) => state.dispatchList)
-  const dispatchItem = useStore((state) => state.dispatchItem)
-  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
-  const [addedToList, setAddedToList] = useState(false)
+    });
+  }, [item.id]);
+  const [deleteConfirmDialogOpen, setdeleteConfirmDialog] = useState(false);
+  const dispatchList = useStore((state) => state.dispatchList);
+  const dispatchItem = useStore((state) => state.dispatchItem);
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer);
+  const [addedToList, setAddedToList] = useState(false);
 
   useTimeout(
     () => {
-      setAddedToList(false)
+      setAddedToList(false);
     },
     addedToList ? 2000 : null
-  )
+  );
 
   const handleConfirmDialogClose = () => {
-    setdeleteConfirmDialog(false)
-  }
+    setdeleteConfirmDialog(false);
+  };
   const handleAddToList = () => {
     dispatchList({
       type: "list:add-item",
@@ -43,36 +43,36 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
         quantity: 1,
         shoppingItemId: item.id,
       },
-    })
-    setAddedToList(true)
-  }
+    });
+    setAddedToList(true);
+  };
 
   const {
     execute: exeDelete,
     isLoading: deleteLoading,
     error,
-  } = useAsync(deleteItem, false)
+  } = useAsync(deleteItem, false);
   const handleDelete = async () => {
-    await exeDelete()
+    await exeDelete();
     dispatchItem({
       type: "item:delete",
       payload: {
         category: item.category,
         itemId: item.id,
       },
-    })
+    });
     dispatchList({
       type: "list:delete-item",
       payload: {
         itemCategory: item.category,
         shoppingItemId: item.id,
       },
-    })
+    });
     dispatchDrawer({
       type: "drawer:set",
       payload: "create-list",
-    })
-  }
+    });
+  };
   return (
     <div className="wrapper">
       <button
@@ -201,7 +201,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default ShoppingItemInfo
+export default ShoppingItemInfo;

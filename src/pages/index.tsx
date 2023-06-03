@@ -1,24 +1,24 @@
-import { IconButton, InputAdornment } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import { PlusIcon, SearchOutlineIcon } from "~/components/icons"
-import CTextField from "~/mui-c/TextField"
-import { useStore } from "~/zustand"
-import Layout from "../components/Layout"
-import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice"
-import { IShoppingItem } from "~/types"
-import NotLoggedIn from "~/components/NotLoggedIn"
-import useDebounce from "~/hooks/useDebounce"
-import { selectUser } from "~/zustand/userSlice"
+import { IconButton, InputAdornment } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { PlusIcon, SearchOutlineIcon } from "~/components/icons";
+import CTextField from "~/mui-c/TextField";
+import { useStore } from "~/zustand";
+import Layout from "../components/Layout";
+import { ShoppingItemSlice } from "~/zustand/shoppingItemSlice";
+import { IShoppingItem } from "~/types";
+import NotLoggedIn from "~/components/NotLoggedIn";
+import useDebounce from "~/hooks/useDebounce";
+import { selectUser } from "~/zustand/userSlice";
 
 const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
-  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
-  const dispatchList = useStore((state) => state.dispatchList)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer);
+  const dispatchList = useStore((state) => state.dispatchList);
 
   const handleAdd = () => {
     dispatchDrawer({
       type: "drawer:set",
       payload: "create-list",
-    })
+    });
     dispatchList({
       type: "list:add-item",
       payload: {
@@ -27,8 +27,8 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
         itemName: item.name,
         quantity: 1,
       },
-    })
-  }
+    });
+  };
   return (
     <div className="s-item">
       <button
@@ -81,11 +81,11 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 interface ShoppingItemsGroupProps {
-  groupName: string
-  items: IShoppingItem[]
+  groupName: string;
+  items: IShoppingItem[];
 }
 const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
   return (
@@ -123,17 +123,17 @@ const ShoppingItemsGroup = ({ groupName, items }: ShoppingItemsGroupProps) => {
         }
       `}</style>
     </section>
-  )
-}
+  );
+};
 const HomeContent = () => {
-  const [searchKey, setSearchKey] = useState("")
-  const debouncedSearchKey = useDebounce<string>(searchKey, 500)
-  const itemsGrouped = useStore((state) => state.itemsGrouped)
-  const [filtered, setFiltered] = useState(itemsGrouped)
+  const [searchKey, setSearchKey] = useState("");
+  const debouncedSearchKey = useDebounce<string>(searchKey, 500);
+  const itemsGrouped = useStore((state) => state.itemsGrouped);
+  const [filtered, setFiltered] = useState(itemsGrouped);
 
   useEffect(() => {
-    setFiltered(itemsGrouped)
-  }, [itemsGrouped])
+    setFiltered(itemsGrouped);
+  }, [itemsGrouped]);
 
   const search = (
     items: ShoppingItemSlice["itemsGrouped"],
@@ -143,25 +143,25 @@ const HomeContent = () => {
       Object.entries(items).reduce((acc, [category, items]) => {
         const filteredCategoryItems = items.filter(
           (item) => item.name.toLowerCase().search(searchKey) !== -1
-        )
+        );
         if (filteredCategoryItems.length !== 0) {
-          acc[category] = filteredCategoryItems
+          acc[category] = filteredCategoryItems;
         }
-        return acc
+        return acc;
       }, {})
-    )
-  }
+    );
+  };
 
   const handleSearchKeyChange = (e: any) => {
-    setSearchKey(e.target.value.toLowerCase())
-  }
+    setSearchKey(e.target.value.toLowerCase());
+  };
   useEffect(() => {
     if (debouncedSearchKey) {
-      search(itemsGrouped, debouncedSearchKey)
-      return
+      search(itemsGrouped, debouncedSearchKey);
+      return;
     }
-    setFiltered(itemsGrouped)
-  }, [debouncedSearchKey, itemsGrouped])
+    setFiltered(itemsGrouped);
+  }, [debouncedSearchKey, itemsGrouped]);
 
   return (
     <>
@@ -218,16 +218,16 @@ const HomeContent = () => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
 const Home = () => {
-  const user = useStore(selectUser)
-  const fetchShoppingItems = useStore((state) => state.fetchShoppingItems)
+  const user = useStore(selectUser);
+  const fetchShoppingItems = useStore((state) => state.fetchShoppingItems);
 
   useEffect(() => {
-    fetchShoppingItems()
-  }, [fetchShoppingItems])
+    fetchShoppingItems();
+  }, [fetchShoppingItems]);
 
   return (
     <Layout>
@@ -244,7 +244,7 @@ const Home = () => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

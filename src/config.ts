@@ -9,6 +9,6 @@ const config = {
   baseUrl: `https://shoppingify.vercel.app/`,
   image: `https://i.imgur.com/8PPjpAD.png`,
   codeUrl: `https://github.com/zkindest/shoppingify.git`,
-}
+};
 
 export default config;

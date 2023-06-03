@@ -1,38 +1,41 @@
-import React, { useEffect, useMemo } from "react"
-import Layout from "~/components/Layout"
-import C_LineChart from "~/components/charts/C_LineChart"
-import C_BarChart from "~/components/charts/C_BarChart"
-import { useStore } from "~/zustand"
-import { selectUser } from "~/zustand/userSlice"
-import NotLoggedIn from "~/components/NotLoggedIn"
+import React, { useEffect, useMemo } from "react";
+import Layout from "~/components/Layout";
+import C_LineChart from "~/components/charts/C_LineChart";
+import C_BarChart from "~/components/charts/C_BarChart";
+import { useStore } from "~/zustand";
+import { selectUser } from "~/zustand/userSlice";
+import NotLoggedIn from "~/components/NotLoggedIn";
 
 interface StatsProps {}
 
 const Stats: React.FC<StatsProps> = ({}) => {
-  const user = useStore(selectUser)
-  const fetchStats = useStore((state) => state.fetchStats)
+  const user = useStore(selectUser);
+  const fetchStats = useStore((state) => state.fetchStats);
   useEffect(() => {
-    fetchStats()
-  }, [fetchStats])
-  const stats = useStore((state) => state.stats)
+    fetchStats();
+  }, [fetchStats]);
+  const stats = useStore((state) => state.stats);
   const topItemsNormalized = useMemo(() => {
-    if (!stats.byItem) return []
-    const total = stats.byItem.reduce((acc, curr) => acc + curr.quantity, 0)
+    if (!stats.byItem) return [];
+    const total = stats.byItem.reduce((acc, curr) => acc + curr.quantity, 0);
 
     return stats.byItem.map((item) => ({
       ...item,
       percent: Math.round((item.quantity * 100) / total),
-    }))
-  }, [stats])
+    }));
+  }, [stats]);
   const topCategoriesNormalized = useMemo(() => {
     // if (!stats.byCategory) return []
-    const total = stats.byCategory.reduce((acc, curr) => acc + curr.quantity, 0)
+    const total = stats.byCategory.reduce(
+      (acc, curr) => acc + curr.quantity,
+      0
+    );
 
     return stats.byCategory.map((item) => ({
       ...item,
       percent: Math.round((item.quantity * 100) / total),
-    }))
-  }, [stats])
+    }));
+  }, [stats]);
   return (
     <Layout>
       {!user ? (
@@ -116,7 +119,7 @@ const Stats: React.FC<StatsProps> = ({}) => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default Stats
+export default Stats;

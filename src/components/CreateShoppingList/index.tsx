@@ -1,5 +1,5 @@
-import AddItemBanner from "./AddItemBanner"
-import ComposeList from "./ComposeList"
+import AddItemBanner from "./AddItemBanner";
+import ComposeList from "./ComposeList";
 
 interface CreateShoppingListProps {}
 
@@ -34,7 +34,7 @@ const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default CreateShoppingList
+export default CreateShoppingList;

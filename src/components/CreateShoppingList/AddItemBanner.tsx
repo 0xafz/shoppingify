@@ -1,9 +1,9 @@
-import { TextButton } from "~/mui-c/Button"
-import { useStore } from "~/zustand"
-import Image from "next/image"
+import { TextButton } from "~/mui-c/Button";
+import { useStore } from "~/zustand";
+import Image from "next/image";
 
 const AddItemBanner = () => {
-  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer);
   return (
     <div className="add-item-banner">
       <div className="banner-img">
@@ -57,7 +57,7 @@ const AddItemBanner = () => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default AddItemBanner
+export default AddItemBanner;

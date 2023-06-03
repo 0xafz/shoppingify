@@ -4,11 +4,11 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
-} from "recharts"
+} from "recharts";
 
 const BarShape = (props: any) => {
-  const { yAxisDataKey, x, y, width, height, fill, background, value } = props
-  const name = props[yAxisDataKey]
+  const { yAxisDataKey, x, y, width, height, fill, background, value } = props;
+  const name = props[yAxisDataKey];
   return (
     <g
       fontSize={background.width < 268 ? "1.4rem" : "1.8rem"}
@@ -38,17 +38,17 @@ const BarShape = (props: any) => {
         name={name}
       ></rect>
     </g>
-  )
-}
+  );
+};
 interface C_BarChartProps {
-  data: Array<{ [key: string]: any }>
-  dataKey?: string
-  xAxisDataKey: string
-  yAxisDataKey: string
-  width?: number
-  height?: number
-  barSize?: number
-  fill?: string
+  data: Array<{ [key: string]: any }>;
+  dataKey?: string;
+  xAxisDataKey: string;
+  yAxisDataKey: string;
+  width?: number;
+  height?: number;
+  barSize?: number;
+  fill?: string;
 }
 const C_BarChart = ({
   data,
@@ -71,6 +71,6 @@ const C_BarChart = ({
         ></Bar>
       </ReBarChart>
     </ResponsiveContainer>
-  )
-}
-export default C_BarChart
+  );
+};
+export default C_BarChart;

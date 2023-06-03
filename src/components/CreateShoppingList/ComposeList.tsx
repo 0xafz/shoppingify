@@ -1,13 +1,13 @@
-import { useStore } from "~/zustand"
-import CompleteCancelCTA from "./CompleteCancelCTA"
-import ShoppingListGroup from "./ListGroup"
-import SaveListNameForm from "./SaveListNameForm"
+import { useStore } from "~/zustand";
+import CompleteCancelCTA from "./CompleteCancelCTA";
+import ShoppingListGroup from "./ListGroup";
+import SaveListNameForm from "./SaveListNameForm";
 
 const ComposeList = () => {
-  const currList = useStore((state) => state.currList)
-  const currListItems = useStore((state) => state.currListItems)
+  const currList = useStore((state) => state.currList);
+  const currListItems = useStore((state) => state.currListItems);
   // const handleEditListName = () => {}
-  if (!currList) return null
+  if (!currList) return null;
   return (
     <div className="compose-list">
       <div className="compose-list__header">
@@ -84,6 +84,6 @@ const ComposeList = () => {
         }
       `}</style>
     </div>
-  )
-}
-export default ComposeList
+  );
+};
+export default ComposeList;

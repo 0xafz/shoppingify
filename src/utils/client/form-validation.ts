@@ -1,11 +1,11 @@
-import { RegisterOptions } from "react-hook-form"
+import { RegisterOptions } from "react-hook-form";
 
 interface GetValidation {
-  name: string
-  type?: "string" | "number"
-  min?: number
-  max?: number
-  req?: boolean
+  name: string;
+  type?: "string" | "number";
+  min?: number;
+  max?: number;
+  req?: boolean;
 }
 
 export const getValidation = ({
@@ -15,7 +15,7 @@ export const getValidation = ({
   name,
   req = true,
 }: GetValidation) => {
-  const itemType = type === "string" ? "characters" : "digits"
+  const itemType = type === "string" ? "characters" : "digits";
   return {
     required: req ? `${name} required` : undefined,
     minLength: min
@@ -30,8 +30,8 @@ export const getValidation = ({
           message: `${name} cannot be more than ${max} ${itemType}`,
         }
       : undefined,
-  } as RegisterOptions
-}
+  } as RegisterOptions;
+};
 export const validPhone = {
   ...getValidation({
     name: "phone",
@@ -44,4 +44,4 @@ export const validPhone = {
     value: /\d{9,15}/,
     message: "please enter valid phone",
   },
-}
+};

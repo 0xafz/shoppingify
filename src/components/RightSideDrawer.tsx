@@ -1,14 +1,14 @@
-import React from "react"
-import { useStore } from "~/zustand"
-import CreateShoppingItem from "./CreateShoppingItem"
-import CreateShoppingList from "./CreateShoppingList"
-import ShoppingItemInfo from "./ShoppingItemInfo"
+import React from "react";
+import { useStore } from "~/zustand";
+import CreateShoppingItem from "./CreateShoppingItem";
+import CreateShoppingList from "./CreateShoppingList";
+import ShoppingItemInfo from "./ShoppingItemInfo";
 
 interface RightSideDrawerProps {}
 
 const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
-  const rightSideDrawerType = useStore((state) => state.rightSideDrawerType)
-  const itemInDrawer = useStore((state) => state.itemInDrawer)
+  const rightSideDrawerType = useStore((state) => state.rightSideDrawerType);
+  const itemInDrawer = useStore((state) => state.itemInDrawer);
   return (
     <aside
       className="right-side-drawer"
@@ -56,7 +56,7 @@ const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
         `}
       </style>
     </aside>
-  )
-}
+  );
+};
 
-export default RightSideDrawer
+export default RightSideDrawer;

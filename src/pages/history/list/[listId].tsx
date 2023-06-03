@@ -1,17 +1,17 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import React, { useCallback } from "react"
-import { CalendarIcon } from "~/components/icons"
-import Layout from "~/components/Layout"
-import useAsync from "~/hooks/useAsync"
-import { cfetchPromise } from "~/lib/cfetch"
-import { ItemInList, ShoppingListWithItems } from "~/types"
-import { groupBy } from "~/utils/client"
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useCallback } from "react";
+import { CalendarIcon } from "~/components/icons";
+import Layout from "~/components/Layout";
+import useAsync from "~/hooks/useAsync";
+import { cfetchPromise } from "~/lib/cfetch";
+import { ItemInList, ShoppingListWithItems } from "~/types";
+import { groupBy } from "~/utils/client";
 
 interface ListInfoProps {}
 interface ListInfoGroupProps {
-  items: ItemInList[]
-  groupName: string
+  items: ItemInList[];
+  groupName: string;
 }
 const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
   return (
@@ -80,17 +80,17 @@ const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 const ListInfo: React.FC<ListInfoProps> = ({}) => {
-  const { query } = useRouter()
+  const { query } = useRouter();
 
   const fetchList = useCallback(async () => {
     return cfetchPromise<ShoppingListWithItems>(`/api/lists/${query.listId}`, {
       method: "GET",
-    })
-  }, [query.listId])
-  const { error, isLoading, data } = useAsync(fetchList, true)
+    });
+  }, [query.listId]);
+  const { error, isLoading, data } = useAsync(fetchList, true);
   return (
     <Layout>
       <div className="wrapper">
@@ -152,7 +152,7 @@ const ListInfo: React.FC<ListInfoProps> = ({}) => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default ListInfo
+export default ListInfo;

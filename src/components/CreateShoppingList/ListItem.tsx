@@ -1,11 +1,11 @@
-import { useState } from "react"
-import { C_Checkbox } from "~/mui-c/Checkbox"
-import { ItemInList } from "~/types"
-import { useStore } from "~/zustand"
-import { DeleteOutlineIcon } from "../icons"
+import { useState } from "react";
+import { C_Checkbox } from "~/mui-c/Checkbox";
+import { ItemInList } from "~/types";
+import { useStore } from "~/zustand";
+import { DeleteOutlineIcon } from "../icons";
 
 interface ShoppingListItemProps extends ItemInList {
-  listType: string
+  listType: string;
 }
 const ShoppingListItem = ({
   itemName,
@@ -14,9 +14,9 @@ const ShoppingListItem = ({
   quantity = 1,
   listType,
 }: ShoppingListItemProps) => {
-  const [showOptions, setShowOptions] = useState(false)
-  const [itemPurchased, setItemPurchased] = useState(false)
-  const dispatchList = useStore((state) => state.dispatchList)
+  const [showOptions, setShowOptions] = useState(false);
+  const [itemPurchased, setItemPurchased] = useState(false);
+  const dispatchList = useStore((state) => state.dispatchList);
   const handleDelete = () => {
     dispatchList({
       type: "list:delete-item",
@@ -24,8 +24,8 @@ const ShoppingListItem = ({
         shoppingItemId,
         itemCategory,
       },
-    })
-  }
+    });
+  };
   const handlePlusMinus = (delta: -1 | 1) => {
     if (quantity === 1 && delta === -1) {
       dispatchList({
@@ -34,8 +34,8 @@ const ShoppingListItem = ({
           shoppingItemId,
           itemCategory,
         },
-      })
-      return
+      });
+      return;
     }
     dispatchList({
       type: "list:update-item-quantity",
@@ -44,8 +44,8 @@ const ShoppingListItem = ({
         quantity: quantity + delta,
         itemCategory,
       },
-    })
-  }
+    });
+  };
   const toggleItemPurchase = (e: any) => {
     dispatchList({
       type: "list:toggle-item-purchase",
@@ -56,9 +56,9 @@ const ShoppingListItem = ({
         itemName,
         itemPurchased: e.target.checked,
       },
-    })
-    setItemPurchased(e.target.checked)
-  }
+    });
+    setItemPurchased(e.target.checked);
+  };
   return (
     <li className={itemPurchased ? "checked" : ""}>
       {listType === "incomplete" ? (
@@ -167,6 +167,6 @@ const ShoppingListItem = ({
         }
       `}</style>
     </li>
-  )
-}
-export default ShoppingListItem
+  );
+};
+export default ShoppingListItem;

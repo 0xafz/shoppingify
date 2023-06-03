@@ -1,77 +1,79 @@
-import IconButton from "@mui/material/IconButton"
-import Popover from "@mui/material/Popover"
-import Link from "next/link"
-import React, { useCallback, useEffect, useState } from "react"
+import IconButton from "@mui/material/IconButton";
+import Popover from "@mui/material/Popover";
+import Link from "next/link";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   CalendarIcon,
   CheckCircleIcon,
   CrossCircleIcon,
   DeleteOutlineIcon,
   QuestionMarkCircled,
-} from "~/components/icons"
-import Layout from "~/components/Layout"
-import NotLoggedIn from "~/components/NotLoggedIn"
-import useAsync from "~/hooks/useAsync"
-import { cfetchPromise } from "~/lib/cfetch"
-import { RedButton, TextButton } from "~/mui-c/Button"
-import { IShoppingList } from "~/types"
-import { sortObjectByKey } from "~/utils/client"
-import { useStore } from "~/zustand"
-import { selectUser } from "~/zustand/userSlice"
+} from "~/components/icons";
+import Layout from "~/components/Layout";
+import NotLoggedIn from "~/components/NotLoggedIn";
+import useAsync from "~/hooks/useAsync";
+import { cfetchPromise } from "~/lib/cfetch";
+import { RedButton, TextButton } from "~/mui-c/Button";
+import { IShoppingList } from "~/types";
+import { sortObjectByKey } from "~/utils/client";
+import { useStore } from "~/zustand";
+import { selectUser } from "~/zustand/userSlice";
 
 const getStatusClass = (status: string) => {
   switch (status) {
     case "completed":
-      return "completed"
+      return "completed";
     case "cancelled":
-      return "cancelled"
+      return "cancelled";
     case "incomplete":
-      return "incomplete"
+      return "incomplete";
     default:
-      return "unknown"
+      return "unknown";
   }
-}
+};
 const getStatusIcon = (status: string) => {
   switch (status) {
     case "completed":
-      return <CheckCircleIcon color="var(--clr-green9)" aria-hidden="true" />
+      return <CheckCircleIcon color="var(--clr-green9)" aria-hidden="true" />;
     case "cancelled":
-      return <CrossCircleIcon color="var(--clr-red9)" aria-hidden="true" />
+      return <CrossCircleIcon color="var(--clr-red9)" aria-hidden="true" />;
     default:
-      return <QuestionMarkCircled color="var(--clr-gray9)" aria-hidden="true" />
+      return (
+        <QuestionMarkCircled color="var(--clr-gray9)" aria-hidden="true" />
+      );
   }
-}
+};
 const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
-  const dispatchList = useStore((state) => state.dispatchList)
-  const [deletePopoverAnchorEl, setDeletePopoverAnchorEl] = useState(null)
+  const dispatchList = useStore((state) => state.dispatchList);
+  const [deletePopoverAnchorEl, setDeletePopoverAnchorEl] = useState(null);
   const deleteList = useCallback(() => {
     return cfetchPromise(`/api/lists/${id}`, {
       method: "DELETE",
-    })
-  }, [id])
+    });
+  }, [id]);
   const handleDeleteClick = (e: any) => {
-    e.stopPropagation()
-    setDeletePopoverAnchorEl(e.currentTarget)
-  }
+    e.stopPropagation();
+    setDeletePopoverAnchorEl(e.currentTarget);
+  };
   const { execute: exeDelete, isLoading: deleteLoading } = useAsync(
     deleteList,
     false
-  )
+  );
   const handleDelete = async () => {
     try {
-      await exeDelete()
+      await exeDelete();
       dispatchList({
         type: "list:delete",
         payload: {
           id,
           createdAt,
         },
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-  const showDeletePopover = Boolean(deletePopoverAnchorEl)
+  };
+  const showDeletePopover = Boolean(deletePopoverAnchorEl);
   return (
     <div className={`s-list ${deleteLoading ? "disabled" : ""}`}>
       <Link href={`/history/list/${id}`} passHref>
@@ -229,11 +231,11 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 interface ShoppingListGroupProps {
-  groupName: string
-  lists: IShoppingList[]
+  groupName: string;
+  lists: IShoppingList[];
 }
 const ShoppingListGroup = ({ groupName, lists }: ShoppingListGroupProps) => {
   return (
@@ -265,10 +267,10 @@ const ShoppingListGroup = ({ groupName, lists }: ShoppingListGroupProps) => {
         }
       `}</style>
     </section>
-  )
-}
+  );
+};
 const HistoryContent = () => {
-  const listsGrouped = useStore((state) => state.listsGrouped)
+  const listsGrouped = useStore((state) => state.listsGrouped);
   return (
     <>
       <header>
@@ -295,16 +297,16 @@ const HistoryContent = () => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 interface historyProps {}
 
 const History: React.FC<historyProps> = ({}) => {
-  const user = useStore(selectUser)
-  const fetchShoppingLists = useStore((state) => state.fetchShoppingLists)
+  const user = useStore(selectUser);
+  const fetchShoppingLists = useStore((state) => state.fetchShoppingLists);
   useEffect(() => {
-    fetchShoppingLists()
-  })
+    fetchShoppingLists();
+  });
   return (
     <Layout>
       <div className="wrapper">
@@ -322,7 +324,7 @@ const History: React.FC<historyProps> = ({}) => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default History
+export default History;
