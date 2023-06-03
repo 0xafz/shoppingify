@@ -10,19 +10,21 @@ const Header: React.FC = () => {
   return (
     <nav>
       <div className="left">
-        <Link href="/" className="bold" data-active={isActive("/")}>
-          Blog
+        <Link href="/" legacyBehavior>
+          <a className="bold" data-active={isActive("/")}>
+            Blog
+          </a>
         </Link>
-        <Link href="/drafts" data-active={isActive("/drafts")}>
-          Drafts
+        <Link href="/drafts" legacyBehavior>
+          <a data-active={isActive("/drafts")}>Drafts</a>
         </Link>
       </div>
       <div className="right">
-        <Link href="/signup" data-active={isActive("/signup")}>
-          Signup
+        <Link href="/signup" legacyBehavior>
+          <a data-active={isActive("/signup")}>Signup</a>
         </Link>
-        <Link href="/create" data-active={isActive("/create")}>
-          + Create draft
+        <Link href="/create" legacyBehavior>
+          <a data-active={isActive("/create")}>+ Create draft</a>
         </Link>
       </div>
       <style jsx>{`
