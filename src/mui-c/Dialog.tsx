@@ -65,7 +65,12 @@ export const ConfirmDialog = ({
         >
           cancel
         </TextButton>
-        <RedButton onClick={onYes} disabled={onYesLoading} variant="contained" data-cy="confirmAction">
+        <RedButton
+          onClick={onYes}
+          disabled={onYesLoading}
+          variant="contained"
+          data-cy="confirmAction"
+        >
           {onYesLoading ? "processing..." : "Yes"}
         </RedButton>
       </DialogActions>

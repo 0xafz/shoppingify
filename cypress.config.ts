@@ -1,37 +1,41 @@
-import prisma from './src/lib/prisma'
-import { defineConfig } from 'cypress'
+import prisma from "./src/lib/prisma";
+import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: "http://localhost:3000",
     /**
-     * defaults to medium screen, check ~/src/styles/base.css for more info 
+     * defaults to medium screen, check ~/src/styles/base.css for more info
      */
     viewportWidth: 768,
     setupNodeEvents(on, config) {
-      on('task', {
+      on("task", {
         async deleteUserByEmail(email: string) {
           try {
-            console.log(`info: Deleting User with email: ${email}`)
-          await prisma.user.delete({
-            where: {
-              email
-            }
-          })
+            console.log(`info: Deleting User with email: ${email}`);
+            await prisma.user.delete({
+              where: {
+                email,
+              },
+            });
           } catch (error) {
-            console.error(`error: Something went wrong while deleting User with email: ${email}`)
+            console.error(
+              `error: Something went wrong while deleting User with email: ${email}`
+            );
           }
         },
       }),
-        on('after:spec', async () => {
+        on("after:spec", async () => {
           try {
-            console.log('info: Wiping User data...')
-            await prisma.user.deleteMany()
-            console.log('info: Wiped User data successfully.')
+            console.log("info: Wiping User data...");
+            await prisma.user.deleteMany();
+            console.log("info: Wiped User data successfully.");
           } catch (error) {
-            console.error('error: Something went wrong while wiping User data.')
+            console.error(
+              "error: Something went wrong while wiping User data."
+            );
           }
-        })
+        });
     },
   },
-})
+});

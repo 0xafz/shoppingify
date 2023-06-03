@@ -1,8 +1,8 @@
-describe('Home', () => {
-  it('should display login link', () => {
-    cy.visit('/')
+describe("Home", () => {
+  it("should display login link", () => {
+    cy.visit("/");
 
-    cy.contains('Please login').should('be.visible')
-    cy.clickLink('login')
-  })
-})
+    cy.contains("Please login").should("be.visible");
+    cy.clickLink("login");
+  });
+});
