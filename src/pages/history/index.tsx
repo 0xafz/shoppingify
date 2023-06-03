@@ -76,7 +76,7 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
   const showDeletePopover = Boolean(deletePopoverAnchorEl);
   return (
     <div className={`s-list ${deleteLoading ? "disabled" : ""}`}>
-      <Link href={`/history/list/${id}`} passHref>
+      <Link href={`/history/list/${id}`} passHref legacyBehavior>
         <h3>{name}</h3>
       </Link>
       <div className="s-list__details">

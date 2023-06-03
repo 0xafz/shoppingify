@@ -6,7 +6,10 @@ interface NotLoggedInProps {}
 const NotLoggedIn: React.FC<NotLoggedInProps> = ({}) => {
   return (
     <div className="login">
-      Please <Link href="/user/sign-in" style={{ cursor: 'pointer'}}>login</Link>
+      Please{" "}
+      <Link href="/user/sign-in" style={{ cursor: "pointer" }} legacyBehavior>
+        login
+      </Link>
       <style jsx>{`
         .login {
           font-size: 2rem;

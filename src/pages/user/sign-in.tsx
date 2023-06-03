@@ -125,7 +125,9 @@ const SignIn: React.FC<SignInProps> = ({}) => {
               </div>
               <p>
                 Need an account, sign up{" "}
-                <Link href={"/user/sign-up"}>here.</Link>
+                <Link href={"/user/sign-up"} legacyBehavior>
+                  here.
+                </Link>
               </p>
             </div>
           </form>

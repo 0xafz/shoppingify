@@ -147,7 +147,9 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
               </div>
               <p>
                 Already have an account, sign in{" "}
-                <Link href={"/user/sign-in"}>here.</Link>
+                <Link href={"/user/sign-in"} legacyBehavior>
+                  here.
+                </Link>
               </p>
             </div>
           </form>
