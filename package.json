@@ -14,13 +14,9 @@
     "lint": "yarn run check-types && next lint",
     "format": "prettier --write .",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "prisma:generate": "prisma generate",
     "test:w": "jest --watch --",
-    "test": "jest",
-    "p:gen": "prisma generate",
-    "p:mig": "prisma migrate",
-    "p:db": "prisma db",
-    "p:validate": "prisma validate",
-    "p:format": "prisma format"
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
