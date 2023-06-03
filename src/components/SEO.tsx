@@ -1,30 +1,30 @@
-import React from "react"
-import defaults from "~/config"
-import Head from "next/head"
+import React from "react";
+import defaults from "~/config";
+import Head from "next/head";
 type SEOProps = {
-  title?: string
-  description?: string
-  path?: string
-  image?: string
-  preconnectGitApi?: boolean
-  imageOwnerProfile?: string
-}
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  preconnectGitApi?: boolean;
+  imageOwnerProfile?: string;
+};
 
 const SEO: React.FC<SEOProps> = (props) => {
   if (defaults.baseUrl === "" && typeof window !== "undefined") {
-    defaults.baseUrl = window.location.origin
+    defaults.baseUrl = window.location.origin;
   }
 
   if (defaults.baseUrl === "") {
-    console.error("Please set a baseUrl in your site metadata!")
-    return null
+    console.error("Please set a baseUrl in your site metadata!");
+    return null;
   }
 
-  const title = props.title || defaults.title
-  const description = props.description || defaults.description
-  const url = new URL(props.path || "", defaults.baseUrl).href
-  const image = props.image || defaults.image
-  const twitterUserName = defaults.twitterUserName || ""
+  const title = props.title || defaults.title;
+  const description = props.description || defaults.description;
+  const url = new URL(props.path || "", defaults.baseUrl).href;
+  const image = props.image || defaults.image;
+  const twitterUserName = defaults.twitterUserName || "";
 
   return (
     <Head>
@@ -57,7 +57,7 @@ const SEO: React.FC<SEOProps> = (props) => {
         />
       )}
     </Head>
-  )
-}
+  );
+};
 
-export default SEO
+export default SEO;

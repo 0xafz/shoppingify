@@ -1,28 +1,28 @@
 export function getJwtToken() {
-  return sessionStorage.getItem("jwt")
+  return sessionStorage.getItem("jwt");
 }
 export function getRefreshToken() {
-  return sessionStorage.getItem("refreshToken")
+  return sessionStorage.getItem("refreshToken");
 }
 export function setJwtToken(token: string) {
-  sessionStorage.setItem("jwt", token)
+  sessionStorage.setItem("jwt", token);
 }
 
 export function setRefreshToken(token: string) {
-  sessionStorage.setItem("refreshToken", token)
+  sessionStorage.setItem("refreshToken", token);
 }
 
 export function removeJwtTokens() {
-  localStorage.removeItem("jwt")
-  localStorage.removeItem("refreshToken")
+  localStorage.removeItem("jwt");
+  localStorage.removeItem("refreshToken");
 }
 
 export function getAuthHeaders() {
-  const headers: HeadersInit = {}
-  const token = getJwtToken()
+  const headers: HeadersInit = {};
+  const token = getJwtToken();
 
-  if (token) headers["authorization"] = `Bearer ${token}`
-  return headers
+  if (token) headers["authorization"] = `Bearer ${token}`;
+  return headers;
 }
 export const getAuthFetchOptions = (): RequestInit => {
   return {
@@ -31,5 +31,5 @@ export const getAuthFetchOptions = (): RequestInit => {
     headers: {
       ...getAuthHeaders(),
     },
-  }
-}
+  };
+};

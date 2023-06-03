@@ -1,25 +1,25 @@
-import { useRouter } from "next/router"
-import { useState } from "react"
-import cfetch from "~/lib/cfetch"
-import { CButton } from "~/mui-c/Button"
-import CTextField from "~/mui-c/TextField"
-import { unGroup } from "~/utils/client"
-import { useStore } from "~/zustand"
+import { useRouter } from "next/router";
+import { useState } from "react";
+import cfetch from "~/lib/cfetch";
+import { CButton } from "~/mui-c/Button";
+import CTextField from "~/mui-c/TextField";
+import { unGroup } from "~/utils/client";
+import { useStore } from "~/zustand";
 
 const SaveListNameForm = () => {
-  const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [listName, setListName] = useState("")
-  const router = useRouter()
-  const dispatchList = useStore((state) => state.dispatchList)
-  const currListItems = useStore((state) => state.currListItems)
+  const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [listName, setListName] = useState("");
+  const router = useRouter();
+  const dispatchList = useStore((state) => state.dispatchList);
+  const currListItems = useStore((state) => state.currListItems);
 
   const handleSave = async (e: any) => {
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
+    e.preventDefault();
     try {
-      setLoading(true)
-      setFormError("")
+      setLoading(true);
+      setFormError("");
       const result = await cfetch("api/lists", {
         method: "POST",
         body: JSON.stringify({
@@ -27,25 +27,25 @@ const SaveListNameForm = () => {
           status: "incomplete",
           items: unGroup(currListItems),
         }),
-      })
-      setLoading(false)
+      });
+      setLoading(false);
       if (result.error) {
-        setFormError(result.error)
-        return
+        setFormError(result.error);
+        return;
       }
       if (result.data) {
         dispatchList({
           type: "list:save",
           payload: result.data,
-        })
-        router.push("/history")
+        });
+        router.push("/history");
       }
     } catch (err) {
-      setLoading(false)
-      setFormError("something went wrong!")
-      console.error(err)
+      setLoading(false);
+      setFormError("something went wrong!");
+      console.error(err);
     }
-  }
+  };
   return (
     <form onSubmit={handleSave}>
       <CTextField
@@ -71,7 +71,7 @@ const SaveListNameForm = () => {
         }
       `}</style>
     </form>
-  )
-}
+  );
+};
 
-export default SaveListNameForm
+export default SaveListNameForm;

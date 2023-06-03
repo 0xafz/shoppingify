@@ -1,31 +1,31 @@
-import crypto from "node:crypto"
-import { promisify } from "node:util"
-import tokenGenerator from "./TokenGenerator"
+import crypto from "node:crypto";
+import { promisify } from "node:util";
+import tokenGenerator from "./TokenGenerator";
 
-const scrypt = promisify(crypto.scrypt)
+const scrypt = promisify(crypto.scrypt);
 
 export async function hashPassword(password: string) {
-  const salt = crypto.randomBytes(8).toString("hex")
-  const derivedKey = (await scrypt(password, salt, 64)) as Buffer
-  return salt + ":" + derivedKey.toString("hex")
+  const salt = crypto.randomBytes(8).toString("hex");
+  const derivedKey = (await scrypt(password, salt, 64)) as Buffer;
+  return salt + ":" + derivedKey.toString("hex");
 }
 
 export async function checkPassword(
   plaintextPassword: string,
   hashedPassword: string
 ) {
-  const [salt, key] = hashedPassword.split(":")
+  const [salt, key] = hashedPassword.split(":");
   const derivedKey = (await scrypt(
     plaintextPassword,
     salt,
     64
-  )) as NodeJS.ArrayBufferView
+  )) as NodeJS.ArrayBufferView;
 
-  return crypto.timingSafeEqual(Buffer.from(key, "hex"), derivedKey)
+  return crypto.timingSafeEqual(Buffer.from(key, "hex"), derivedKey);
 }
 
 export function sha256(value: string) {
-  return crypto.createHash("sha256").update(value, "utf8").digest("hex")
+  return crypto.createHash("sha256").update(value, "utf8").digest("hex");
 }
 export function uuidv4(): string {
   // @ts-ignore
@@ -36,16 +36,16 @@ export function uuidv4(): string {
       // @ts-ignore
       (crypto.randomFillSync(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
-  )
+  );
 }
 
 export function SignWithUserClaims(user: { id: number }, fingerprint?: string) {
   return tokenGenerator.signWithClaims({
     "X-Auth-User-Id": String(user.id),
     ...(fingerprint ? { "X-Auth-FingerPrint": fingerprint } : null),
-  })
+  });
 }
 
 export function md5(value: string) {
-  return crypto.createHash("md5").update(value).digest("hex")
+  return crypto.createHash("md5").update(value).digest("hex");
 }

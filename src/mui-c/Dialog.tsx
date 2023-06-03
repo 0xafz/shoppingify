@@ -1,18 +1,18 @@
-import IconButton from "@mui/material/IconButton"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogTitle from "@mui/material/DialogTitle"
-import { CloseIcon } from "~/components/icons"
-import { RedButton, TextButton } from "./Button"
-import { ReactNode, useState } from "react"
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { CloseIcon } from "~/components/icons";
+import { RedButton, TextButton } from "./Button";
+import { ReactNode, useState } from "react";
 
 interface ConfirmDialogProps {
-  open: boolean
-  children: ReactNode
-  onYes: (...args: any) => void
-  onClose: () => void
-  onYesLoading: boolean
+  open: boolean;
+  children: ReactNode;
+  onYes: (...args: any) => void;
+  onClose: () => void;
+  onYesLoading: boolean;
 }
 export const ConfirmDialog = ({
   open,
@@ -68,5 +68,5 @@ export const ConfirmDialog = ({
         </RedButton>
       </DialogActions>
     </Dialog>
-  )
-}
+  );
+};

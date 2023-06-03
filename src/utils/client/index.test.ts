@@ -1,4 +1,4 @@
-import { groupBy, groupByTime, unGroup } from "."
+import { groupBy, groupByTime, unGroup } from ".";
 
 test("groupBy", () => {
   const arr1 = [
@@ -14,7 +14,7 @@ test("groupBy", () => {
       cat: "Non veg",
       name: "Chicken",
     },
-  ]
+  ];
   expect(groupBy(arr1, "cat")).toEqual({
     Fruits: [
       {
@@ -34,8 +34,8 @@ test("groupBy", () => {
         name: "Chicken",
       },
     ],
-  })
-})
+  });
+});
 
 test("timeLine", () => {
   const arr2 = [
@@ -54,7 +54,7 @@ test("timeLine", () => {
       name: "Chicken",
       date: new Date("Aug 03,20"),
     },
-  ]
+  ];
   expect(groupByTime(arr2, "date", "month")).toEqual([
     [
       "August 2020",
@@ -87,13 +87,13 @@ test("timeLine", () => {
         },
       ],
     ],
-  ])
-})
+  ]);
+});
 
 test("unGroup", () => {
   const arr3 = {
     one: [1, 2],
     two: [3, 4],
-  }
-  expect(unGroup(arr3)).toEqual([1, 2, 3, 4])
-})
+  };
+  expect(unGroup(arr3)).toEqual([1, 2, 3, 4]);
+});

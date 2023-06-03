@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   CartesianGrid,
   Line,
@@ -7,16 +7,16 @@ import {
   ResponsiveContainer,
   XAxis,
   YAxis,
-} from "recharts"
+} from "recharts";
 
 interface C_LineChartProps {
-  data: Array<{ [key: string]: any }>
-  dataKey: string
-  xAxisDataKey: string
-  yAxisDataKey?: string
-  stroke?: string
-  xAxisType?: "category" | "number"
-  lineType?: LineProps["type"]
+  data: Array<{ [key: string]: any }>;
+  dataKey: string;
+  xAxisDataKey: string;
+  yAxisDataKey?: string;
+  stroke?: string;
+  xAxisType?: "category" | "number";
+  lineType?: LineProps["type"];
 }
 
 const C_LineChart: React.FC<C_LineChartProps> = ({
@@ -47,7 +47,7 @@ const C_LineChart: React.FC<C_LineChartProps> = ({
         <Line type={lineType} dataKey={dataKey} stroke={stroke} />
       </LineChart>
     </ResponsiveContainer>
-  )
-}
+  );
+};
 
-export default C_LineChart
+export default C_LineChart;

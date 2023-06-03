@@ -1,21 +1,21 @@
-import Link from "next/link"
-import { useRouter } from "next/router"
-import React from "react"
-import Cart from "./Cart"
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import Cart from "./Cart";
 import {
   ChartOutlineIcon,
   ListBulletedIcon,
   PersonIcon,
   RefreshOutlineIcon,
-} from "./icons"
-import Image from "next/image"
+} from "./icons";
+import Image from "next/image";
 
 interface MenuProps {}
 
 export const Menu: React.FC<MenuProps> = ({}) => {
-  const router = useRouter()
+  const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname
+    router.pathname === pathname;
 
   return (
     <nav className="menu" id="menu" aria-label="Menu">
@@ -135,5 +135,5 @@ export const Menu: React.FC<MenuProps> = ({}) => {
         }
       `}</style>
     </nav>
-  )
-}
+  );
+};

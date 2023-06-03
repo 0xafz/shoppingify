@@ -1,10 +1,10 @@
-import { ItemInList } from "~/types"
-import ShoppingListItem from "./ListItem"
+import { ItemInList } from "~/types";
+import ShoppingListItem from "./ListItem";
 
 interface ShoppingListGroupProps {
-  groupName: string
-  items: Array<ItemInList>
-  listType: string
+  groupName: string;
+  items: Array<ItemInList>;
+  listType: string;
 }
 const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
   groupName,
@@ -37,6 +37,6 @@ const ShoppingListGroup: React.FC<ShoppingListGroupProps> = ({
         }
       `}</style>
     </div>
-  )
-}
-export default ShoppingListGroup
+  );
+};
+export default ShoppingListGroup;

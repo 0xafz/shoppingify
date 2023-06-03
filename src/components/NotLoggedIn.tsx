@@ -1,5 +1,5 @@
-import Link from "next/link"
-import React from "react"
+import Link from "next/link";
+import React from "react";
 
 interface NotLoggedInProps {}
 
@@ -15,7 +15,7 @@ const NotLoggedIn: React.FC<NotLoggedInProps> = ({}) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default NotLoggedIn
+export default NotLoggedIn;

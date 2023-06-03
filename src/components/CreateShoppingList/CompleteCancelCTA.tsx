@@ -1,65 +1,65 @@
-import { useRouter } from "next/router"
-import { useState } from "react"
-import cfetch from "~/lib/cfetch"
-import { TextButton, SkyButton } from "~/mui-c/Button"
-import { ConfirmDialog } from "~/mui-c/Dialog"
-import { useStore } from "~/zustand"
+import { useRouter } from "next/router";
+import { useState } from "react";
+import cfetch from "~/lib/cfetch";
+import { TextButton, SkyButton } from "~/mui-c/Button";
+import { ConfirmDialog } from "~/mui-c/Dialog";
+import { useStore } from "~/zustand";
 
 const CompleteCancelCTA = () => {
-  const [confirmDialogOpen, setConfirmDialog] = useState(false)
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const { id = undefined, name } = useStore((state) => state.currList)
-  const dispatchList = useStore((state) => state.dispatchList)
-  const crossedItems = useStore((state) => state.crossedItems)
-  const router = useRouter()
+  const [confirmDialogOpen, setConfirmDialog] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { id = undefined, name } = useStore((state) => state.currList);
+  const dispatchList = useStore((state) => state.dispatchList);
+  const crossedItems = useStore((state) => state.crossedItems);
+  const router = useRouter();
 
   const handleConfirmDialogClose = () => {
-    setConfirmDialog(false)
-  }
+    setConfirmDialog(false);
+  };
 
   const handleCancelList = async (e: any) => {
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
+    e.preventDefault();
     if (!id) {
-      console.error("list id required")
-      return
+      console.error("list id required");
+      return;
     }
     try {
-      setError("")
-      setLoading(true)
+      setError("");
+      setLoading(true);
       const result = await cfetch(`api/lists/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
           status: "cancelled",
         }),
-      })
-      setLoading(false)
-      setConfirmDialog(false)
+      });
+      setLoading(false);
+      setConfirmDialog(false);
       if (result.error) {
-        setError(result.error)
-        return
+        setError(result.error);
+        return;
       }
       if (result.data) {
         dispatchList({
           type: "list:cancel",
           payload: result.data,
-        })
-        router.push("/history")
+        });
+        router.push("/history");
       }
     } catch (error) {
-      setLoading(false)
-      setConfirmDialog(false)
-      console.error(error)
+      setLoading(false);
+      setConfirmDialog(false);
+      console.error(error);
     }
-  }
+  };
 
   const handleComplete = async (e: any) => {
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
+    e.preventDefault();
     try {
-      setLoading(true)
-      setError("")
+      setLoading(true);
+      setError("");
       const result = await cfetch(`api/lists/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
@@ -67,24 +67,24 @@ const CompleteCancelCTA = () => {
           status: "completed",
           items: crossedItems,
         }),
-      })
-      setLoading(false)
+      });
+      setLoading(false);
       if (result.error) {
-        setError(result.error)
-        return
+        setError(result.error);
+        return;
       }
       if (result.data) {
         dispatchList({
           type: "list:complete",
           payload: result.data,
-        })
-        router.push("/history")
+        });
+        router.push("/history");
       }
     } catch (err) {
-      console.error(err)
-      setError("something went wrong!")
+      console.error(err);
+      setError("something went wrong!");
     }
-  }
+  };
   return (
     <>
       {error && <p className="error">{error}</p>}
@@ -118,6 +118,6 @@ const CompleteCancelCTA = () => {
         }
       `}</style>
     </>
-  )
-}
-export default CompleteCancelCTA
+  );
+};
+export default CompleteCancelCTA;

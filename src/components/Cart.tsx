@@ -1,11 +1,11 @@
-import React from "react"
-import { useStore } from "~/zustand"
-import { CartOutlineIcon } from "./icons"
+import React from "react";
+import { useStore } from "~/zustand";
+import { CartOutlineIcon } from "./icons";
 
 interface CartProps {}
 
 const Cart: React.FC<CartProps> = () => {
-  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer);
   return (
     <>
       <button
@@ -28,7 +28,7 @@ const Cart: React.FC<CartProps> = () => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

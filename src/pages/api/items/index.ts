@@ -1,21 +1,21 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-import prisma from "~/lib/prisma"
-import checkAuth from "~/middleware/checkAuth"
-import { ClientError, handleError } from "~/utils/api/error"
+import type { NextApiRequest, NextApiResponse } from "next";
+import prisma from "~/lib/prisma";
+import checkAuth from "~/middleware/checkAuth";
+import { ClientError, handleError } from "~/utils/api/error";
 
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const { method } = req
+    const { method } = req;
 
-    const loggedUser = checkAuth(req)
+    const loggedUser = checkAuth(req);
 
     switch (method) {
       case "GET":
         {
-          const { cursor, limit = 10 } = req.query
+          const { cursor, limit = 10 } = req.query;
           const items = await prisma.shoppingItem.findMany({
             where: {
               userId: loggedUser.id,
@@ -29,7 +29,7 @@ export default async function handle(
                   id: Number(cursor),
                 }
               : undefined,
-          })
+          });
           res.status(200).json({
             data: {
               items,
@@ -38,21 +38,21 @@ export default async function handle(
                   ? items[items.length - 1].id
                   : "",
             },
-          })
+          });
         }
-        break
+        break;
       case "POST":
         {
-          const { name, note, imageUrl, category } = req.body
+          const { name, note, imageUrl, category } = req.body;
 
-          if (!category || !name) throw new ClientError("missing/empty fields")
+          if (!category || !name) throw new ClientError("missing/empty fields");
           const existingItem = await prisma.shoppingItem.findFirst({
             where: {
               userId: loggedUser.id,
               name: name,
             },
-          })
-          if (existingItem) throw new ClientError("item already exists")
+          });
+          if (existingItem) throw new ClientError("item already exists");
 
           const newItem = await prisma.shoppingItem.create({
             data: {
@@ -67,15 +67,15 @@ export default async function handle(
                 },
               },
             },
-          })
-          res.status(200).json({ data: newItem })
+          });
+          res.status(200).json({ data: newItem });
         }
-        break
+        break;
       default:
-        res.setHeader("Allow", ["GET", "POST"])
-        res.status(405).end(`Method ${method} Not Allowed`)
+        res.setHeader("Allow", ["GET", "POST"]);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
-    handleError(error, res)
+    handleError(error, res);
   }
 }

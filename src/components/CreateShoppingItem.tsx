@@ -1,30 +1,30 @@
-import Button from "@mui/material/Button"
-import Autocomplete from "@mui/material/Autocomplete"
-import React, { useState } from "react"
-import { CButton } from "~/mui-c/Button"
-import CTextField from "~/mui-c/TextField"
-import { useStore } from "~/zustand"
-import { Controller, useForm } from "react-hook-form"
-import { getValidation } from "~/utils/client/form-validation"
-import cfetch from "~/lib/cfetch"
-import useTimeout from "~/hooks/useTimeout"
+import Button from "@mui/material/Button";
+import Autocomplete from "@mui/material/Autocomplete";
+import React, { useState } from "react";
+import { CButton } from "~/mui-c/Button";
+import CTextField from "~/mui-c/TextField";
+import { useStore } from "~/zustand";
+import { Controller, useForm } from "react-hook-form";
+import { getValidation } from "~/utils/client/form-validation";
+import cfetch from "~/lib/cfetch";
+import useTimeout from "~/hooks/useTimeout";
 
 interface CreateShoppingItemProps {}
 
 const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
-  const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const itemCategories = useStore((state) => state.itemCategories)
-  const dispatchDrawer = useStore((state) => state.dispatchDrawer)
-  const dispatchItem = useStore((state) => state.dispatchItem)
-  const [status, setStatus] = useState("")
+  const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const itemCategories = useStore((state) => state.itemCategories);
+  const dispatchDrawer = useStore((state) => state.dispatchDrawer);
+  const dispatchItem = useStore((state) => state.dispatchItem);
+  const [status, setStatus] = useState("");
 
   useTimeout(
     () => {
-      setStatus("")
+      setStatus("");
     },
     status ? 5000 : null
-  )
+  );
   const {
     control,
     handleSubmit,
@@ -37,30 +37,30 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
       note: undefined,
       category: null,
     },
-  })
+  });
   const onSubmit = async (data: any) => {
     try {
-      setFormError("")
-      setLoading(true)
-      setStatus("")
+      setFormError("");
+      setLoading(true);
+      setStatus("");
       const result = await cfetch("/api/items", {
         method: "POST",
         body: JSON.stringify(data),
-      })
-      setLoading(false)
+      });
+      setLoading(false);
       if (result.error) {
-        setFormError(result.error)
-        return
+        setFormError(result.error);
+        return;
       }
-      dispatchItem({ type: "item:add", payload: result.data })
-      reset()
-      setStatus("Item created!")
+      dispatchItem({ type: "item:add", payload: result.data });
+      reset();
+      setStatus("Item created!");
     } catch (err) {
-      setLoading(false)
-      setFormError("something went wrong!")
-      console.error(err)
+      setLoading(false);
+      setFormError("something went wrong!");
+      console.error(err);
     }
-  }
+  };
   return (
     <div className="wrapper">
       <h2>Add a new item</h2>
@@ -246,7 +246,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default CreateShoppingItem
+export default CreateShoppingItem;

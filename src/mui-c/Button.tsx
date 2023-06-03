@@ -1,6 +1,6 @@
-import Button from "@mui/material/Button"
-import styled from "@mui/system/styled"
-import theme from "~/lib/mui-theme"
+import Button from "@mui/material/Button";
+import styled from "@mui/system/styled";
+import theme from "~/lib/mui-theme";
 
 export const CButton = styled(Button)({
   textTransform: "none",
@@ -14,21 +14,21 @@ export const CButton = styled(Button)({
   "&:hover": {
     backgroundColor: "var(--clr-amber11)",
   },
-})
+});
 export const TextButton = styled(CButton)({
   color: "var(--clr-black)",
   backgroundColor: "var(--clr-white)",
   "&:hover": {
     backgroundColor: "var(--clr-gray1)",
   },
-})
+});
 export const RedButton = styled(CButton)({
   backgroundColor: "var(--clr-red10)",
   fontWeight: "bold",
   "&:hover": {
     backgroundColor: "var(--clr-red11)",
   },
-})
+});
 
 export const SkyButton = styled(CButton)({
   background: "var(--clr-sky10)",
@@ -36,4 +36,4 @@ export const SkyButton = styled(CButton)({
   "&:hover": {
     backgroundColor: "var(--clr-sky11)",
   },
-})
+});

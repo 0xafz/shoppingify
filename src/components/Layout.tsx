@@ -1,14 +1,14 @@
-import React, { ReactNode } from "react"
-import { useStore } from "~/zustand"
-import { Menu } from "./Menu"
-import RightSideDrawer from "./RightSideDrawer"
+import React, { ReactNode } from "react";
+import { useStore } from "~/zustand";
+import { Menu } from "./Menu";
+import RightSideDrawer from "./RightSideDrawer";
 
 type Props = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 const Layout: React.FC<Props> = (props) => {
-  const showRightSideDrawer = useStore((state) => state.showRightSideDrawer)
+  const showRightSideDrawer = useStore((state) => state.showRightSideDrawer);
   return (
     <div {...props} className="layout">
       <a href="#content" className="sr-text skip-link">
@@ -49,7 +49,7 @@ const Layout: React.FC<Props> = (props) => {
         `}
       </style>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

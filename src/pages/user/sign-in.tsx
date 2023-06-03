@@ -1,22 +1,22 @@
-import CTextField from "~/mui-c/TextField"
-import React, { useState } from "react"
-import { useForm, Controller } from "react-hook-form"
-import Layout from "~/components/Layout"
-import { CButton } from "~/mui-c/Button"
-import { getValidation } from "~/utils/client/form-validation"
-import cfetch from "~/lib/cfetch"
-import { useStore } from "~/zustand"
-import { setJwtToken, setRefreshToken } from "~/utils/client/auth"
-import { useRouter } from "next/router"
-import Link from "next/link"
+import CTextField from "~/mui-c/TextField";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Layout from "~/components/Layout";
+import { CButton } from "~/mui-c/Button";
+import { getValidation } from "~/utils/client/form-validation";
+import cfetch from "~/lib/cfetch";
+import { useStore } from "~/zustand";
+import { setJwtToken, setRefreshToken } from "~/utils/client/auth";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface SignInProps {}
 
 const SignIn: React.FC<SignInProps> = ({}) => {
-  const router = useRouter()
-  const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const setUser = useStore((state) => state.setUser)
+  const router = useRouter();
+  const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const setUser = useStore((state) => state.setUser);
   const {
     control,
     handleSubmit,
@@ -26,38 +26,38 @@ const SignIn: React.FC<SignInProps> = ({}) => {
       email: "",
       password: "",
     },
-  })
+  });
   const onSubmit = async (data: any) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const result = await cfetch("/api/users/login", {
         method: "POST",
         body: JSON.stringify(data),
-      })
+      });
       if (result.error) {
-        setFormError(result.error)
-        return
+        setFormError(result.error);
+        return;
       }
       if (result.data) {
-        setJwtToken(result.data.jwt)
-        setRefreshToken(result.data.refreshToken)
+        setJwtToken(result.data.jwt);
+        setRefreshToken(result.data.refreshToken);
 
         // fetch user data
         const userResult = await cfetch("/api/users/me", {
           method: "GET",
-        })
+        });
 
-        setUser(userResult.data)
+        setUser(userResult.data);
 
-        router.push("/")
+        router.push("/");
       }
     } catch (err) {
-      console.error(err)
-      setFormError("something went wrong!")
+      console.error(err);
+      setFormError("something went wrong!");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
   return (
     <Layout>
       <div className="wrapper">
@@ -178,7 +178,7 @@ const SignIn: React.FC<SignInProps> = ({}) => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;

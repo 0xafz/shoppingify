@@ -1,61 +1,61 @@
-import Image from "next/image"
-import { useRouter } from "next/router"
-import React, { useCallback, useState } from "react"
-import Layout from "~/components/Layout"
-import NotLoggedIn from "~/components/NotLoggedIn"
-import useAsync from "~/hooks/useAsync"
-import { cfetchPromise } from "~/lib/cfetch"
-import { RedButton, CButton } from "~/mui-c/Button"
-import { ConfirmDialog } from "~/mui-c/Dialog"
-import { IUser } from "~/types"
-import { useStore } from "~/zustand"
-import { selectUser } from "~/zustand/userSlice"
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
+import Layout from "~/components/Layout";
+import NotLoggedIn from "~/components/NotLoggedIn";
+import useAsync from "~/hooks/useAsync";
+import { cfetchPromise } from "~/lib/cfetch";
+import { RedButton, CButton } from "~/mui-c/Button";
+import { ConfirmDialog } from "~/mui-c/Dialog";
+import { IUser } from "~/types";
+import { useStore } from "~/zustand";
+import { selectUser } from "~/zustand/userSlice";
 
 const UserInfo = ({ user }: { user: IUser }) => {
   const deleteAccount = useCallback(() => {
     return cfetchPromise(`/api/users/${user.id}`, {
       method: "DELETE",
-    })
-  }, [user.id])
+    });
+  }, [user.id]);
   const logout = useCallback(() => {
     return cfetchPromise("/api/users/logout", {
       method: "post",
-    })
-  }, [])
-  const router = useRouter()
-  const clearStore = useStore((state) => state.clearStore)
-  const [showConfirm, setShowConfirm] = useState(false)
+    });
+  }, []);
+  const router = useRouter();
+  const clearStore = useStore((state) => state.clearStore);
+  const [showConfirm, setShowConfirm] = useState(false);
   const { execute: deleteUser, isLoading: deleteLoading } = useAsync(
     deleteAccount,
     false
-  )
+  );
   const { execute: exeLogout, isLoading: logoutLoading } = useAsync(
     logout,
     false
-  )
+  );
 
   const handleLogout = async () => {
     try {
-      await exeLogout()
+      await exeLogout();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
       // one way or other,just force clean session data
-      sessionStorage.clear()
-      clearStore()
-      router.push("/user/sign-in")
+      sessionStorage.clear();
+      clearStore();
+      router.push("/user/sign-in");
     }
-  }
+  };
   const handleDelete = async () => {
     try {
-      await deleteUser()
-      sessionStorage.clear()
-      clearStore()
-      router.push("/user/sign-in")
+      await deleteUser();
+      sessionStorage.clear();
+      clearStore();
+      router.push("/user/sign-in");
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
   return (
     <>
       <div className="avatar">
@@ -125,12 +125,12 @@ const UserInfo = ({ user }: { user: IUser }) => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 interface UserProps {}
 
 const User: React.FC<UserProps> = ({}) => {
-  const user = useStore(selectUser)
+  const user = useStore(selectUser);
   return (
     <Layout>
       <div className="wrapper">
@@ -153,7 +153,7 @@ const User: React.FC<UserProps> = ({}) => {
         }
       `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default User
+export default User;
