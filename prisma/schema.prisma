@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
@@ -60,8 +60,8 @@ model ShoppingItemToList {
   shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   shoppingListId Int
   quantity       Int
-  itemName           String
-  itemCategory       String
+  itemName       String
+  itemCategory   String
   assignedBy     Int
   assignedAt     DateTime
   itemPurchased  Boolean
