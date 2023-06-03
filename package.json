@@ -10,7 +10,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "check-types": "tsc --noEmit",
+    "lint": "yarn run check-types && next lint",
+    "format": "prettier --write .",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:generate": "prisma generate",
     "test:w": "jest --watch --",
@@ -42,6 +44,7 @@
     "eslint-config-next": "^13.4.3",
     "eslint-config-prettier": "^8.8.0",
     "jest": "27.5.1",
+    "prettier": "^2.8.8",
     "prisma": "3.14.0",
     "ts-node": "10.7.0",
     "typescript": "4.6.4"
@@ -49,5 +52,8 @@
   "prisma": {},
   "engines": {
     "node": ">=16.15.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
