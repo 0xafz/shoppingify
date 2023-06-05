@@ -18,6 +18,10 @@ export default defineConfig({
                 email,
               },
             });
+            if (!user || !user.id) {
+              console.log(`info: User with email: ${email} does not exists!`);
+              return;
+            }
             await prisma.user.delete({
               where: {
                 id: user.id,
