@@ -1,4 +1,4 @@
-import { Users } from "../support/constants";
+import { Users, rightSideDrawer } from "../support/constants";
 
 const User2 = Users.user2;
 
@@ -19,37 +19,27 @@ describe("Shopping Item", () => {
     beforeEach(() => {
       cy.setScreenSize("xl");
     });
+
     it("should be able to create", () => {
       cy.signIn(User2.email, User2.password);
 
-      cy.visit("/");
-      cy.get("button[data-cy='toggle-drawer']").click();
-
-      cy.get('aside[data-cy="right-side-drawer"]')
-        .should("be.visible")
-        .get('button[data-cy="add-item"]')
-        .click();
-
-      cy.get('aside[data-cy="right-side-drawer"]')
-        .contains("h2", "Add a new item")
-        .should("be.visible");
-
-      cy.get("input[name=name]").type(ShoppingItem1.name);
-      cy.get("textarea[name=note]").type(ShoppingItem1.note);
-      cy.get("input[id=category]").type("Fruits");
-
-      cy.get('.MuiAutocomplete-popper li[data-option-index="0"]').click();
-
-      cy.get('button[data-cy="save-shopping-item"]').click();
+      cy.createShoppingItemAfterAuth(ShoppingItem1);
 
       cy.get("main").should("contain", ShoppingItem1.name);
 
       cy.wait(5000);
 
-      cy.get('aside[data-cy="right-side-drawer"]').should(
-        "not.contain",
-        "Item created!"
-      );
+      cy.get(rightSideDrawer).should("not.contain", "Item created!");
+    });
+
+    it("should fail if user creates an item with existing name", () => {
+      cy.signIn(User2.email, User2.password);
+
+      cy.createShoppingItemAfterAuth(ShoppingItem1);
+
+      cy.get(rightSideDrawer).should("not.contain", "Item created!");
+
+      cy.get(rightSideDrawer).should("contain", "something went wrong");
     });
 
     it("should be able to delete", () => {
@@ -63,7 +53,7 @@ describe("Shopping Item", () => {
 
       cy.get(`button[aria-label="${buttonAriaLabel}"]`).click();
 
-      cy.get('aside[data-cy="right-side-drawer"]')
+      cy.get(rightSideDrawer)
         .should("be.visible")
         .get('button[data-cy="delete-item"]')
         .click();

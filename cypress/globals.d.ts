@@ -8,5 +8,6 @@ declare namespace Cypress {
     signIn(email: string, password: string): Chainable<any>;
     signUp(email: string, password: string): Chainable<any>;
     setScreenSize(size: SCREEN_SIZE): Chainable<any>;
+    createShoppingItemAfterAuth(item: any): Chainable<any>;
   }
 }

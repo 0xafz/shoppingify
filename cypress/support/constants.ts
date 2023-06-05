@@ -28,3 +28,5 @@ export const itemCategories = [
 ];
 
 export const loginCookieName = "__Secure__User-Fgp";
+
+export const rightSideDrawer = 'aside[data-cy="right-side-drawer"]';

@@ -9,7 +9,11 @@
 // ***********************************************
 //
 import { submitSignInForm, submitSignUpForm } from "../utils/auth";
-import { ScreenSizeToCypressPreset, loginCookieName } from "./constants";
+import {
+  ScreenSizeToCypressPreset,
+  loginCookieName,
+  rightSideDrawer,
+} from "./constants";
 
 Cypress.Commands.add("resetAuth", () => {
   cy.clearAllCookies();
@@ -68,4 +72,24 @@ Cypress.Commands.add("setScreenSize", (size) => {
   } else {
     cy.viewport(presetValue);
   }
+});
+
+Cypress.Commands.add("createShoppingItemAfterAuth", (item) => {
+  cy.visit("/");
+  cy.get("button[data-cy='toggle-drawer']").click();
+
+  cy.get(rightSideDrawer)
+    .should("be.visible")
+    .get('button[data-cy="add-item"]')
+    .click();
+
+  cy.get(rightSideDrawer).contains("h2", "Add a new item").should("be.visible");
+
+  cy.get("input[name=name]").type(item.name);
+  cy.get("textarea[name=note]").type(item.note);
+  cy.get("input[id=category]").type(item.categorySearchString);
+
+  cy.get('.MuiAutocomplete-popper li[data-option-index="0"]').click();
+
+  cy.get('button[data-cy="save-shopping-item"]').click();
 });
