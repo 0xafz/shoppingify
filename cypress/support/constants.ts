@@ -19,4 +19,12 @@ export const Users = {
   },
 };
 
+export const itemCategories = [
+  "Fruits and vegetables",
+  "Meat and Fish",
+  "Beverages",
+  "Groceries",
+  "Other",
+];
+
 export const loginCookieName = "__Secure__User-Fgp";

@@ -186,6 +186,7 @@ const CreateShoppingItem: React.FC<CreateShoppingItemProps> = ({}) => {
               Cancel
             </Button>
             <CButton
+              data-cy="save-shopping-item"
               type="submit"
               variant="contained"
               sx={{

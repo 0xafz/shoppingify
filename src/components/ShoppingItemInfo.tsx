@@ -113,6 +113,7 @@ const ShoppingItemInfo: React.FC<ShoppingItemInfoProps> = ({ item }) => {
         <div className="item__cta">
           {error && <p className="error">{error.message}</p>}
           <TextButton
+            data-cy="delete-item"
             variant="text"
             onClick={() => setdeleteConfirmDialog(true)}
             disabled={deleteLoading}

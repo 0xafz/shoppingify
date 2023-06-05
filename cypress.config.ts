@@ -10,6 +10,9 @@ export default defineConfig({
     viewportWidth: 768,
     setupNodeEvents(on, config) {
       on("task", {
+        /**
+         * Deletes user and their entire activity data :)
+         */
         async deleteUserByEmail(email: string) {
           try {
             console.log(`info: Deleting User with email: ${email}`);
@@ -20,7 +23,7 @@ export default defineConfig({
             });
             if (!user || !user.id) {
               console.log(`info: User with email: ${email} does not exists!`);
-              return;
+              return false;
             }
             await prisma.user.delete({
               where: {

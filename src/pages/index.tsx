@@ -32,6 +32,7 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
   return (
     <div className="s-item">
       <button
+        aria-label={`Open ${item.name} details in Drawer`}
         className="s-item__name"
         onClick={() =>
           dispatchDrawer({ type: "drawer:set-info-item", payload: item })

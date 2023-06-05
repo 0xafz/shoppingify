@@ -12,6 +12,7 @@ const AddItemBanner = () => {
       <div className="banner-info">
         <h3>Didn&apos;t find what you need?</h3>
         <TextButton
+          data-cy="add-item"
           sx={{
             padding: ".5rem 1rem",
             marginTop: "1rem",
