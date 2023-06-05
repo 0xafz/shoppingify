@@ -32,6 +32,16 @@ describe(
         cy.get('input[placeholder="search item"]').should("be.visible");
       });
 
+      it("should allow users to logout", () => {
+        cy.signIn(User1.email, User1.password);
+
+        cy.visit("/user");
+
+        cy.get("button[data-cy=logout]").click();
+
+        cy.contains("h1", "Sign In");
+      });
+
       it("should allow users to delete their account", () => {
         cy.visit("/");
 
@@ -68,6 +78,16 @@ describe(
         ).should("not.be.visible");
 
         cy.get('input[placeholder="search item"]').should("be.visible");
+      });
+
+      it("should allow users to logout", () => {
+        cy.signIn(User1.email, User1.password);
+
+        cy.visit("/user");
+
+        cy.get("a[data-cy=logout]").click();
+
+        cy.contains("h1", "Sign In");
       });
 
       it("should allow users to delete their account", () => {

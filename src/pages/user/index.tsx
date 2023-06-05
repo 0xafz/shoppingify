@@ -74,6 +74,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
       </div>
       <div>
         <CButton
+          data-cy="logout"
           onClick={handleLogout}
           variant="contained"
           disabled={logoutLoading}
