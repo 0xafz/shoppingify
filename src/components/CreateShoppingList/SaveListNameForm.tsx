@@ -47,8 +47,9 @@ const SaveListNameForm = () => {
     }
   };
   return (
-    <form onSubmit={handleSave}>
+    <form onSubmit={handleSave} data-cy="SaveListNameForm">
       <CTextField
+        data-cy="input"
         placeholder="Enter a name"
         fullWidth
         value={listName}
@@ -57,7 +58,12 @@ const SaveListNameForm = () => {
         autoComplete="off"
         InputProps={{
           endAdornment: (
-            <CButton type="submit" disabled={loading} variant="contained">
+            <CButton
+              type="submit"
+              disabled={loading}
+              variant="contained"
+              data-cy="save"
+            >
               {loading ? "..." : "Save"}
             </CButton>
           ),

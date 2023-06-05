@@ -30,7 +30,7 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
     });
   };
   return (
-    <div className="s-item">
+    <div className="s-item" data-cy="shopping-item">
       <button
         aria-label={`Open ${item.name} details in Drawer`}
         className="s-item__name"
@@ -41,6 +41,7 @@ const ShoppingItem = ({ item }: { item: IShoppingItem }) => {
         <h3>{item.name}</h3>
       </button>
       <IconButton
+        data-cy="add-shopping-item-tolist"
         sx={{
           fontSize: "2rem",
           fontWeight: "700",

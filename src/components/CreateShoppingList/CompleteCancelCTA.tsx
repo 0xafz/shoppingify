@@ -88,7 +88,7 @@ const CompleteCancelCTA = () => {
   return (
     <>
       {error && <p className="error">{error}</p>}
-      <div className="complete-cta">
+      <div className="complete-cta" data-cy="complete-cta">
         <TextButton onClick={() => setConfirmDialog(true)} disabled={loading}>
           Cancel
         </TextButton>

@@ -75,7 +75,10 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
   };
   const showDeletePopover = Boolean(deletePopoverAnchorEl);
   return (
-    <div className={`s-list ${deleteLoading ? "disabled" : ""}`}>
+    <div
+      className={`s-list ${deleteLoading ? "disabled" : ""}`}
+      data-cy="shoppingList"
+    >
       <Link href={`/history/list/${id}`} passHref legacyBehavior>
         <h3>{name}</h3>
       </Link>

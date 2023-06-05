@@ -34,6 +34,7 @@ Cypress.Commands.add("signIn", (email, password) => {
     },
     {
       validate() {
+        cy.wait(50);
         cy.visit("/user");
 
         cy.contains("dd", email).should("be.visible");
@@ -55,6 +56,7 @@ Cypress.Commands.add("signUp", (email, password) => {
     },
     {
       validate() {
+        cy.wait(50);
         cy.visit("/user");
 
         cy.contains("dd", email).should("be.visible");

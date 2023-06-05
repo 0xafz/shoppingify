@@ -30,3 +30,14 @@ export const itemCategories = [
 export const loginCookieName = "__Secure__User-Fgp";
 
 export const rightSideDrawer = 'aside[data-cy="right-side-drawer"]';
+
+export const createShoppingList = '[data-cy="CreateShoppingList"]';
+
+export const shoppingItem = '[data-cy="shopping-item"]';
+
+export const shoppingItemAddButton =
+  'button[data-cy="add-shopping-item-tolist"]';
+
+export const saveListNameForm = 'form[data-cy="SaveListNameForm"]';
+
+export const completListCTA = '[data-cy="complete-cta"]';
