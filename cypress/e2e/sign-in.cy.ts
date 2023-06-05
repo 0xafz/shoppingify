@@ -3,6 +3,10 @@ import { submitSignInForm } from "../utils/auth";
 
 const User2 = Users.user2;
 
+before(() => {
+  cy.task("deleteUserByEmail", User2.email);
+});
+
 describe("Sign in", () => {
   it("should fail sign in for non registered users", () => {
     cy.visit("/user/sign-in");

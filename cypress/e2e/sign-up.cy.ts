@@ -1,11 +1,11 @@
 import { Users } from "../support/constants";
-import {
-  clickAndConfirmDeleteAccount,
-  submitSignInForm,
-  submitSignUpForm,
-} from "../utils/auth";
+import { clickAndConfirmDeleteAccount, submitSignInForm } from "../utils/auth";
 
 const User1 = Users.user1;
+
+before(() => {
+  cy.task("deleteUserByEmail", User1.email);
+});
 
 describe(
   "Sign up page",
@@ -20,9 +20,9 @@ describe(
       it("should allow users signup", () => {
         cy.visit("/");
 
-        cy.visit("/user/sign-up");
+        cy.signUp(User1.email, User1.password);
 
-        submitSignUpForm(User1.email, User1.password);
+        cy.visit("/");
 
         cy.contains(
           "h1",
@@ -35,9 +35,7 @@ describe(
       it("should allow users to delete their account", () => {
         cy.visit("/");
 
-        cy.visit("/user/sign-in");
-
-        submitSignInForm(User1.email, User1.password);
+        cy.signIn(User1.email, User1.password);
 
         cy.visit("/user");
 
@@ -48,6 +46,8 @@ describe(
         submitSignInForm(User1.email, User1.password);
 
         cy.contains("h1", "Sign In").should("be.visible");
+
+        cy.visit("/user").contains("a", "login");
       });
     });
 
@@ -59,7 +59,13 @@ describe(
       it("should allow users signup", () => {
         cy.visit("/user/sign-up");
 
-        submitSignUpForm(User1.email, User1.password);
+        cy.signUp(User1.email, User1.password);
+
+        cy.visit("/");
+        cy.contains(
+          "h1",
+          "Shoppingify allows you take your shopping list wherever you go"
+        ).should("not.be.visible");
 
         cy.get('input[placeholder="search item"]').should("be.visible");
       });
@@ -67,7 +73,7 @@ describe(
       it("should allow users to delete their account", () => {
         cy.visit("/user/sign-in");
 
-        submitSignInForm(User1.email, User1.password);
+        cy.signIn(User1.email, User1.password);
 
         cy.visit("/user");
 
@@ -78,6 +84,8 @@ describe(
         submitSignInForm(User1.email, User1.password);
 
         cy.contains("h1", "Sign In").should("be.visible");
+
+        cy.visit("/user").contains("a", "login");
       });
     });
   }
