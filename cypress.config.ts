@@ -13,29 +13,44 @@ export default defineConfig({
         async deleteUserByEmail(email: string) {
           try {
             console.log(`info: Deleting User with email: ${email}`);
-            await prisma.user.delete({
+            const user = await prisma.user.findFirst({
               where: {
                 email,
               },
             });
+            await prisma.user.delete({
+              where: {
+                id: user.id,
+              },
+            });
+            await prisma.shoppingItemToList.deleteMany({
+              where: {
+                assignedBy: user.id,
+              },
+            });
+            console.log(
+              `info: Deleted User with email: ${email} and their data.`
+            );
+            return true;
           } catch (error) {
             console.error(
               `error: Something went wrong while deleting User with email: ${email}`
             );
+            return false;
           }
         },
-      }),
-        on("after:spec", async () => {
-          try {
-            console.log("info: Wiping User data...");
-            await prisma.user.deleteMany();
-            console.log("info: Wiped User data successfully.");
-          } catch (error) {
-            console.error(
-              "error: Something went wrong while wiping User data."
-            );
-          }
-        });
+      });
+      // on("after:spec", async () => {
+      //   try {
+      //     console.log("info: Wiping User data...");
+      //     await prisma.user.deleteMany();
+      //     console.log("info: Wiped User data successfully.");
+      //   } catch (error) {
+      //     console.error(
+      //       "error: Something went wrong while wiping User data."
+      //     );
+      //   }
+      // });
     },
   },
 });
