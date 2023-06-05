@@ -18,3 +18,5 @@ export const Users = {
     email: "sdf1770@test.com",
   },
 };
+
+export const loginCookieName = "__Secure__User-Fgp";

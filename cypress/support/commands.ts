@@ -9,8 +9,7 @@
 // ***********************************************
 //
 import { submitSignInForm, submitSignUpForm } from "../utils/auth";
-import { ScreenSizeToCypressPreset } from "./constants";
-import { loginCookieName } from "~/constants";
+import { ScreenSizeToCypressPreset, loginCookieName } from "./constants";
 
 Cypress.Commands.add("resetAuth", () => {
   cy.clearAllCookies();
@@ -24,14 +23,17 @@ Cypress.Commands.add("clickLink", (label) => {
 
 Cypress.Commands.add("signIn", (email, password) => {
   cy.session(
-    [email, password],
+    ["SignIn", email, password],
     () => {
       cy.visit("/user/sign-in");
       submitSignInForm(email, password);
     },
     {
       validate() {
-        // TODO: Since we don't have any visual indicator for successful login, we use below (which is bad imo)
+        cy.visit("/user");
+
+        cy.contains("dd", email).should("be.visible");
+
         cy.getCookie(loginCookieName).should("exist");
       },
       cacheAcrossSpecs: true,
@@ -41,7 +43,7 @@ Cypress.Commands.add("signIn", (email, password) => {
 
 Cypress.Commands.add("signUp", (email, password) => {
   cy.session(
-    [email, password],
+    ["SignUp", email, password],
     () => {
       cy.visit("/user/sign-up");
 
@@ -49,10 +51,12 @@ Cypress.Commands.add("signUp", (email, password) => {
     },
     {
       validate() {
-        // TODO: Since we don't have any great visual indicator for successful sign up, we use below (which is bad imo)
+        cy.visit("/user");
+
+        cy.contains("dd", email).should("be.visible");
+
         cy.getCookie(loginCookieName).should("exist");
       },
-      cacheAcrossSpecs: true,
     }
   );
 });
