@@ -41,7 +41,8 @@ export default defineConfig({
             return true;
           } catch (error) {
             console.error(
-              `error: Something went wrong while deleting User with email: ${email}`
+              `error: Something went wrong while deleting User with email: ${email}`,
+              error
             );
             return false;
           }
