@@ -176,6 +176,8 @@ describe("Shopping List", () => {
 
         cy.get("@adjustQty").click();
 
+        cy.wait(10);
+
         cy.get(rightSideDrawer)
           .contains("li", item.name)
           .find('button[aria-label="increase item quantity by 1"]')
@@ -202,6 +204,14 @@ describe("Shopping List", () => {
         .should("be.visible")
         .contains("button", "Complete")
         .click();
+
+      cy.get(rightSideDrawer).get(saveListNameForm).should("be.visible");
+
+      cy.get("main")
+        .get(historyListItem)
+        .contains(historyListItem, shoppingList1.name)
+        .and("contain.text", "completed")
+        .should("be.visible");
     });
   });
 });
