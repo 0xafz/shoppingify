@@ -28,7 +28,7 @@ export default async function handle(
         {
           const loggedUser = checkAuth(req);
 
-          const lists = await prisma.shoppingList.findMany({
+          const lists = await prisma.shoppinglist.findMany({
             where: {
               userId: loggedUser.id,
               status: "completed",

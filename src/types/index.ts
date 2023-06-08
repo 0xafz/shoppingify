@@ -1,13 +1,13 @@
-import { User } from "@prisma/client";
+import { user } from "@prisma/client";
 
 export type DecodedUser = {
   id: number;
   [x: string]: any;
 };
 
-export type CreateUserInput = Omit<User, "createdAt" | "updatedAt" | "id">;
+export type CreateUserInput = Omit<user, "createdAt" | "updatedAt" | "id">;
 
-export type IUser = Omit<User, "password" | "createdAt" | "updatedAt"> & {
+export type IUser = Omit<user, "password" | "createdAt" | "updatedAt"> & {
   createdAt: string;
 };
 export type CreateListInput = {
