@@ -26,7 +26,7 @@ model shoppingitem {
   createdAt          DateTime
   userId             Int
   user               user                 @relation(fields: [userId], references: [id], onDelete: Cascade, map: "ShoppingItem_userId_fkey")
-  shoppingitemtolist shoppingitemtolist[]
+  shoppingLists shoppingitemtolist[]
 
   @@index([userId], map: "ShoppingItem_userId_fkey")
 }
@@ -54,7 +54,7 @@ model shoppinglist {
   createdAt          DateTime
   updatedAt          DateTime
   userId             Int
-  shoppingitemtolist shoppingitemtolist[]
+  shoppingItems      shoppingitemtolist[]
   user               user                 @relation(fields: [userId], references: [id], onDelete: Cascade, map: "ShoppingList_userId_fkey")
 
   @@index([userId], map: "ShoppingList_userId_fkey")
@@ -69,6 +69,6 @@ model user {
   updatedAt    DateTime?
   createdAt    DateTime
   session      session?
-  shoppingitem shoppingitem[]
-  shoppinglist shoppinglist[]
+  shoppingItems shoppingitem[]
+  shoppingLists shoppinglist[]
 }
