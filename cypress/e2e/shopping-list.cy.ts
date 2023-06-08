@@ -171,16 +171,25 @@ describe("Shopping List", () => {
       shoppinItems.slice(0, 2).forEach((item) => {
         cy.get(rightSideDrawer)
           .contains("li", item.name)
-          .get('button[aria-label="adjust quantity of this item"]')
-          .click();
+          .find('button[aria-label="adjust quantity of this item"]')
+          .as("adjustQty");
+
+        cy.get("@adjustQty").click();
+
         cy.get(rightSideDrawer)
           .contains("li", item.name)
-          .get('button[aria-label="increase item quantity by 1"]')
-          .click();
+          .find('button[aria-label="increase item quantity by 1"]')
+          .as("increaseBtn")
+          .debug();
+
+        cy.get("@increaseBtn").debug().click();
+
         cy.get(rightSideDrawer)
           .contains("li", item.name)
-          .get('input[aria-label="mark item as done"]')
-          .check();
+          .find('input[aria-label="mark item as done"]')
+          .as("markAsDone");
+
+        cy.get("@markAsDone").check();
       });
 
       cy.get(rightSideDrawer)

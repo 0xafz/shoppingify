@@ -5,6 +5,7 @@ const User2 = Users.user2;
 const ShoppingItem1 = {
   name: "Test item 1",
   note: "Test item 1 note",
+  categorySearchString: "Fruits",
 };
 
 before(() => {
@@ -24,6 +25,8 @@ describe("Shopping Item", () => {
       cy.signIn(User2.email, User2.password);
 
       cy.createShoppingItemAfterAuth(ShoppingItem1);
+
+      cy.get(rightSideDrawer).should("contain", "Item created!");
 
       cy.get("main").should("contain", ShoppingItem1.name);
 

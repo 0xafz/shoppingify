@@ -85,7 +85,7 @@ describe(
 
         cy.visit("/user");
 
-        cy.get("a[data-cy=logout]").click();
+        cy.get("button[data-cy=logout]").click();
 
         cy.contains("h1", "Sign In");
       });
