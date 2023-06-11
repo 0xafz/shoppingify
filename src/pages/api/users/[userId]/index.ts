@@ -38,17 +38,9 @@ export default async function handle(
         break;
       case "DELETE":
         {
-          const userId_ = Number(userId);
-          // NOTE: Users records in List-Item relation table must be cleared before deleting user otherwise it
-          // shows foreign key violation errors
-          await prisma.shoppingitemtolist.deleteMany({
-            where: {
-              assignedBy: userId_,
-            },
-          });
           await prisma.user.delete({
             where: {
-              id: userId_,
+              id: Number(userId),
             },
           });
           res.status(200).json({

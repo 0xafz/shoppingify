@@ -16,7 +16,7 @@ export default async function handle(
       case "GET":
         {
           const { cursor, limit = 10 } = req.query;
-          const items = await prisma.shoppingitem.findMany({
+          const items = await prisma.shoppingItem.findMany({
             where: {
               userId: loggedUser.id,
             },
@@ -46,7 +46,7 @@ export default async function handle(
           const { name, note, imageUrl, category } = req.body;
 
           if (!category || !name) throw new ClientError("missing/empty fields");
-          const existingItem = await prisma.shoppingitem.findFirst({
+          const existingItem = await prisma.shoppingItem.findFirst({
             where: {
               userId: loggedUser.id,
               name: name,
@@ -54,7 +54,7 @@ export default async function handle(
           });
           if (existingItem) throw new ClientError("item already exists");
 
-          const newItem = await prisma.shoppingitem.create({
+          const newItem = await prisma.shoppingItem.create({
             data: {
               name,
               note,

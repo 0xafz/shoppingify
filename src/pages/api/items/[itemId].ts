@@ -17,7 +17,7 @@ export default async function handle(
     switch (method) {
       case "GET":
         {
-          const item = await prisma.shoppingitem.findFirst({
+          const item = await prisma.shoppingItem.findFirst({
             where: {
               id: Number(itemId),
             },
@@ -29,13 +29,13 @@ export default async function handle(
       case "PATCH":
         {
           const { note, imageUrl, name, category } = req.body;
-          const item = await prisma.shoppingitem.findFirst({
+          const item = await prisma.shoppingItem.findFirst({
             where: {
               id: Number(itemId),
             },
           });
           if (!item) throw new ClientError("item not found");
-          const updatedItem = await prisma.shoppingitem.update({
+          const updatedItem = await prisma.shoppingItem.update({
             where: {
               id: Number(itemId),
             },
@@ -51,7 +51,7 @@ export default async function handle(
         break;
       case "DELETE":
         {
-          await prisma.shoppingitem.delete({
+          await prisma.shoppingItem.delete({
             where: {
               id: Number(itemId),
             },
