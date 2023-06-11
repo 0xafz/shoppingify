@@ -2,7 +2,7 @@ import { produce } from "immer";
 import cfetch from "~/lib/cfetch";
 import { Action, IShoppingItem } from "~/types";
 import { groupBy } from "~/utils/client";
-import { StoreSlice } from ".";
+import { StateCreator } from "zustand";
 
 export type shoppingItemActions =
   | Action<"item:add", IShoppingItem>
@@ -45,7 +45,7 @@ export type ShoppingItemSlice = {
   dispatchItem: (args: shoppingItemActions) => void;
   fetchShoppingItems: () => void;
 };
-export const createShoppingItemSlice: StoreSlice<ShoppingItemSlice> = (
+export const createShoppingItemSlice: StateCreator<ShoppingItemSlice> = (
   set,
   get
 ) => ({

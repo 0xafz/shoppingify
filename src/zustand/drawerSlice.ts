@@ -1,6 +1,6 @@
 import { Action, IShoppingItem } from "~/types";
-import { StoreSlice } from ".";
 import { produce } from "immer";
+import { StateCreator } from "zustand";
 
 export type DrawerActions =
   | Action<"drawer:set", "create-list" | "item-info" | "create-item">
@@ -35,7 +35,7 @@ const drawerReducer = (state: DrawerSlice, action: DrawerActions) => {
       break;
   }
 };
-export const createDrawerSlice: StoreSlice<DrawerSlice> = (set, get) => ({
+export const createDrawerSlice: StateCreator<DrawerSlice> = (set) => ({
   rightSideDrawerType: "create-list",
   showRightSideDrawer: false,
   itemInDrawer: null,
