@@ -38,9 +38,15 @@ export default async function handle(
         break;
       case "DELETE":
         {
+          const _userId = Number(userId);
+          await prisma.shoppingItemToList.deleteMany({
+            where: {
+              assignedBy: _userId,
+            },
+          });
           await prisma.user.delete({
             where: {
-              id: Number(userId),
+              id: _userId,
             },
           });
           res.status(200).json({

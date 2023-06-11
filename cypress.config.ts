@@ -25,14 +25,14 @@ export default defineConfig({
               console.log(`info: User with email: ${email} does not exists!`);
               return false;
             }
-            await prisma.user.delete({
-              where: {
-                id: user.id,
-              },
-            });
             await prisma.shoppingItemToList.deleteMany({
               where: {
                 assignedBy: user.id,
+              },
+            });
+            await prisma.user.delete({
+              where: {
+                id: user.id,
               },
             });
             console.log(
@@ -41,7 +41,8 @@ export default defineConfig({
             return true;
           } catch (error) {
             console.error(
-              `error: Something went wrong while deleting User with email: ${email}`
+              `error: Something went wrong while deleting User with email: ${email}`,
+              error
             );
             return false;
           }
