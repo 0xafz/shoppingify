@@ -1,8 +1,8 @@
 import cfetch from "~/lib/cfetch";
 import { Action, IShoppingList, ItemInList } from "~/types";
-import { StoreSlice } from ".";
 import { produce } from "immer";
 import { getGroupByKeyString, groupBy, groupByTime } from "~/utils/client";
+import { StateCreator } from "zustand";
 
 type ItemWithIdCat = {
   shoppingItemId: number;
@@ -198,7 +198,7 @@ export type ShoppingListSlice = {
   fetchShoppingLists: () => Promise<void>;
   setLatestIncompleteList: () => Promise<void>;
 };
-export const createShoppingListSlice: StoreSlice<ShoppingListSlice> = (
+export const createShoppingListSlice: StateCreator<ShoppingListSlice> = (
   set,
   get
 ) => ({

@@ -1,6 +1,6 @@
 import cfetch from "~/lib/cfetch";
 import { IUser } from "~/types";
-import { StoreSlice } from ".";
+import { StateCreator } from "zustand";
 
 export type UserSlice = {
   user: IUser;
@@ -10,10 +10,9 @@ export type UserSlice = {
     byItem: { quantity: number; itemName: string }[];
   };
   setUser: (user: IUser) => void;
-  clearStore: () => void;
   fetchStats: () => Promise<void>;
 };
-export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
+export const createUserSlice: StateCreator<UserSlice> = (set, get) => ({
   user: null,
   stats: {
     byCategory: [],
@@ -21,25 +20,6 @@ export const createUserSlice: StoreSlice<UserSlice> = (set, get) => ({
     byMonth: [],
   },
   setUser: (user) => set({ user }),
-  clearStore: () =>
-    set({
-      currList: {
-        name: "New Shopping List",
-        status: "un-saved",
-      },
-      currListItems: {},
-      crossedItems: [],
-      itemsGrouped: {},
-      itemsUngrouped: [],
-      listsUngrouped: [],
-      listsGrouped: {},
-      user: null,
-      stats: {
-        byCategory: [],
-        byItem: [],
-        byMonth: [],
-      },
-    }),
   fetchStats: async () => {
     const user = get().user;
     if (!user) return;

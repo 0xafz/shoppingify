@@ -1,4 +1,4 @@
-import create, { GetState, SetState } from "zustand";
+import { create } from "zustand";
 import { DrawerSlice, createDrawerSlice } from "./drawerSlice";
 import {
   ShoppingItemSlice,
@@ -10,19 +10,39 @@ import {
 } from "./shoppingListSlice";
 import { createUserSlice, UserSlice } from "./userSlice";
 
+type RootSlice = {
+  clearStore: () => void;
+};
+
 export type StoreState = UserSlice &
   ShoppingListSlice &
   ShoppingItemSlice &
-  DrawerSlice;
+  DrawerSlice &
+  RootSlice;
 
-export type StoreSlice<T> = (
-  set: SetState<StoreState>,
-  get: GetState<StoreState>
-) => T;
-
-export const useStore = create<StoreState>((set, get) => ({
-  ...createUserSlice(set, get),
-  ...createShoppingListSlice(set, get),
-  ...createShoppingItemSlice(set, get),
-  ...createDrawerSlice(set, get),
+export const useStore = create<StoreState>()((setState, ...a) => ({
+  ...createUserSlice(setState, ...a),
+  ...createShoppingListSlice(setState, ...a),
+  ...createShoppingItemSlice(setState, ...a),
+  ...createDrawerSlice(setState, ...a),
+  clearStore() {
+    setState({
+      currList: {
+        name: "New Shopping List",
+        status: "un-saved",
+      },
+      currListItems: {},
+      crossedItems: [],
+      itemsGrouped: {},
+      itemsUngrouped: [],
+      listsUngrouped: [],
+      listsGrouped: {},
+      user: null,
+      stats: {
+        byCategory: [],
+        byItem: [],
+        byMonth: [],
+      },
+    });
+  },
 }));
