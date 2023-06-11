@@ -75,7 +75,10 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
   };
   const showDeletePopover = Boolean(deletePopoverAnchorEl);
   return (
-    <div className={`s-list ${deleteLoading ? "disabled" : ""}`}>
+    <div
+      className={`s-list ${deleteLoading ? "disabled" : ""}`}
+      data-cy="shoppingList"
+    >
       <Link href={`/history/list/${id}`} passHref legacyBehavior>
         <h3>{name}</h3>
       </Link>
@@ -90,7 +93,7 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
         <div className={`sm__status`} title={`${name} status: ${status}`}>
           {getStatusIcon(status)}
         </div>
-        <IconButton onClick={handleDeleteClick}>
+        <IconButton onClick={handleDeleteClick} data-cy="delete-shopping-list">
           <DeleteOutlineIcon fontSize={"2.5rem"} />
         </IconButton>
       </div>
@@ -102,6 +105,7 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
           vertical: "bottom",
           horizontal: "left",
         }}
+        data-cy="list-delete-popover"
       >
         <div className="popover-content">
           <strong>Confirm</strong>
@@ -131,7 +135,6 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
           transition: box-shadow 0.3s ease;
           border-radius: 1.2rem;
           box-shadow: var(--elevation3);
-          cursor: pointer;
           padding: 2rem;
           font-size: 1rem;
         }
@@ -170,6 +173,7 @@ const ShoppingList = ({ name, createdAt, status, id }: IShoppingList) => {
           max-width: 50%;
           word-break: break-all;
           text-decoration: underline;
+          cursor: pointer;
         }
         .lg__status {
           padding: 0.5em;

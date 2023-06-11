@@ -133,6 +133,7 @@ const SignUp: React.FC<SignUpProps> = ({}) => {
               {formError && <p className="error">{formError}</p>}
               <div className="form__cta">
                 <CButton
+                  data-cy="submit"
                   type="submit"
                   variant="contained"
                   sx={{

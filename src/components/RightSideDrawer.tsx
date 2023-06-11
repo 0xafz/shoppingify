@@ -11,6 +11,7 @@ const RightSideDrawer: React.FC<RightSideDrawerProps> = ({}) => {
   const itemInDrawer = useStore((state) => state.itemInDrawer);
   return (
     <aside
+      data-cy="right-side-drawer"
       className="right-side-drawer"
       id="right-side-drawer"
       tabIndex={-1}

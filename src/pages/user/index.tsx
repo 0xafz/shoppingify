@@ -74,6 +74,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
       </div>
       <div>
         <CButton
+          data-cy="logout"
           onClick={handleLogout}
           variant="contained"
           disabled={logoutLoading}
@@ -83,6 +84,7 @@ const UserInfo = ({ user }: { user: IUser }) => {
       </div>
 
       <RedButton
+        data-cy="deleteMyAccount"
         onClick={() => setShowConfirm(true)}
         sx={{ mt: "4rem" }}
         variant="contained"

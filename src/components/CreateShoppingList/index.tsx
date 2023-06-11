@@ -5,7 +5,7 @@ interface CreateShoppingListProps {}
 
 const CreateShoppingList: React.FC<CreateShoppingListProps> = ({}) => {
   return (
-    <div className="wrapper">
+    <div className="wrapper" data-cy="CreateShoppingList">
       <div className="top">
         <AddItemBanner />
       </div>

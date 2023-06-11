@@ -9,6 +9,7 @@ const Cart: React.FC<CartProps> = () => {
   return (
     <>
       <button
+        data-cy="toggle-drawer"
         title="cart"
         className="cart"
         onClick={() => dispatchDrawer({ type: "drawer:toggle" })}

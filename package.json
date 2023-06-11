@@ -20,7 +20,9 @@
     "p:mig": "prisma migrate",
     "p:db": "prisma db",
     "p:validate": "prisma validate",
-    "p:format": "prisma format"
+    "p:format": "prisma format",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -39,11 +41,12 @@
   },
   "devDependencies": {
     "@types/cookie": "0.5.1",
-    "@types/jest": "27.4.1",
+    "@types/jest": "27.5.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/node": "16.11.35",
     "@types/react": "^18.2.7",
     "babel-jest": "27.5.1",
+    "cypress": "^12.13.0",
     "eslint": "8.15.0",
     "eslint-config-next": "^13.4.3",
     "eslint-config-prettier": "^8.8.0",

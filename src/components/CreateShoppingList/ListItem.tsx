@@ -66,7 +66,7 @@ const ShoppingListItem = ({
           checked={itemPurchased}
           size={"medium"}
           onChange={toggleItemPurchase}
-          inputProps={{ "aria-label": "check shopping item" }}
+          inputProps={{ "aria-label": "mark item as done" }}
         />
       ) : null}
       <span>{itemName}</span>
@@ -77,6 +77,7 @@ const ShoppingListItem = ({
               className="delete flex-center"
               title="delete item"
               onClick={handleDelete}
+              aria-label="delete-item"
             >
               <DeleteOutlineIcon aria-hidden="true" />
             </button>
@@ -84,6 +85,7 @@ const ShoppingListItem = ({
               className="minus"
               title="decrease item count"
               onClick={() => handlePlusMinus(-1)}
+              aria-label="decrease item quantity by 1"
             >
               -
             </button>
@@ -93,6 +95,7 @@ const ShoppingListItem = ({
           className="display"
           title="quantity"
           onClick={() => setShowOptions((prev) => !prev)}
+          aria-label="adjust quantity of this item"
         >
           <strong>{quantity} pcs</strong>
         </button>
@@ -101,6 +104,7 @@ const ShoppingListItem = ({
             className="plus"
             title="increase item count"
             onClick={() => handlePlusMinus(+1)}
+            aria-label="increase item quantity by 1"
           >
             +
           </button>

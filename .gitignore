@@ -10,4 +10,8 @@ yarn-error.log
 *.db
 *.db-journal
 
+cypress/videos/*
+cypress/screenshots/*
+cypress/downloads/*
+
 tsconfig.tsbuildinfo

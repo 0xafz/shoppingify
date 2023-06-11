@@ -15,7 +15,7 @@ interface ListInfoGroupProps {
 }
 const ListInfoGroup = ({ items, groupName }: ListInfoGroupProps) => {
   return (
-    <div className="wrapper">
+    <div className="wrapper" data-cy="ListInfoGroup">
       <h2>{groupName}</h2>
       <ul>
         {items.map((item) => (
