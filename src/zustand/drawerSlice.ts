@@ -1,6 +1,6 @@
 import { Action, IShoppingItem } from "~/types";
 import { StoreSlice } from ".";
-import produce from "immer";
+import { produce } from "immer";
 
 export type DrawerActions =
   | Action<"drawer:set", "create-list" | "item-info" | "create-item">
