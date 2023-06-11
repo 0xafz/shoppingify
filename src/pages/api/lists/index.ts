@@ -16,7 +16,7 @@ export default async function handle(
       case "GET":
         {
           const { cursor, limit = 10 } = req.query;
-          const lists = await prisma.shoppingList.findMany({
+          const lists = await prisma.shoppinglist.findMany({
             where: {
               userId: loggedUser.id,
             },
@@ -64,7 +64,7 @@ export default async function handle(
               itemCategory,
               itemName,
               itemPurchased: false,
-              shoppingItem: {
+              shoppingitem: {
                 connect: {
                   id: shoppingItemId,
                 },
@@ -72,7 +72,7 @@ export default async function handle(
             })
           );
 
-          const newList = await prisma.shoppingList.create({
+          const newList = await prisma.shoppinglist.create({
             data: {
               name,
               status,
@@ -80,6 +80,7 @@ export default async function handle(
                 create: itemIds,
               },
               createdAt: assignedAt,
+              updatedAt: assignedAt,
               user: {
                 // connect shoppingList user
                 connect: {
