@@ -37,7 +37,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.29.0",
     "recharts": "^2.1.9",
-    "zustand": "^3.7.2"
+    "zustand": "^4.0.0"
   },
   "devDependencies": {
     "@types/cookie": "0.5.1",
