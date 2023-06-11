@@ -1,13 +1,15 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
   shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
+  // Initial I have used Planetscale which does not support foreign keys 
+  // check for more info: https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode
+  // I can still switch to `foreignKeys` mode, but don't know how to resolve migration issues(full db reset)
+  relationMode = "prisma"
 }
 
 model User {
@@ -40,6 +42,8 @@ model ShoppingList {
   user          User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
   shoppingItems ShoppingItemToList[]
+
+  @@index([userId])
 }
 
 model ShoppingItem {
@@ -52,6 +56,8 @@ model ShoppingItem {
   user          User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
   shoppingLists ShoppingItemToList[]
+
+  @@index([userId])
 }
 
 model ShoppingItemToList {
@@ -67,4 +73,7 @@ model ShoppingItemToList {
   itemPurchased  Boolean
 
   @@id([shoppingListId, shoppingItemId])
+  @@index([assignedBy])
+  @@index([shoppingListId])
+  @@index([shoppingItemId])
 }
