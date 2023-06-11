@@ -1,4 +1,4 @@
-import produce from "immer";
+import { produce } from "immer";
 import cfetch from "~/lib/cfetch";
 import { Action, IShoppingItem } from "~/types";
 import { groupBy } from "~/utils/client";
