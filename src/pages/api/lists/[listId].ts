@@ -19,7 +19,7 @@ export default async function handle(
     switch (method) {
       case "GET":
         {
-          const list = await prisma.shoppinglist.findFirst({
+          const list = await prisma.shoppingList.findFirst({
             where: {
               id: listId,
             },
@@ -34,7 +34,7 @@ export default async function handle(
       case "PATCH":
         {
           const { status, name, items: rawItems } = req.body;
-          const list = await prisma.shoppinglist.findFirst({
+          const list = await prisma.shoppingList.findFirst({
             where: {
               id: listId,
             },
@@ -58,7 +58,7 @@ export default async function handle(
                 ...updates,
                 assignedAt,
                 assignedBy: loggedUser.id,
-                shoppingitem: {
+                shoppingItem: {
                   connect: {
                     id: shoppingItemId,
                   },
@@ -66,7 +66,7 @@ export default async function handle(
               },
             }));
           }
-          const updatedList = await prisma.shoppinglist.update({
+          const updatedList = await prisma.shoppingList.update({
             where: {
               id: listId,
             },
@@ -87,16 +87,14 @@ export default async function handle(
         {
           // when list gets deleted, remove all related records from
           // ShoppingItemToList (junction table)
-          await prisma.shoppingitemtolist.deleteMany({
+          await prisma.shoppingItemToList.deleteMany({
             where: {
               shoppingListId: listId,
-              // TODO: include UserId here, (use assignedBy)
             },
           });
-          await prisma.shoppinglist.delete({
+          await prisma.shoppingList.delete({
             where: {
               id: listId,
-              // TODO: include UserId here
             },
           });
           res.status(200).json({

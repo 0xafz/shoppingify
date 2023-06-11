@@ -1,38 +1,63 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  relationMode      = "foreignKeys"
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
-model session {
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String
+  avatar        String
+  password      String
+  updatedAt     DateTime?      @updatedAt
+  createdAt     DateTime
+  session       Session?
+  shoppingLists ShoppingList[]
+  shoppingItems ShoppingItem[]
+}
+
+model Session {
   id                    Int     @id @default(autoincrement())
-  userId                Int     @unique(map: "Session_userId_key")
+  userId                Int     @unique
   refreshToken          String
   refreshTokenExpiresAt String?
-  user                  user    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Session_userId_fkey")
+  user                  User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model shoppingitem {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  note               String?
-  imageUrl           String?
-  category           String
-  createdAt          DateTime
-  userId             Int
-  user               user                 @relation(fields: [userId], references: [id], onDelete: Cascade, map: "ShoppingItem_userId_fkey")
-  shoppingLists shoppingitemtolist[]
-
-  @@index([userId], map: "ShoppingItem_userId_fkey")
+model ShoppingList {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  status        String
+  createdAt     DateTime
+  updatedAt     DateTime             @updatedAt
+  user          User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  shoppingItems ShoppingItemToList[]
 }
 
-model shoppingitemtolist {
+model ShoppingItem {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  note          String?
+  imageUrl      String?
+  category      String
+  createdAt     DateTime
+  user          User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  shoppingLists ShoppingItemToList[]
+}
+
+model ShoppingItemToList {
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   shoppingItemId Int
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   shoppingListId Int
   quantity       Int
   itemName       String
@@ -40,35 +65,6 @@ model shoppingitemtolist {
   assignedBy     Int
   assignedAt     DateTime
   itemPurchased  Boolean
-  shoppingitem   shoppingitem @relation(fields: [shoppingItemId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ShoppingItemToList_shoppingItemId_fkey")
-  shoppinglist   shoppinglist @relation(fields: [shoppingListId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ShoppingItemToList_shoppingListId_fkey")
 
   @@id([shoppingListId, shoppingItemId])
-  @@index([shoppingItemId], map: "ShoppingItemToList_shoppingItemId_fkey")
-}
-
-model shoppinglist {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  status             String
-  createdAt          DateTime
-  updatedAt          DateTime
-  userId             Int
-  shoppingItems      shoppingitemtolist[]
-  user               user                 @relation(fields: [userId], references: [id], onDelete: Cascade, map: "ShoppingList_userId_fkey")
-
-  @@index([userId], map: "ShoppingList_userId_fkey")
-}
-
-model user {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique(map: "User_email_key")
-  name         String
-  avatar       String
-  password     String
-  updatedAt    DateTime?
-  createdAt    DateTime
-  session      session?
-  shoppingItems shoppingitem[]
-  shoppingLists shoppinglist[]
 }
