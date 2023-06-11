@@ -4,12 +4,15 @@ Shopping list management with purchase stats.
 
 ## TODO
 
-- handle token expiry
-- handle tab synchronisation
-- show confirm access for sensitive info change
-- add product home page
-- make app more interactive
-- provide functionality to pick/fork from existing lists
+- [x] Add E2E testing
+- [x] Upgrade to Next.js v13
+- [x] Upgrade to Prisma v4
+- [ ] handle token expiry
+- [ ] handle tab synchronisation
+- [ ] show confirm access for sensitive info change
+- [ ] add product home page
+- [ ] make app more interactive
+- [ ] provide functionality to pick/fork from existing lists
 
 ## Tech stack
 
