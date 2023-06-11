@@ -25,6 +25,8 @@ export default defineConfig({
               console.log(`info: User with email: ${email} does not exists!`);
               return false;
             }
+            // NOTE: Users records in List-Item relation table must be cleared before deleting user otherwise it
+            // shows foreign key vialotion errors
             await prisma.shoppingitemtolist.deleteMany({
               where: {
                 assignedBy: user.id,
