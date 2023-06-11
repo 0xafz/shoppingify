@@ -56,39 +56,29 @@ test("timeLine", () => {
       date: new Date("Aug 03,20"),
     },
   ];
-  expect(groupByTime(arr2, "date", "month")).toEqual([
-    [
-      "August 2020",
-      [
-        {
-          cat: "Non veg",
-          name: "Chicken",
-          date: new Date("Aug 03,20"),
-        },
-      ],
+  expect(groupByTime(arr2, "date", "month")).toEqual({
+    "August 2020": [
+      {
+        cat: "Non veg",
+        name: "Chicken",
+        date: new Date("Aug 03,20"),
+      },
     ],
-
-    [
-      "March 2020",
-      [
-        {
-          cat: "Veg",
-          name: "brinjal",
-          date: new Date("Mar 03,20"),
-        },
-      ],
+    "March 2020": [
+      {
+        cat: "Veg",
+        name: "brinjal",
+        date: new Date("Mar 03,20"),
+      },
     ],
-    [
-      "January 2020",
-      [
-        {
-          cat: "Fruits",
-          name: "Tomato",
-          date: new Date("Jan 03,20"),
-        },
-      ],
+    "January 2020": [
+      {
+        cat: "Fruits",
+        name: "Tomato",
+        date: new Date("Jan 03,20"),
+      },
     ],
-  ]);
+  });
 });
 
 test("unGroup", () => {
