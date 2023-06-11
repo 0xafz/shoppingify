@@ -1,7 +1,7 @@
 import cfetch from "~/lib/cfetch";
 import { Action, IShoppingList, ItemInList } from "~/types";
 import { StoreSlice } from ".";
-import produce from "immer";
+import { produce } from "immer";
 import { getGroupByKeyString, groupBy, groupByTime } from "~/utils/client";
 
 type ItemWithIdCat = {
