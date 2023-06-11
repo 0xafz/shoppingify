@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/cookie": "0.5.1",
-    "@types/jest": "27.5.1",
+    "@types/jest": "27.5.2",
     "@types/jsonwebtoken": "9.0.2",
     "@types/node": "16.11.35",
     "@types/react": "^18.2.7",
