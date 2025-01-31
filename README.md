@@ -4,11 +4,23 @@ Shopping list management with purchase stats.
 
 ## How to run this program?
 
-### Cloud/DevContainers (**Recommended**)
-[![Edit af4oz/shoppingify/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/shoppingify/main?embed=1)
+### Codesandbox Setup
+
+- **Step 1:**
+
+  [![Edit af4oz/shoppingify/main](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/github/af4oz/shoppingify/main?embed=1)
+
+  Wait for VM bootup process....
+
+- **Step 2:** Create a local branch on your codesandbox account.
+
+- **Step 3:**  
+  Run `yarn dev`
 
 ### Local Setup
+
 #### Requirements
+
 1. Node.js v16.15.0 or higher for Next.js v13. (Prisma need Node.js v14.17.0 or higher)
 2. For **styled-jsx**: Install VScode [ extension ](https://github.com/vercel/styled-jsx#syntax-highlighting-visual-studio-code-extension)
 3. Add relevant `.env` variables using `.env.example` template
@@ -28,7 +40,7 @@ yarn build
 
 # Start development server
 yarn dev
-````
+```
 
 ## TODO
 
@@ -56,7 +68,6 @@ yarn dev
 - Typescript
 - ts-node (run ts files)
 - zustand (state management , first time user)
-
 
 ## Credits
 

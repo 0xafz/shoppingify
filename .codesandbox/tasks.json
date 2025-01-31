@@ -2,28 +2,33 @@
   // These tasks will run in order when initializing your CodeSandbox project.
   "setupTasks": [
     {
-      "name": "Install Dependencies",
-      "command": "yarn install"
+      "command": "yarn install",
+      "name": "Install Dependencies"
     },
     {
-      "name": "Setup Prisma",
-      "command": "yarn p:gen && yarn p:mig dev"
+      "command": "yarn p:gen && yarn p:mig dev",
+      "name": "Setup Prisma"
     },
     {
-      "name": "Build App",
-      "command": "yarn build"
+      "command": "yarn build",
+      "name": "Build App"
     }
   ],
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "yarn start:dev": {
-      "name": "Start Development server",
-      "command": "yarn dev",
-      "runAtStart": true,
-      "preview": {
-        "port": 3000
-      }
-    }
+    // NOTE: Below not working, something's broken from CodeSandbox side,
+    // Problem: It doesn't connect to db server properly 
+    // "yarn start:dev": {
+    //   "name": "Start Development server",
+    //   "command": "yarn dev",
+    //   "runAtStart": false,
+    //   "preview": {
+    //     "port": 3000
+    //   }
+    //   // "restartOn": {
+    //   //   "files": ["yarn.lock", "src/*"]
+    //   // }
+    // }
   }
 }

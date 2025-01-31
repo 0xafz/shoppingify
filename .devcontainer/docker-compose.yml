@@ -19,6 +19,22 @@ services:
     # entrypoint: sh -c "/usr/local/bin/docker-entrypoint.sh --default-authentication-plugin=mysql_native_password"
     ports:
       - 3306:3306
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "myuser",
+          "-p$password",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     volumes:
       - mysql-data:/var/lib/mysql
       - ./dump:/docker-entrypoint-initdb.d # Mount custom init script
