@@ -14,3 +14,5 @@ cypress/screenshots/*
 cypress/downloads/*
 
 tsconfig.tsbuildinfo
+
+.idx/.data
